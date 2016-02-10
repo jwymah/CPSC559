@@ -9,7 +9,7 @@ public class CommandTest extends junit.framework.TestCase {
         c = new Command();
     }
 
-    @Test 
+    @Test
     public void getOneTest() {
         System.out.println("In getOneTest:");
         int i = c.getOne();
