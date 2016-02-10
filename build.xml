@@ -1,10 +1,10 @@
 <project name="Server" basedir="." default="main">
-    <property name="src.dir" value="src/"/>
+    <property name="src.dir" value="src/com/github/cjhutchi"/>
     <property name="build.dir" value="build"/>
     <property name="lib.dir" value="libs"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir" value="${build.dir}/jar"/>
-    <property name="main-class" value="Server"/>
+    <property name="main-class" value="com.github.cjhutchi.Server"/>
 
     <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
     <path id="classpath">
@@ -55,9 +55,6 @@
             </classpath>
         </java>
     </target>
-
-    <!-- CLEAN-BUILD -->
-    <target name="clean-build" depends="clean,jar"/>
 
     <!-- MAIN -->
     <target name="main" depends="clean,run"/>
