@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="solitude.local" name="com.github.cjhutchi.CommandTest" skipped="0" tests="2" time="0.072" timestamp="2016-02-11T21:56:36">
+  <properties>
+    <property name="java.vendor" value="Oracle Corporation" />
+    <property name="lib.dir" value="libs" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+    <property name="dist" value="deploy" />
+    <property name="os.name" value="Mac OS X" />
+    <property name="sun.boot.class.path" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/JObjC.jar:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/classes" />
+    <property name="TODAY" value="February 11 2016" />
+    <property name="user.country.format" value="CA" />
+    <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+    <property name="ant.home" value="/usr/local/Cellar/ant/1.9.6/libexec" />
+    <property name="jar.dir" value="build/jar" />
+    <property name="java.runtime.version" value="1.7.0_45-b18" />
+    <property name="user.name" value="cory" />
+    <property name="user.language" value="en" />
+    <property name="build" value="build" />
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib" />
+    <property name="ant.project.default-target" value="dist" />
+    <property name="ant.project.name" value="Server" />
+    <property name="DSTAMP" value="20160211" />
+    <property name="java.version" value="1.7.0_45" />
+    <property name="user.timezone" value="" />
+    <property name="sun.arch.data.model" value="64" />
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+    <property name="java.endorsed.dirs" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/endorsed" />
+    <property name="sun.cpu.isalist" value="" />
+    <property name="sun.jnu.encoding" value="UTF-8" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="file.separator" value="/" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="classes.dir" value="build/classes" />
+    <property name="java.class.version" value="51.0" />
+    <property name="src" value="src" />
+    <property name="user.country" value="US" />
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="ant.file" value="/Users/cory/Documents/Code/Java/CPSC559/build.xml" />
+    <property name="os.version" value="10.11.3" />
+    <property name="path.separator" value=":" />
+    <property name="java.vm.version" value="24.45-b08" />
+    <property name="ant.library.dir" value="/usr/local/Cellar/ant/1.9.6/libexec/lib" />
+    <property name="java.awt.printerjob" value="sun.lwawt.macosx.CPrinterJob" />
+    <property name="sun.io.unicode.encoding" value="UnicodeBig" />
+    <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit" />
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+    <property name="junit.results" value="results" />
+    <property name="user.home" value="/Users/cory" />
+    <property name="java.specification.vendor" value="Oracle Corporation" />
+    <property name="ant.file.Server" value="/Users/cory/Documents/Code/Java/CPSC559/build.xml" />
+    <property name="java.library.path" value="/Users/cory/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:." />
+    <property name="java.vendor.url" value="http://java.oracle.com/" />
+    <property name="java.vm.vendor" value="Oracle Corporation" />
+    <property name="gopherProxySet" value="false" />
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.github.cjhutchi.CommandTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.PlainJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/cory/Documents/Code/Java/CPSC559/results/TEST-com.github.cjhutchi.CommandTest.xml crashfile=/Users/cory/Documents/Code/Java/CPSC559/junitvmwatcher478871593518584968.properties propsfile=/Users/cory/Documents/Code/Java/CPSC559/junit8855403745288855244.properties" />
+    <property name="java.class.path" value="/Users/cory/Documents/Code/Java/CPSC559/libs/hamcrest-all-1.1.jar:/Users/cory/Documents/Code/Java/CPSC559/libs/json-simple-1.1.1.jar:/Users/cory/Documents/Code/Java/CPSC559/libs/junit-4.12.jar:/Users/cory/Documents/Code/Java/CPSC559/build:/usr/local/Cellar/ant/1.9.6/libexec/lib/ant-launcher.jar:/usr/local/Cellar/ant/1.9.6/libexec/lib/ant.jar:/usr/local/Cellar/ant/1.9.6/libexec/lib/ant-junit.jar:/usr/local/Cellar/ant/1.9.6/libexec/lib/ant-junit4.jar" />
+    <property name="ant.version" value="Apache Ant(TM) version 1.9.6 compiled on June 29 2015" />
+    <property name="TSTAMP" value="1456" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="ant.file.type" value="file" />
+    <property name="java.vm.specification.version" value="1.7" />
+    <property name="junit.jar" value="junit-4.12.jar" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="sun.os.patch.level" value="unknown" />
+    <property name="src.test" value="test" />
+    <property name="java.io.tmpdir" value="/var/folders/vy/t87r1tgd6qgcrbhyv3ts39ww0000gn/T/" />
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+    <property name="os.arch" value="x86_64" />
+    <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment" />
+    <property name="java.ext.dirs" value="/Users/cory/Library/Java/Extensions:/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/jre/lib/ext:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java" />
+    <property name="user.dir" value="/Users/cory/Documents/Code/Java/CPSC559" />
+    <property name="line.separator" value="&#xa;" />
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+    <property name="basedir" value="/Users/cory/Documents/Code/Java/CPSC559" />
+    <property name="junit.home" value="libs/" />
+    <property name="ant.java.version" value="1.7" />
+    <property name="ant.core.lib" value="/usr/local/Cellar/ant/1.9.6/libexec/lib/ant.jar" />
+    <property name="ant.file.type.Server" value="file" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="java.specification.version" value="1.7" />
+    <property name="ant.project.invoked-targets" value="dist" />
+  </properties>
+  <testcase classname="com.github.cjhutchi.CommandTest" name="basicTest" time="0.003" />
+  <testcase classname="com.github.cjhutchi.CommandTest" name="assertTrueTest" time="0.0" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

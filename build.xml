@@ -1,61 +1,112 @@
-<project name="Server" basedir="." default="main">
-    <property name="src.dir" value="src/com/github/cjhutchi"/>
-    <property name="build.dir" value="build"/>
-    <property name="lib.dir" value="libs"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir" value="${build.dir}/jar"/>
-    <property name="main-class" value="com.github.cjhutchi.Server"/>
+<project name="Server" default="dist" basedir=".">
+    <description>
+        TBD
+    </description>
 
-    <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
+    <!-- GLOBAL PROPERTIES -->
+    <property file="build.properties"/>
+    <property name="src" value="src"/>
+    <property name="src.test" value="test"/>
+    <property name="build" value="build"/>
+    <property name="dist" value="deploy"/>
+    <property name="classes.dir" value="${build}/classes"/>
+    <property name="jar.dir" value="${build}/jar"/>
+    <property name="junit.results" value="results"/>
+
+    <!-- LIBRARY VARIABLES -->
+    <property name="lib.dir" value="libs"/>
+
+    <!-- SET CLASSPATH -->
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${junit.home}" includes="${junit.jar}"/>
     </path>
 
-    <!-- TEST -->
-    <target name="test" depends="jar">
-        <junit printsummary="yes">
-            <classpath>
-                <path refid="classpath"/>
-                <path refid="application"/>
-            </classpath>
+    <path id="classpath.test">
+        <path refid="classpath"/>
+        <pathelement location="${build}"/>
+    </path>
 
-            <batchtest fork="yes">
-                <fileset dir="${src.dir}" includes="*Test.java"/>
-            </batchtest>
-        </junit>
+    <!-- INITIALIZE ENV -->
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
     </target>
 
-    <!-- CLEAN -->
-    <target name="clean">
-        <delete dir="${build.dir}"/>
+    <!-- COMPILE --> 
+    <target name="compile" depends="init" description="compiles source files">
+        <javac destdir="${build}" includeantruntime="false">
+            <src path="${src}"/>
+            <src path="${src.test}"/>
+            <classpath refid="classpath"/>
+        </javac>
     </target>
 
-    <!-- COMPILE -->
-    <target name="compile">
-        <mkdir dir="${classes.dir}"/>
-        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    <!-- COMPILE WTIH DEBUG -->
+    <target name="compile.debug" depends="init" description="compiles source
+        files with debug flags">
+        <javac debug="on" destdir="${build}" includeantruntime="false">
+            <src path="${src}"/>
+            <src path="${src.test}"/>
+            <classpath refid="classpath"/>
+        </javac>
     </target>
 
-    <!-- JAR -->
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-            <manifest>
-                <attribute name="Main-Class" value="${main-class}"/>
-            </manifest>
+    <!-- CLEAN BUILD -->
+    <target name="dist-clean">
+        <antcall target="clean"/>
+        <antcall target="dist"/>
+    </target>
+
+    <!-- DIST BUILD -->
+    <target name="dist" depends="test,compile,docs" description="generate the
+        distribution">
+        <mkdir dir="${dist}/libs"/>
+        <jar jarfile="${dist}/libs/${ant.project.name}.jar">
+            <fileset dir="${build}">
+                <exclude name="**/*Test*"/>
+            </fileset>
         </jar>
     </target>
 
-    <!-- RUN -->
-    <target name="run" depends="jar">
-        <java fork="true" classname="${main-class}">
-            <classpath>
-                <path refid="classpath"/>
-                <path location="${jar.dir}/${ant.project.name}.jar"/>
-            </classpath>
-        </java>
+    <!-- DOCS -->
+    <target name="docs" depends="init" description="generate javadocs">
+        <delete dir="${dist}/docs"/>
+        <mkdir dir="${dist}/docs"/>
+        <mkdir dir="${dist}/docs/api"/>
+        <javadoc 
+            destdir="${dist}/docs/api"
+            author="true"
+            version="true"
+            use="true"
+            windowtitle="${ant.project.name}">
+            <classpath refid="classpath"/>
+            <packageset dir="src" defaultexcludes="yes">
+                <include name="**/*"/>
+                <exclude name="**/*Test*"/>
+            </packageset>
+        </javadoc>
     </target>
 
-    <!-- MAIN -->
-    <target name="main" depends="clean,run"/>
+    <!-- TEST -->
+    <target name="test" depends="compile" description="run unit tests">
+        <delete dir="${junit.results}"/>
+        <mkdir dir="${junit.results}"/>
+        <junit fork="on" errorProperty="test.failed" failureProperty="test.failed">
+            <classpath refid="classpath.test"/>
+            <formatter type="plain" usefile="false"/>
+            <formatter type="xml"/>
+            <batchtest todir="${junit.results}">
+                <fileset dir="${build}" includes="**/*Test.class"/>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed. Please see test reports" if="test.failed"/>
+    </target>
+
+    <!-- CLEAN -->
+    <target name="clean" description="cleanup">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+
 </project>
