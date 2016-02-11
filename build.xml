@@ -66,6 +66,10 @@
             <fileset dir="${build}">
                 <exclude name="**/*Test*"/>
             </fileset>
+            <manifest>
+                <attribute name="Main-Class"
+                    value="com.github.cjhutchi.Server"/>
+            </manifest>
         </jar>
     </target>
 
