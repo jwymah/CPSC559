@@ -11,9 +11,6 @@ import java.net.*;
 import java.io.*;
 
 import org.apache.commons.cli.*;
-//import org.json.simple.*;
-//import org.json.simple.parser.*;
-//import org.json.simple.parser.ParseException;
 
 public class Server extends Thread {
 
@@ -26,7 +23,7 @@ public class Server extends Thread {
 
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println("[+] Server socket created.");
+            System.out.println("[+] Server socket created on port "+port+".");
             try {
                 while (running) {
                     new Server(serverSocket.accept());
