@@ -113,4 +113,14 @@
         <delete dir="${dist}"/>
     </target>
 
+    <!-- RUN -->
+    <target name="run" depends="dist" description="run server">
+    <java fork="true" classname="com.github.group.Server">
+        <classpath>
+            <path refid="classpath"/>
+            <path location="${dist}/libs/${ant.project.name}.jar"/>
+        </classpath>
+    </java>
+    </target>
+
 </project>
