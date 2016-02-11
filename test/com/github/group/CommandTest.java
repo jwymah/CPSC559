@@ -1,9 +1,22 @@
-package com.github.cjhutchi;
+package com.github.group;
 
 import org.junit.Test;
 import org.junit.Assert;
 
 public class CommandTest {
+    private Command c = new Command();
+
+    @Test
+    public void getOneTest () {
+        int i = c.getOne();
+        Assert.assertEquals(i, 1);
+    }
+
+    @Test
+    public void getHelloTest () {
+        String s = c.getHello();
+        Assert.assertEquals(s, "Hello.");
+    }
 
     @Test
     public void assertTrueTest () {

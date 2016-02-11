@@ -1,4 +1,4 @@
-package com.github.cjhutchi;
+package com.github.group;
 
 public class Command {
     public Command () {

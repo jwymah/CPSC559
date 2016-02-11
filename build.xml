@@ -68,7 +68,7 @@
             </fileset>
             <manifest>
                 <attribute name="Main-Class"
-                    value="com.github.cjhutchi.Server"/>
+                    value="com.github.group.Server"/>
             </manifest>
         </jar>
     </target>
