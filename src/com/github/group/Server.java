@@ -1,6 +1,6 @@
-/*
+/**
  * The Server file represents the basic barebones implementation
- * of our TCP server.
+ * of a TCP server.
  *
  * @author  Cory Hutchison
  * @version 0.0
@@ -57,11 +57,20 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Server creates a new instance of a server, and starts the new thread for
+     * the client.
+     *
+     * @param   clientSock  Incoming client socket.
+     */
     private Server (Socket clientSock) {
         clientSocket = clientSock;
         start();
     }
 
+    /**
+     * Thread execution code.
+     */
     public void run() {
         System.out.println("[+] Connection accepted. Thread ID: " + Thread.currentThread().getId());
 
