@@ -87,9 +87,13 @@ public class Server extends Thread {
                     break;
                 }
 
+                if (inputLine.equals("ping")) {
+                    out.println("pong");
+                }
+
                 System.out.println("[Thread: " + Thread.currentThread().getId() 
                                    + "] " + inputLine);
-                out.println("OK");
+                //out.println("OK");
             }
 
             out.close();
