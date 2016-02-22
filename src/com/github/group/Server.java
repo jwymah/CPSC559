@@ -72,11 +72,13 @@ public class Server extends Thread {
      * Thread execution code.
      */
     public void run() {
-        System.out.println("[+] Connection accepted. Thread ID: " + Thread.currentThread().getId());
+        System.out.println("[+] Connection accepted. Thread ID: " 
+                           + Thread.currentThread().getId());
 
         try {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(clientSocket.getInputStream()));
 
             String inputLine;
 
@@ -85,13 +87,15 @@ public class Server extends Thread {
                     break;
                 }
 
-                System.out.println("[Thread: " + Thread.currentThread().getId() + "] " + inputLine);
+                System.out.println("[Thread: " + Thread.currentThread().getId() 
+                                   + "] " + inputLine);
                 out.println("OK");
             }
 
             out.close();
             in.close();
-            System.out.println("[-] Connection from Thread ID: " + Thread.currentThread().getId() + " has ended.");
+            System.out.println("[-] Connection from Thread ID: " 
+                               + Thread.currentThread().getId() + " has ended.");
             clientSocket.close();
         } catch (IOException e) {
             System.err.println();
