@@ -170,7 +170,7 @@ public class Message {
         } catch (NoSuchAlgorithmException nsae) {
         }
 
-        return sb.toString();
+        return sb.toString().toUpperCase();
     }
 
 }
