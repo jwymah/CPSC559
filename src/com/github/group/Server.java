@@ -40,13 +40,16 @@ public class Server extends Thread {
         }
 
         // Cory: Testing message 
-        Message msg = new Message(getID(), "nil", "TEST", "This is a test message.");
-        System.out.println(msg.getStamp());
-        System.out.println(msg.getHostID());
-        System.out.println(msg.getGroupID());
-        System.out.println(msg.getMessageID());
-        System.out.println(msg.getMessageType());
-        System.out.println(msg.getMessageBody());
+        /*
+            Message msg = new Message(getID(), "nil", "TEST", "This is a test message.");
+            System.out.println(msg.getStamp());
+            System.out.println(msg.getHostID());
+            System.out.println(msg.getGroupID());
+            System.out.println(msg.getMessageID());
+            System.out.println(msg.getMessageType());
+            System.out.println(msg.getMessageBody());
+            System.out.println(msg.ControlMsg());
+        */
 
         try {
             serverSocket = new ServerSocket(port);
@@ -116,6 +119,15 @@ public class Server extends Thread {
 
                 if (inputLine.equals("ping")) {
                     out.println("pong");
+                }
+
+                if (inputLine.equals("test")) {
+                    Message msg = new Message(
+                            getID(), 
+                            "nil", 
+                            "TEST", 
+                            "This is a test message.");
+                    out.println(msg.ControlMsg());
                 }
 
                 System.out.println("[Thread: " + Thread.currentThread().getId() 

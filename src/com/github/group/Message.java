@@ -8,7 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
-import org.json.simple.*;
+import org.json.simple.JSONObject;
 
 /**
  *  {
@@ -31,7 +31,7 @@ public class Message {
     private String messageType;
     private String messageBody;
 
-    public Message(String id, String gId, String type, String msg) {
+    public Message(String id, String gId, String type, String m) {
         // Time Stamp
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
@@ -44,16 +44,22 @@ public class Message {
         groupId = gId;
 
         // Message ID
-        messageId = generateMessageID(msg);
+        messageId = generateMessageID(m);
 
         // Message Type
         messageType = type;
 
         // Message Body
-        messageBody = msg;
+        messageBody = m;
 
         // Package up into a JSON Object
-        //msg = new JSONObject();
+        msg = new JSONObject();
+        msg.put("TimeStamp", timestamp);
+        msg.put("HostID", hostId);
+        msg.put("GroupID", groupId);
+        msg.put("MessageID", messageId);
+        msg.put("MessageType", messageType);
+        msg.put("MessageBody", messageBody);
     }
 
     /**
@@ -101,8 +107,8 @@ public class Message {
     /**
      * @return
      */
-    public JSONObject ControlMsg() {
-        return msg;
+    public String ControlMsg() {
+        return msg.toJSONString();
     }
 
     /**
