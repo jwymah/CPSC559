@@ -1,3 +1,13 @@
+/**
+ * File:    MessageTest.java
+ *
+ * Test suite for the Message.java file.
+ *
+ * @author  Cory Hutchison
+ * @author  Frankie Yuan
+ * @author  Jeremy Mah
+ * @version 0.0
+ */
 package com.github.group;
 
 import org.junit.Test;

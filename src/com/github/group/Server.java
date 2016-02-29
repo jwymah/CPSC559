@@ -1,6 +1,8 @@
 /**
+ * File:    Server.java
+ *
  * The Server file represents the basic implementation
- * of a TCP server.
+ * of a TCP server, it passes JSON messages.
  *
  * @author  Cory Hutchison
  * @author  Jeremy Mah
