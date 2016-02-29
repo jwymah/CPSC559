@@ -4,12 +4,29 @@ import org.junit.Test;
 import org.junit.Assert;
 
 public class MessageTest {
-    Message msg = new Message("ID", "nil", "TYPE", "MSG");
+    Message msg = new Message("HOST", "GROUP", "TYPE", "MSG");
+
+    @Test
+    public void testMessage() {
+        Assert.assertNotNull(msg);
+    }
+
+    @Test
+    public void testTimeStamp() {
+        Message msg2 = new Message("nil", "nil", "nil", "nil");
+        Assert.assertNotSame(msg.getTimeStamp(), msg2.getTimeStamp());
+    }
 
     @Test
     public void testGetHostID() {
         String s = msg.getHostID();
-        Assert.assertEquals(s, "ID");
+        Assert.assertEquals(s, "HOST");
+    }
+
+    @Test
+    public void testGetGroupID() {
+        String s = msg.getGroupID();
+        Assert.assertEquals(s, "GROUP");
     }
 
     @Test
@@ -24,9 +41,4 @@ public class MessageTest {
         Assert.assertEquals(s, "MSG");
     }
 
-    @Test
-    public void testGetGroupID() {
-        String s = msg.getGroupID();
-        Assert.assertEquals(s, "nil");
-    }
 }

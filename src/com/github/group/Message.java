@@ -65,7 +65,7 @@ public class Message {
     /**
      * @return
      */
-    public String getStamp() {
+    public String getTimeStamp() {
         return timestamp;
     }
 
