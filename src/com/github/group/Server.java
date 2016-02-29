@@ -1,25 +1,45 @@
 /**
- * The Server file represents the basic barebones implementation
+ * The Server file represents the basic implementation
  * of a TCP server.
  *
  * @author  Cory Hutchison
+ * @author  Jeremy Mah
+ * @author  Frankie Yuan
  * @version 0.0
  */ 
 package com.github.group;
 
 import java.net.*;
 import java.io.*;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.lang.Process;
 
-import org.apache.commons.cli.*;
+import org.json.simple.*;
+// Cory: Ignoring for now, we can add interface after basic functionality is
+// completed.
+// import org.apache.commons.cli.*;
 
 public class Server extends Thread {
 
     protected Socket clientSocket;
+    static int port = 9999;
+
+    private static String id;
 
     public static void main (String[] argv) throws IOException {
         Boolean running = true;
         ServerSocket serverSocket = null;
-        int port = 9999;
+
+        // Set server id
+        createID();
+        System.out.println(getID());
+
+
+        // Cory: Testing message timestamp
+        Message msg = new Message(getID(), "TEST");
+        System.out.println(msg.getDate());
 
         try {
             serverSocket = new ServerSocket(port);
@@ -105,6 +125,26 @@ public class Server extends Thread {
             System.err.println();
             System.exit(1);
         }
+    }
+
+    private static void createID() throws IOException {
+        Runtime rt = Runtime.getRuntime();
+        String[] commands = {"uuidgen"};
+        Process proc = rt.exec(commands);
+
+        BufferedReader stdIn = new BufferedReader(
+                new InputStreamReader(proc.getInputStream()));
+
+        BufferedReader stdErr = new BufferedReader(
+                new InputStreamReader(proc.getErrorStream()));
+
+        String uuid = stdIn.readLine();
+
+        id = uuid;
+    }
+
+    public static String getID() {
+        return id;
     }
 
 }
