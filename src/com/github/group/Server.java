@@ -33,13 +33,20 @@ public class Server extends Thread {
         ServerSocket serverSocket = null;
 
         // Set server id
-        createID();
-        System.out.println(getID());
+        // Cory: Eventually we will need to store this information in a config
+        // file or something so that we aren't changing IDs on every restart.
+        if (id == null) {
+            createID();
+        }
 
-
-        // Cory: Testing message timestamp
-        Message msg = new Message(getID(), "TEST");
-        System.out.println(msg.getDate());
+        // Cory: Testing message 
+        Message msg = new Message(getID(), "nil", "TEST", "This is a test message.");
+        System.out.println(msg.getStamp());
+        System.out.println(msg.getHostID());
+        System.out.println(msg.getGroupID());
+        System.out.println(msg.getMessageID());
+        System.out.println(msg.getMessageType());
+        System.out.println(msg.getMessageBody());
 
         try {
             serverSocket = new ServerSocket(port);
