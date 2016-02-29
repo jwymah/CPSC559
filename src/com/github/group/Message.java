@@ -107,7 +107,7 @@ public class Message {
     /**
      * @return
      */
-    public String ControlMsg() {
+    public String getMessage() {
         return msg.toJSONString();
     }
 

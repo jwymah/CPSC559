@@ -16,7 +16,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.lang.Process;
 
-import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.json.simple.JSONObject;
+
 // Cory: Ignoring for now, we can add interface after basic functionality is
 // completed.
 // import org.apache.commons.cli.*;
@@ -48,7 +51,7 @@ public class Server extends Thread {
             System.out.println(msg.getMessageID());
             System.out.println(msg.getMessageType());
             System.out.println(msg.getMessageBody());
-            System.out.println(msg.ControlMsg());
+            System.out.println(msg.getMessage());
         */
 
         try {
@@ -106,6 +109,7 @@ public class Server extends Thread {
                            + Thread.currentThread().getId());
 
         try {
+            JSONParser parser = new JSONParser();
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(clientSocket.getInputStream()));
@@ -113,32 +117,50 @@ public class Server extends Thread {
             String inputLine;
 
             while ((inputLine = in.readLine()) != null) {
-                if (inputLine.equals("quit")) {
-                    break;
-                }
+                try {
+                    Object obj = parser.parse(inputLine);
+                    JSONObject jsonObj = (JSONObject) obj;
+                    String msgType = (String) jsonObj.get("MessageType");
 
-                if (inputLine.equals("ping")) {
-                    out.println("pong");
-                }
+                    // Quit for testing with netcat
+                    if (msgType.equals("bye")) {
+                        break;
+                    }
 
-                if (inputLine.equals("test")) {
-                    Message msg = new Message(
-                            getID(), 
-                            "nil", 
-                            "TEST", 
-                            "This is a test message.");
-                    out.println(msg.ControlMsg());
-                }
+                    // Ping
+                    if (msgType.equals("ping")) {
+                        Message msg = new Message(
+                                getID(),
+                                "nil",
+                                "pong",
+                                "pong");
+                        out.println(msg.getMessage());
+                    }
 
-                System.out.println("[Thread: " + Thread.currentThread().getId() 
-                                   + "] " + inputLine);
-                //out.println("OK");
+                    // Test Message
+                    if (msgType.equals("test")) {
+                        Message msg = new Message(
+                                getID(), 
+                                "nil", 
+                                "TEST", 
+                                "This is a test message.");
+                        out.println(msg.getMessage());
+                    }
+
+                    System.out.println("[Thread: " + Thread.currentThread().getId() 
+                                       + "] " + inputLine);
+                } catch (ParseException e) {
+                    System.out.println("[!!] [Thread: " + Thread.currentThread().getId()
+                            + "] Received invalid input: " + inputLine);
+                    out.println("[!!] Received invalid input: " + inputLine);
+                }
             }
 
-            out.close();
-            in.close();
+            // Cleanup
             System.out.println("[-] Connection from Thread ID: " 
                                + Thread.currentThread().getId() + " has ended.");
+            out.close();
+            in.close();
             clientSocket.close();
         } catch (IOException e) {
             System.err.println();
