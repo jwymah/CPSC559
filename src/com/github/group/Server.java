@@ -14,6 +14,7 @@ package com.github.group;
 import java.net.*;
 import java.io.*;
 import java.util.Date;
+import java.util.Random;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.lang.Process;
@@ -28,12 +29,15 @@ import org.json.simple.JSONObject;
 
 public class Server extends Thread {
 
+    private static final int minPort = 9000;
+    private static final int maxPort = 9005;
+
     protected Socket clientSocket;
-    static int port = 9999;
 
     private static String id;
+    private static int port;
 
-    public static void main (String[] argv) throws IOException {
+    public static void main (String[] argv) {
         Boolean running = true;
         ServerSocket serverSocket = null;
 
@@ -41,7 +45,11 @@ public class Server extends Thread {
         // Cory: Eventually we will need to store this information in a config
         // file or something so that we aren't changing IDs on every restart.
         if (id == null) {
-            createID();
+            try {
+                createID();
+            } catch (IOException e) {
+                System.out.println("[!!] Failed to create a HostID.");
+            }
         }
 
         // Cory: Testing message 
@@ -53,12 +61,16 @@ public class Server extends Thread {
             System.out.println(msg.getMessageID());
             System.out.println(msg.getMessageType());
             System.out.println(msg.getMessageBody());
-            System.out.println(msg.getMessage());
+            System.out.println(msg.getJSONMessage());
         */
+
+        port = generatePort();
 
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println("[+] Server socket created on port "+port+".");
+            System.out.println("[+] Server socket created on port " + 
+                    port + ".");
+            broadcast();
             try {
                 while (running) {
                     new Server(serverSocket.accept());
@@ -68,7 +80,8 @@ public class Server extends Thread {
                 System.exit(1);
             }
         } catch (IOException e) {
-            System.err.println("[!!] Unable to listen on port "+port+".");
+            System.err.println(
+                    "[!!] Unable to listen on port " + port + ".");
             System.exit(1);
         }
 
@@ -111,51 +124,61 @@ public class Server extends Thread {
                            + Thread.currentThread().getId());
 
         try {
-            JSONParser parser = new JSONParser();
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            PrintWriter out = new PrintWriter(
+                    clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(clientSocket.getInputStream()));
 
             String inputLine;
 
             while ((inputLine = in.readLine()) != null) {
-                try {
-                    Object obj = parser.parse(inputLine);
-                    JSONObject jsonObj = (JSONObject) obj;
-                    String msgType = (String) jsonObj.get("MessageType");
+                Message inputMsg = new Message(inputLine);
 
-                    // Quit for testing with netcat
-                    if (msgType.equals("bye")) {
-                        break;
-                    }
-
-                    // Ping
-                    if (msgType.equals("ping")) {
-                        Message msg = new Message(
-                                getID(),
-                                "nil",
-                                "pong",
-                                "pong");
-                        out.println(msg.getMessage());
-                    }
-
-                    // Test Message
-                    if (msgType.equals("test")) {
-                        Message msg = new Message(
-                                getID(), 
-                                "nil", 
-                                "TEST", 
-                                "This is a test message.");
-                        out.println(msg.getMessage());
-                    }
-
-                    System.out.println("[Thread: " + Thread.currentThread().getId() 
-                                       + "] " + inputLine);
-                } catch (ParseException e) {
-                    System.out.println("[!!] [Thread: " + Thread.currentThread().getId()
-                            + "] Received invalid input: " + inputLine);
-                    out.println("[!!] Received invalid input: " + inputLine);
+                // Quit for testing with netcat
+                if (inputMsg.getMessageType().equals("bye")) {
+                    break;
                 }
+
+                // Respond to broadcast messages
+                if (inputMsg.getMessageType().equals("broadcast")) {
+                    // Respond to broadcast
+                    Message msg = new Message(
+                            getID(),
+                            "nil",
+                            "response",
+                            "localhost:"+port);
+
+                    out.println(msg.getJSONMessage());
+                }
+
+                // Ping
+                if (inputMsg.getMessageType().equals("ping")) {
+                    Message msg = new Message(
+                            getID(),
+                            "nil",
+                            "response",
+                            "pong");
+                    out.println(msg.getJSONMessage());
+                }
+
+                // Response Message
+                if (inputMsg.getMessageType().equals("response")) {
+                    System.out.println(inputMsg.getMessageBody());
+                }
+
+                // Test Message
+                if (inputMsg.getMessageType().equals("test")) {
+                    Message msg = new Message(
+                            getID(), 
+                            "nil", 
+                            "response", 
+                            "This is a test message.");
+                    out.println(msg.getJSONMessage());
+                }
+
+                System.out.println("[Thread: " + 
+                        Thread.currentThread().getId() + "] " 
+                        + inputLine);
             }
 
             // Cleanup
@@ -170,6 +193,58 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     *
+     */
+    private static void broadcast() {
+        System.out.println("[+] Broadcasting to local network.");
+        // Message to broadcast
+        Message outMsg = new Message(
+                getID(),
+                "nil",
+                "broadcast",
+                "localhost:" + port);
+
+        for (int i = minPort; i <= maxPort; i++) {
+            // Don't message yourself
+            if (i != port) {
+                try {
+                    // Create connection
+                    Socket s = new Socket("localhost", i);
+
+                    System.out.println("[+] Connection accepted. Thread ID: " 
+                                       + Thread.currentThread().getId());
+
+                    // Set up reader/writer
+                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(s.getInputStream()));
+
+                    // Broadcast to peer
+                    out.println(outMsg.getJSONMessage());
+
+                    // Print response
+                    String incoming;
+                    if ((incoming = in.readLine()) != null) {
+                        Message inMsg = new Message(incoming);
+                        System.out.println(inMsg.getJSONMessage());
+                    }
+
+                    s.close();
+                    in.close();
+                    out.close();
+                    System.out.println("[-] Connection from Thread ID: " 
+                                       + Thread.currentThread().getId() + " has ended.");
+                } catch (IOException e) {
+                    System.out.println("[!] Unable to connect to localhost:" + i);
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
     private static void createID() throws IOException {
         Runtime rt = Runtime.getRuntime();
         String[] commands = {"uuidgen"};
@@ -186,8 +261,24 @@ public class Server extends Thread {
         id = uuid;
     }
 
+    /**
+     * Allows other classes to access this server's ID.
+     *
+     * @return  This servers ID
+     */
     public static String getID() {
         return id;
+    }
+
+    /**
+     * Generates a random integer between 9000-9025.
+     *
+     * @return A random integer between 9000-9025
+     */
+    private static int generatePort() {
+        Random rand = new Random(); 
+
+        return rand.nextInt((maxPort - minPort) + 1) + minPort;
     }
 
 }

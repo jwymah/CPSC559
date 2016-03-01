@@ -19,6 +19,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.json.simple.JSONObject;
 
 /**
@@ -41,6 +43,37 @@ public class Message {
     private String messageId;
     private String messageType;
     private String messageBody;
+
+    /**
+     * Constructor for Message which takes as input a JSON string.
+     *
+     * @param   msg JSON formatted message
+     */
+    public Message(String m) {
+        try {
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(m);
+            JSONObject jsonObj = (JSONObject) obj;
+
+            timestamp = (String) jsonObj.get("TimeStamp");
+            hostId = (String) jsonObj.get("HostID");
+            groupId = (String) jsonObj.get("GroupID");
+            messageId = (String) jsonObj.get("MessageID");
+            messageType = (String) jsonObj.get("MessageType");
+            messageBody = (String) jsonObj.get("MessageBody");
+
+            // Package up into a JSON Object
+            msg = new JSONObject();
+            msg.put("TimeStamp", timestamp);
+            msg.put("HostID", hostId);
+            msg.put("GroupID", groupId);
+            msg.put("MessageID", messageId);
+            msg.put("MessageType", messageType);
+            msg.put("MessageBody", messageBody);
+        } catch (ParseException e) {
+            System.out.println("[!!] Error parsing message.");
+        }
+    }
 
     /**
      * Constructor for a Message object.
@@ -140,7 +173,7 @@ public class Message {
      *
      * @return  The message
      */
-    public String getMessage() {
+    public String getJSONMessage() {
         return msg.toJSONString();
     }
 
