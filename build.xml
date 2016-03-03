@@ -1,4 +1,4 @@
-<project name="Server" default="dist" basedir=".">
+<project name="P2PChat" default="dist" basedir=".">
     <description>
         TBD
     </description>
@@ -68,7 +68,7 @@
             </fileset>
             <manifest>
                 <attribute name="Main-Class"
-                    value="com.github.group.Server"/>
+                    value="com.github.group.P2PChat"/>
             </manifest>
         </jar>
     </target>
@@ -115,7 +115,7 @@
 
     <!-- RUN -->
     <target name="run" depends="dist" description="run server">
-    <java fork="true" classname="com.github.group.Server">
+    <java fork="true" classname="com.github.group.P2PChat">
         <classpath>
             <path refid="classpath"/>
             <path location="${dist}/libs/${ant.project.name}.jar"/>
