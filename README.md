@@ -1,4 +1,6 @@
-CPSC 559 - Distributed Systems Group Project ![](https://travis-ci.org/cjhutchi/CPSC559.svg?branch=master)
+CPSC 559 - Distributed Systems Group Project
+[![Build
+Status](https://travis-ci.org/cjhutchi/CPSC559.svg?branch=master)](https://travis-ci.org/cjhutchi/CPSC559)
 ----------------------------------------------
 **Dependencies:**
 * json-simple-1.1.1
