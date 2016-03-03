@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 public class BroadcastMessage extends Message {
     private String id;
     private String ip;
+    private String pub;
     private int port;
 
     private JSONObject msg;
@@ -26,7 +27,8 @@ public class BroadcastMessage extends Message {
 
         // TODO:    Get ID, IP, and Port # from Server
         // Placeholder values
-        id = P2PChat.id;
+        id = P2PChat.username;
+        pub = P2PChat.id;
         ip = "127.0.0.1";
         port = P2PChat.port;
 
@@ -34,6 +36,7 @@ public class BroadcastMessage extends Message {
         msg.put("TimeStamp", super.timestamp);
         msg.put("ID", id);
         msg.put("IP", ip);
+        msg.put("PublicKey", pub);
         msg.put("Port", port);
     }
 

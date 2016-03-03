@@ -31,6 +31,7 @@ public class P2PChat {
     private static PublicKey    pub;
     private static PrivateKey   priv;
 
+    public static String    username;
     public static String    id;
     public static int       port;
     public static boolean   isRunning;
@@ -41,6 +42,8 @@ public class P2PChat {
         System.out.println("- P2P Group chat");
 
         port = generatePort();
+        username = "testing";
+
         try {
             id = generateID();
         } catch (NoSuchAlgorithmException e) {
