@@ -12,9 +12,9 @@ import org.json.simple.parser.ParseException;
 import org.json.simple.JSONObject;
 
 public class BroadcastMessage extends Message {
+    private String username;
     private String id;
     private String ip;
-    private String pub;
     private int port;
 
     private JSONObject msg;
@@ -25,18 +25,16 @@ public class BroadcastMessage extends Message {
     public BroadcastMessage() {
         super();
 
-        // TODO:    Get ID, IP, and Port # from Server
-        // Placeholder values
-        id = P2PChat.username;
-        pub = P2PChat.id;
+        username = P2PChat.username;
+        id = P2PChat.id;
         ip = "127.0.0.1";
         port = P2PChat.port;
 
         msg = new JSONObject();
         msg.put("TimeStamp", super.timestamp);
+        msg.put("Username", username);
         msg.put("ID", id);
         msg.put("IP", ip);
-        msg.put("PublicKey", pub);
         msg.put("Port", port);
     }
 

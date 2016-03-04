@@ -10,17 +10,10 @@ package com.github.group;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.lang.CloneNotSupportedException;
 import java.util.Calendar;
 import java.util.Random;
-import java.security.KeyPairGenerator;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PublicKey;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
-import sun.misc.BASE64Encoder;
 
 
 public class P2PChat {
@@ -28,8 +21,8 @@ public class P2PChat {
     final static int MIN_PORT = 9000;
     final static int MAX_PORT = 9025;
 
-    private static PublicKey    pub;
-    private static PrivateKey   priv;
+    //private static PublicKey    pub;
+    //private static PrivateKey   priv;
 
     public static String    username;
     public static String    id;
@@ -38,17 +31,15 @@ public class P2PChat {
 
     public static void main (String args[]) {
 
+        Crypto c = Crypto.getInstance();
+
         isRunning = true;
         System.out.println("- P2P Group chat");
 
         port = generatePort();
-        username = "testing";
+        username = "cjhutchi";
 
-        try {
-            id = generateID();
-        } catch (NoSuchAlgorithmException e) {
-        } catch (NoSuchProviderException e) {
-        }
+        id = c.getID();
 
         System.out.println("[*] Staring Broadcast Server..");
         (new BroadcastServer()).start();
@@ -83,34 +74,6 @@ public class P2PChat {
         Random rand = new Random(); 
 
         return rand.nextInt((MAX_PORT - MIN_PORT) + 1) + MIN_PORT;
-
-    }
-
-    /**
-     * Generates a Public and Private key and returns the public key as the user
-     * ID.
-     *
-     * @return A public key in Hex encoding
-     */
-    private static String generateID() throws 
-        NoSuchAlgorithmException, NoSuchProviderException {
-
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
-        SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-        keyGen.initialize(512, random);
-        KeyPair pair = keyGen.generateKeyPair();
-
-        priv = pair.getPrivate();
-        pub = pair.getPublic();
-        
-        /**
-         * TODO:    Find a way to display this nicely it is showing up as a
-         *          huge string right now, might have to change Algorithm.
-         */
-        BASE64Encoder encoder = new BASE64Encoder();
-        String s = encoder.encode(pub.getEncoded());
-
-        return s;
 
     }
 }
