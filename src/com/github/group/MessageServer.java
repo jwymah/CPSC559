@@ -55,7 +55,8 @@ public class MessageServer extends Thread {
             String inputLine;
 
             while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
+                System.out.println("[" + P2PChat.getTimeStamp() +
+                        "] " + inputLine);
                 if (inputLine.equals("quit")) {
                     break;
                 }
