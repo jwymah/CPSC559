@@ -21,6 +21,9 @@ import org.json.simple.JSONObject;
 
 public class MessageServer extends Thread {
 
+    private static final String CLASS_ID = "MessageServer";
+    private static Log log;
+
     public boolean isRunning = false;
     public ServerSocket serverSocket;
 
@@ -31,8 +34,14 @@ public class MessageServer extends Thread {
      * Constructor
      */
     public MessageServer(int port) {
+
+        // Get instance of Log
+        log = Log.getInstance();
+
+        // Set is running and port
         isRunning = true;
         this.port = port;
+
     }
 
     /**
@@ -43,10 +52,11 @@ public class MessageServer extends Thread {
     public void clientHandler(Socket client) {
         // TODO:    Fix this so that it actually shows the IP:PORT of the
         //          incoming connection.
-        System.out.println("[" + P2PChat.getTimeStamp() +
-                "] CONNECTED " + client.getRemoteSocketAddress().toString());
+        log.printLogMessage(Log.INFO, CLASS_ID, 
+                "CONNECTED" + client.getRemoteSocketAddress().toString());
 
         try {
+            // Get reader/writer
             PrintWriter out = new PrintWriter(
                     clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
@@ -54,26 +64,34 @@ public class MessageServer extends Thread {
 
             String inputLine;
 
+            // Read input from client
             while ((inputLine = in.readLine()) != null) {
-                System.out.println("[" + P2PChat.getTimeStamp() +
-                        "] " + inputLine);
-                if (inputLine.equals("quit")) {
+                log.printLogMessage(Log.INFO, CLASS_ID, inputLine);
+
+                // Handle `quit` message
+                if (inputLine.equals("/quit")) {
                     break;
                 }
 
-                if (inputLine.equals("ping")) {
-                    out.println("pong");
+                // Handle `ping` message
+                if (inputLine.equals("/ping")) {
+                    out.println("/pong");
                 }
             }
 
+            log.printLogMessage(Log.INFO, CLASS_ID, "DISCONNECTED" + 
+                    client.getRemoteSocketAddress().toString());
+
+            // Clean up connections
             out.close();
             in.close();
             clientSocket.close();
-            System.out.println("[" + P2PChat.getTimeStamp() + 
-                    "] DISCONNECTED " + client.getRemoteSocketAddress().toString());
+
         } catch (IOException e) {
-            // TODO:    Handle IOException
+            log.printLogMessage(Log.ERROR, CLASS_ID, 
+                    "Unable to create read/write connection");
         }
+
     }
 
     /**
@@ -82,21 +100,29 @@ public class MessageServer extends Thread {
     public void run() {
         serverSocket = null;
 
+        // Create a server socket
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println("[" + P2PChat.getTimeStamp() + 
-                    "] Server socket created on Port: " + port);
+            log.printLogMessage(Log.INFO, CLASS_ID, "Running: " + getServerInfo());
             try {
+                // Accept connections
                 while (isRunning) {
                     clientSocket = serverSocket.accept();
                     clientHandler(clientSocket);
                 }
             } catch (IOException e) {
-                System.err.println("[!!] Unable to accept connection.");
+                log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to accept connection");
                 System.exit(1);
             }
         } catch (IOException e) {
-            // TODO:    Handle IOException
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
         }
+    }
+
+    /**
+     * Returns server IP:Port
+     */
+    private String getServerInfo() {
+        return "127.0.0.1:" + port;
     }
 }

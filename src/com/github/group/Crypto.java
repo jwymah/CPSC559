@@ -18,6 +18,10 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 
 public class Crypto {
+
+    private final String CLASS_ID = "Crypto";
+    private static Log log;
+
     private static Crypto instance = null;
 
     private static PrivateKey priv = null;
@@ -27,6 +31,11 @@ public class Crypto {
      * Constructor
      */
     protected Crypto() {
+
+        // Get instance of Log
+        log = Log.getInstance();
+
+        // Generate pub/priv key pair
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
@@ -36,8 +45,11 @@ public class Crypto {
             priv = pair.getPrivate();
             pub = pair.getPublic();
         } catch (NoSuchAlgorithmException e) {
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unknown Public Key algorithm");
         } catch (NoSuchProviderException e) {
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unknown provider");
         }
+
     }
 
     /**
@@ -46,11 +58,13 @@ public class Crypto {
      * @return The instance of Crypto
      */
     public static Crypto getInstance() {
+
         if (instance == null) {
             instance = new Crypto();
         }
 
         return instance;
+
     }
 
     /**
@@ -60,20 +74,28 @@ public class Crypto {
      * @return A public key in Hex encoding
      */
     public String getID() {
+
+        log.printLogMessage(Log.INFO, CLASS_ID, "Generating ID");
+
+        // Get a string buffer
         StringBuffer sb = new StringBuffer();
+
+        // Get a hash of the public key
         try {
             MessageDigest md = MessageDigest.getInstance("SHA");
             md.update(pub.getEncoded());
             byte[] mdbytes = md.digest();
 
-            //convert the byte to hex format method 1
+            // Convert the bytes to hex format 
             for (int i = 0; i < mdbytes.length; i++) {
                 sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
             }
         } catch (NoSuchAlgorithmException e) {
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unknown Hashing algorithm");
         }
 
         return sb.toString();
+
     }
 
     /**
@@ -82,6 +104,9 @@ public class Crypto {
      * @return This servers public key
      */
     public PublicKey getPublicKey() {
+
         return pub;
+
     }
+
 }

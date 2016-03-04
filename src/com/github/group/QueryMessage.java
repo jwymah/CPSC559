@@ -9,6 +9,9 @@ package com.github.group;
 
 public class QueryMessage extends Message {
 
+    private final static String CLASS_ID = "QueryMessage";
+    private static Log log;
+
     public String sourceIP;
     public String destIP;
     public String deskID;
@@ -21,5 +24,6 @@ public class QueryMessage extends Message {
      */
     public QueryMessage() {
         super();
+        log = Log.getInstance();
     }
 }

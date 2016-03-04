@@ -20,6 +20,9 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
 public class BroadcastClient extends Thread {
+
+    private final static String CLASS_ID = "BroadcastClient";
+    private static Log log;
     
     final static String INET_ADDR = "224.0.0.3";
     final static int PORT = 8888;
@@ -28,25 +31,33 @@ public class BroadcastClient extends Thread {
      * Constructor
      */
     public BroadcastClient() {
+
+        log = Log.getInstance();
+
     }
 
     public void run() {
+
+        // Initialization
         InetAddress address = null;
         SocketAddress sockAddress = null;
         NetworkInterface netInterface = null;
 
+        // Lookup address and attempt to connect
         try {
             address = InetAddress.getByName(INET_ADDR);
             sockAddress = new InetSocketAddress(address, PORT);
             netInterface = NetworkInterface.getByName("en0");
         } catch (UnknownHostException e) {
-            // TODO:    Handle UnknownHostException
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to locate host");
         } catch (SocketException e) {
-            // TODO:    Handle SocketException
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
         }
 
+        // Create buffer
         byte[] buf = new byte[512];
 
+        // Attempt to join group and get messages
         try (MulticastSocket clientSocket = new MulticastSocket(PORT)) {
             clientSocket.joinGroup(sockAddress, netInterface);
 
@@ -55,14 +66,11 @@ public class BroadcastClient extends Thread {
                 clientSocket.receive(msgPacket);
 
                 String msg = new String(buf, 0, buf.length);
-
-                Calendar cal = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
-                System.out.println("[" + sdf.format(cal.getTime()) + "] " + msg);
+                BroadcastMessage bMsg = new BroadcastMessage(msg);
+                bMsg.printMessage();
             }
         } catch (IOException e) {
-            // TODO:    Handle IOException
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to join group");
         }
 
     }

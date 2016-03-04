@@ -9,13 +9,23 @@ package com.github.group;
 
 public class Message {
 
-    public int timestamp;
+    private final String CLASS_ID = "Message";
+    private static Log log;
+
+    public long timestamp;
 
     /**
      * Constructor
      */
     public Message() {
-        timestamp = (int) (System.currentTimeMillis() / 1000L);
+
+        // Get instance of log
+        log = Log.getInstance();
+
+        // Give message a UNIX Timestamp 
+        // NOTE: Attempted on both Unix and Windows with success
+        timestamp = (long) (System.currentTimeMillis() / 1000L);
+
     }
 
 }

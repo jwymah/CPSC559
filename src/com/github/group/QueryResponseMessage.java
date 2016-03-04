@@ -9,10 +9,14 @@ package com.github.group;
 
 public class QueryResponseMessage extends Message {
 
+    private final static String CLASS_ID = "QueryResponseMessage";
+    private static Log log;
+
     /**
      * Constructor
      */
     public QueryResponseMessage() {
         super();
+        log = Log.getInstance();
     }
 }

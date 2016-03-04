@@ -11,56 +11,45 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.CloneNotSupportedException;
-import java.util.Calendar;
 import java.util.Random;
-import java.text.SimpleDateFormat;
 
 
 public class P2PChat {
 
+    private final static String CLASS_ID = "P2PChat";
+    private static Log log;
+    private static Crypto c;
+
     final static int MIN_PORT = 9000;
     final static int MAX_PORT = 9025;
-
-    //private static PublicKey    pub;
-    //private static PrivateKey   priv;
 
     public static String    username;
     public static String    id;
     public static int       port;
-    public static boolean   isRunning;
-
-    public static void main (String args[]) {
-
-        Crypto c = Crypto.getInstance();
-
-        isRunning = true;
-        System.out.println("- P2P Group chat");
-
-        port = generatePort();
-        username = "cjhutchi";
-
-        id = c.getID();
-
-        System.out.println("[*] Staring Broadcast Server..");
-        (new BroadcastServer()).start();
-        System.out.println("[*] Starting Broadcast Client..");
-        (new BroadcastClient()).start();
-        System.out.println("[*] Starting Message Server..");
-        (new MessageServer(port)).start();
-
-    }
 
     /**
-     * Returns a timestamp string in HH:mm:ss format.
-     *
-     * @return  HH:mm:ss
+     * MAIN
      */
-    public static String getTimeStamp() {
+    public static void main (String args[]) {
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        // Get instances of Crypto and Log
+        log = Log.getInstance();
+        c = Crypto.getInstance();
 
-        return sdf.format(cal.getTime());
+        // Get Port, Username and ID
+        port = getPort();
+        username = "cjhutchi";
+        id = c.getID();
+
+        // Start services
+        log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastServer");
+        (new BroadcastServer()).start();
+        log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastClient");
+        (new BroadcastClient()).start();
+        log.printLogMessage(Log.INFO, CLASS_ID, "Starting MessageServer");
+        (new MessageServer(port)).start();
+
+        log.printLogMessage(Log.INFO, CLASS_ID, "Startup complete");
 
     }
 
@@ -69,7 +58,9 @@ public class P2PChat {
      *
      * @return A random integer between MIN_PORT and MAX_PORT
      */
-    private static int generatePort() {
+    private static int getPort() {
+       
+        log.printLogMessage(Log.INFO, CLASS_ID, "Generating Port");
 
         Random rand = new Random(); 
 

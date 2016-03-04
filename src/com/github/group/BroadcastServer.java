@@ -15,6 +15,9 @@ import java.net.UnknownHostException;
 
 public class BroadcastServer extends Thread {
 
+    private static String CLASS_ID = "BroadcastServer";
+    private static Log log;
+
     final static String INET_ADDR = "224.0.0.3";
     final static int PORT = 8888;
 
@@ -25,22 +28,28 @@ public class BroadcastServer extends Thread {
      */
     public BroadcastServer() {
 
+        // Get an instance of Log
+        log = Log.getInstance();
+
+        // Create BroadcastMessage and convert to Byte array
         broadcastMessage = new BroadcastMessage();
         byte[] msg = broadcastMessage.toString().getBytes();
 
+        // Attempt to connect to Multicast
         InetAddress addr = null;
 
         try {
             addr = InetAddress.getByName(INET_ADDR);
         } catch (UnknownHostException e) {
-            // TODO:    Handle UnknownHostException
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to locate host");
         }
 
+        // Attempt to broadcast
         try (DatagramSocket serverSocket = new DatagramSocket()) {
             DatagramPacket msgPacket = new DatagramPacket(msg, msg.length, addr, PORT);
             serverSocket.send(msgPacket);
         } catch (IOException e) {
-            // TODO:    Handle IOException
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to broadcast message");
         }
 
     }
