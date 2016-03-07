@@ -32,6 +32,7 @@ public class BroadcastServer extends Thread {
         log = Log.getInstance();
 
         // Create BroadcastMessage and convert to Byte array
+        // for transmission
         broadcastMessage = new BroadcastMessage();
         byte[] msg = broadcastMessage.toString().getBytes();
 

@@ -15,13 +15,15 @@ import org.json.simple.JSONObject;
 
 public class BroadcastMessage extends Message {
 
+    private static MessageServer ms = null;
+
     private static String CLASS_ID = "BroadcastMessage";
     private static Log log;
 
-    private String username;
-    private String id;
-    private String ip;
-    private long port;
+    public String username;
+    public String id;
+    public String ip;
+    public long port;
 
     private JSONObject msg;
 
@@ -33,12 +35,13 @@ public class BroadcastMessage extends Message {
 
         // Get instance of Log
         log = Log.getInstance();
+        ms = MessageServer.getInstance();
 
         // Set components
         username = P2PChat.username;
         id = P2PChat.id;
         ip = "127.0.0.1";
-        port = (long) P2PChat.port;
+        port = ms.getPort();
 
         // Package in JSON object
         msg = new JSONObject();
@@ -92,13 +95,15 @@ public class BroadcastMessage extends Message {
      */
     public void printMessage() {
 
-        log.printLogMessage(Log.INFO, CLASS_ID, "Received:");
+        log.printLogMessage(Log.INFO, CLASS_ID, "");
 
-        System.out.println("\tTimeStamp: " + timestamp);
-        System.out.println("\tUsername: " + username);
-        System.out.println("\tID: " + id);
-        System.out.println("\tIP: " + ip);
-        System.out.println("\tPort: " + port);
+        System.out.println();
+        System.out.println("\tTimeStamp:\t" + timestamp);
+        System.out.println("\tUsername:\t" + username);
+        System.out.println("\tID:\t\t" + id);
+        System.out.println("\tIP:\t\t" + ip);
+        System.out.println("\tPort:\t\t" + port);
+        System.out.println();
         
     }
 

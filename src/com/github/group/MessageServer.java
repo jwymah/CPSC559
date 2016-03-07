@@ -7,122 +7,220 @@
  */ 
 package com.github.group;
 
-import java.net.*;
 import java.io.*;
-import java.util.Date;
-import java.util.Random;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.lang.Process;
+import java.net.*;
+import java.util.Iterator;
+import java.util.Random;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.json.simple.JSONObject;
 
 public class MessageServer extends Thread {
 
+    private static MessageServer instance = null;
+
+    final static int MIN_PORT = 9000;
+    final static int MAX_PORT = 10000;
+
     private static final String CLASS_ID = "MessageServer";
-    private static Log log;
+    private static Log log = null;
 
-    public boolean isRunning = false;
-    public ServerSocket serverSocket;
+    private boolean isRunning = false;
+    private ServerSocket serverSocket = null;
 
-    public int port;
+    private static int SERVER_PORT;
     protected Socket clientSocket;
 
     /**
      * Constructor
      */
-    public MessageServer(int port) {
+    protected MessageServer() {
 
         // Get instance of Log
         log = Log.getInstance();
 
         // Set is running and port
         isRunning = true;
-        this.port = port;
+        SERVER_PORT = genPort();
+        start();
 
     }
 
     /**
-     * Client Handler
+     * Returns a single instance of MessageServer
      *
-     * @param   client  The client socket
+     * @return Instance of MessageServer
      */
-    public void clientHandler(Socket client) {
-        // TODO:    Fix this so that it actually shows the IP:PORT of the
-        //          incoming connection.
-        log.printLogMessage(Log.INFO, CLASS_ID, 
-                "CONNECTED" + client.getRemoteSocketAddress().toString());
+    public static MessageServer getInstance() {
 
-        try {
-            // Get reader/writer
-            PrintWriter out = new PrintWriter(
-                    clientSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(clientSocket.getInputStream()));
-
-            String inputLine;
-
-            // Read input from client
-            while ((inputLine = in.readLine()) != null) {
-                log.printLogMessage(Log.INFO, CLASS_ID, inputLine);
-
-                // Handle `quit` message
-                if (inputLine.equals("/quit")) {
-                    break;
-                }
-
-                // Handle `ping` message
-                if (inputLine.equals("/ping")) {
-                    out.println("/pong");
-                }
-            }
-
-            log.printLogMessage(Log.INFO, CLASS_ID, "DISCONNECTED" + 
-                    client.getRemoteSocketAddress().toString());
-
-            // Clean up connections
-            out.close();
-            in.close();
-            clientSocket.close();
-
-        } catch (IOException e) {
-            log.printLogMessage(Log.ERROR, CLASS_ID, 
-                    "Unable to create read/write connection");
+        if (instance == null) {
+            instance = new MessageServer();
         }
 
+        return instance;
     }
+
 
     /**
      * MessageServer Thread execution 
      */
     public void run() {
-        serverSocket = null;
 
         // Create a server socket
         try {
-            serverSocket = new ServerSocket(port);
-            log.printLogMessage(Log.INFO, CLASS_ID, "Running: " + getServerInfo());
+
+            serverSocket = new ServerSocket(SERVER_PORT);
+            log.printLogMessage(Log.INFO, CLASS_ID, "");
+            printServerInfo();
+
             try {
+
                 // Accept connections
                 while (isRunning) {
+
                     clientSocket = serverSocket.accept();
-                    clientHandler(clientSocket);
+
+                    // Hand off to client handler thread
+                    new ClientHandler(clientSocket).start();
+
                 }
+
             } catch (IOException e) {
+
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to accept connection");
-                System.exit(1);
+
             }
+
         } catch (IOException e) {
+
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
+
         }
+
     }
 
     /**
-     * Returns server IP:Port
+     * Shuts down the MessageServer
      */
-    private String getServerInfo() {
-        return "127.0.0.1:" + port;
+    public void shutdown() {
+
+        isRunning = false;
+
     }
+
+    /**
+     * Prints server IP:Port
+     */
+    private void printServerInfo() {
+
+        System.out.println();
+        System.out.println("\tIP:\t\t127.0.0.1");
+        System.out.println("\tPort:\t\t" + getPort());
+        System.out.println();
+
+    }
+
+    /**
+     * Generates a random integer between MIN_PORT and MAX_PORT.
+     *
+     * @return A random integer between MIN_PORT and MAX_PORT
+     */
+    private static int genPort() {
+
+        log.printLogMessage(Log.INFO, CLASS_ID, "Generating Port");
+
+        Random rand = new Random();
+        int i = rand.nextInt((MAX_PORT - MIN_PORT) + 1) + MIN_PORT;
+
+        return i;
+
+    }
+
+    /**
+     * Get the current port that MessageServer is listening on
+     */
+    public static int getPort() {
+
+        return SERVER_PORT;
+
+    }
+
+    private class ClientHandler extends Thread {
+
+        private static final String CLASS_ID = "ClientHandler";
+        private Socket client = null;
+
+        /**
+         * Constructor
+         */
+        public ClientHandler(Socket c) {
+
+            client = c;
+
+        }
+
+        /**
+         * Client Handler
+         *
+         * @param   client  The client socket
+         */
+        public void run() {
+            String addr = client.getInetAddress().getHostAddress() + ":" + client.getPort();
+
+            log.printLogMessage(Log.INFO, CLASS_ID, 
+                    "Connected:\t" + addr);
+
+            try {
+
+                // Get reader/writer
+                PrintWriter out = new PrintWriter(
+                        clientSocket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                            clientSocket.getInputStream()));
+
+                String inputLine;
+
+                // Read input from client
+                while ((inputLine = in.readLine()) != null) {
+
+                    // Handle `quit` message
+                    if (inputLine.equals("/quit")) {
+
+                        break;
+
+                    }
+
+                    // Handle `ping` message
+                    if (inputLine.equals("/ping")) {
+
+                        out.println("/pong");
+
+                    }
+
+                    log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
+                    //forwardToPeers(inputLine);
+
+                }
+
+                log.printLogMessage(Log.INFO, CLASS_ID, 
+                        "Disconnected:\t" + addr);
+
+                // Clean up connections
+                out.close();
+                in.close();
+                clientSocket.close();
+
+            } catch (IOException e) {
+
+                log.printLogMessage(Log.ERROR, CLASS_ID, 
+                        "Connection interrupted");
+
+            }
+
+        }
+
+    }
+
 }

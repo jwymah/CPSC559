@@ -16,12 +16,11 @@ import java.net.NetworkInterface;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
 
 public class BroadcastClient extends Thread {
 
     private final static String CLASS_ID = "BroadcastClient";
+    private static PeerList peerlist;
     private static Log log;
     
     final static String INET_ADDR = "224.0.0.3";
@@ -33,6 +32,7 @@ public class BroadcastClient extends Thread {
     public BroadcastClient() {
 
         log = Log.getInstance();
+        peerlist = PeerList.getInstance();
 
     }
 
@@ -45,13 +45,19 @@ public class BroadcastClient extends Thread {
 
         // Lookup address and attempt to connect
         try {
+
             address = InetAddress.getByName(INET_ADDR);
             sockAddress = new InetSocketAddress(address, PORT);
             netInterface = NetworkInterface.getByName("en0");
+
         } catch (UnknownHostException e) {
+
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to locate host");
+
         } catch (SocketException e) {
+
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
+
         }
 
         // Create buffer
@@ -59,18 +65,26 @@ public class BroadcastClient extends Thread {
 
         // Attempt to join group and get messages
         try (MulticastSocket clientSocket = new MulticastSocket(PORT)) {
+
             clientSocket.joinGroup(sockAddress, netInterface);
 
             while (true) {
+
                 DatagramPacket msgPacket = new DatagramPacket(buf, buf.length);
                 clientSocket.receive(msgPacket);
 
                 String msg = new String(buf, 0, buf.length);
                 BroadcastMessage bMsg = new BroadcastMessage(msg);
                 bMsg.printMessage();
+                peerlist.list.add(new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port));
+                (new MessageClient(bMsg.ip, (int) bMsg.port)).start();
+
             }
+
         } catch (IOException e) {
+
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to join group");
+
         }
 
     }

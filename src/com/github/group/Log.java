@@ -7,8 +7,8 @@ public class Log {
 
     private static Log instance = null;
 
-    public static final String INFO    = "INFO";
     public static final String ERROR   = "ERROR";
+    public static final String INFO    = "INFO";
     public static final String MESSAGE = "MESSAGE";
 
     /**
