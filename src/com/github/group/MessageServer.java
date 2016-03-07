@@ -200,7 +200,6 @@ public class MessageServer extends Thread {
                     }
 
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
-                    //forwardToPeers(inputLine);
 
                 }
 
