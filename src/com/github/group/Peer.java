@@ -12,12 +12,12 @@ public class Peer {
     public String   username;
     public String   id;
     public String   ip;
-    public long     port;
+    public int     port;
 
     /**
      * Constructor
      */
-    public Peer(String u, String d, String i, long p) {
+    public Peer(String u, String d, String i, int p) {
         username = u;
         id = d;
         ip = i;

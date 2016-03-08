@@ -200,6 +200,7 @@ public class MessageServer extends Thread {
                     }
 
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
+//                    log.printLogMessage(Log.MESSAGE, CLASS_ID, "local address: " + InetAddress.getLocalHost().getHostAddress());
 
                 }
 
