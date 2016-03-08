@@ -26,11 +26,12 @@ public class MessageServer extends Thread {
 
     private static final String CLASS_ID = "MessageServer";
     private static Log log = null;
+    private static int SERVER_PORT;
+    private static String SERVER_IP;
 
     private boolean isRunning = false;
     private ServerSocket serverSocket = null;
 
-    private static int SERVER_PORT;
     protected Socket clientSocket;
 
     /**
@@ -38,12 +39,18 @@ public class MessageServer extends Thread {
      */
     protected MessageServer() {
 
-        // Get instance of Log
-        log = Log.getInstance();
+        try {
+            // Get instance of Log
+            log = Log.getInstance();
 
-        // Set is running and port
-        isRunning = true;
-        SERVER_PORT = genPort();
+            // Set is running and port
+            isRunning = true;
+
+            SERVER_IP = InetAddress.getLocalHost().getHostAddress();
+            SERVER_PORT = genPort();
+        } catch (UnknownHostException e) {
+        }
+
         start();
 
     }
@@ -83,7 +90,7 @@ public class MessageServer extends Thread {
                     clientSocket = serverSocket.accept();
 
                     // Hand off to client handler thread
-                    new ClientHandler(clientSocket).start();
+                    new MessageHandler(clientSocket).start();
 
                 }
 
@@ -139,6 +146,13 @@ public class MessageServer extends Thread {
     }
 
     /**
+     *
+     */
+    public static String getIP() {
+        return SERVER_IP;
+    }
+
+    /**
      * Get the current port that MessageServer is listening on
      */
     public static int getPort() {
@@ -147,15 +161,15 @@ public class MessageServer extends Thread {
 
     }
 
-    private class ClientHandler extends Thread {
+    private class MessageHandler extends Thread {
 
-        private static final String CLASS_ID = "ClientHandler";
+        private static final String CLASS_ID = "MessageHandler";
         private Socket client = null;
 
         /**
          * Constructor
          */
-        public ClientHandler(Socket c) {
+        public MessageHandler(Socket c) {
 
             client = c;
 
@@ -170,7 +184,7 @@ public class MessageServer extends Thread {
             String addr = client.getInetAddress().getHostAddress() + ":" + client.getPort();
 
             log.printLogMessage(Log.INFO, CLASS_ID, 
-                    "Connected:\t" + addr);
+                    "Connected: " + addr);
 
             try {
 
@@ -199,12 +213,22 @@ public class MessageServer extends Thread {
 
                     }
 
+                    // Handle `help` or `?` message
+                    if (inputLine.equals("/?") || inputLine.equals("/help")) {
+                        out.println("/ping - ping");
+                        out.println("/quit - disconnect");
+                    }
+
+                    // Return OK message so that client knows message is
+                    // received
+                    out.println("OK");
+                    // Log message to stdout
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
 
                 }
 
                 log.printLogMessage(Log.INFO, CLASS_ID, 
-                        "Disconnected:\t" + addr);
+                        "Disconnected: " + addr);
 
                 // Clean up connections
                 out.close();

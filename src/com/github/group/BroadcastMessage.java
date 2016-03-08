@@ -8,6 +8,10 @@
 package com.github.group;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,6 +30,7 @@ public class BroadcastMessage extends Message {
     public long port;
 
     private JSONObject msg;
+    private NetworkInterface net;
 
     /**
      * Constructor
@@ -40,7 +45,7 @@ public class BroadcastMessage extends Message {
         // Set components
         username = P2PChat.username;
         id = P2PChat.id;
-        ip = "127.0.0.1";
+        ip = ms.getIP();
         port = ms.getPort();
 
         // Package in JSON object
