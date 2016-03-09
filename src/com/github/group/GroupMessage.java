@@ -89,7 +89,7 @@ public class GroupMessage extends Message {
 				signMessage();
 				out.writeChars(msg.toString());
 				socket.shutdownOutput();
-				if (in.read() == 0)
+				if (in.read() == 0) //does this actually happen?
 				{
 					break;
 				}

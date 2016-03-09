@@ -8,20 +8,20 @@
 package com.github.group;
 
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.json.simple.JSONObject;
 
 public class Group {
 
-    public Collection<Peer> group;
+    public Set<Peer> group;
 
     /**
      * Constructor
      */
     protected Group() {
-        group = new ArrayList();
+        group = new TreeSet<Peer>();
     }
 
 //    msg = new JSONObject();
