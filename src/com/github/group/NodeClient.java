@@ -1,5 +1,5 @@
 /**
- *  MessageClient.java
+ *  NodeClient.java
  *
  *  @author Cory Hutchison
  *  @author Frankie Yuan
@@ -15,9 +15,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class MessageClient extends Thread {
+public class NodeClient extends Thread {
 
-    private final String CLASS_ID = "MessageClient";
+    private final String CLASS_ID = "NodeClient";
     private static Log log;
 
     private String ip;
@@ -26,7 +26,7 @@ public class MessageClient extends Thread {
     /**
      * Construction
      */
-    public MessageClient(String s, int p) {
+    public NodeClient(String s, int p) {
 
         try {
             // Get instance of Log
@@ -57,10 +57,9 @@ public class MessageClient extends Thread {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                         connectToPeer.getInputStream()));
 
-            out.println("/ping");
-            String pong = in.readLine();
+            out.println("hello.");
             String ok = in.readLine();
-            log.printLogMessage(Log.INFO, CLASS_ID, "Received: " + pong + " " + ok);
+            log.printLogMessage(Log.INFO, CLASS_ID, "Received: " + ok);
 
         } catch (IOException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to connect to peer");

@@ -1,5 +1,5 @@
 /**
- *  MessageServer.java
+ *  NodeServer.java
  *
  *  @author  Cory Hutchison
  *  @author  Jeremy Mah
@@ -10,6 +10,7 @@ package com.github.group;
 import java.io.*;
 import java.lang.Process;
 import java.net.*;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -17,14 +18,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class MessageServer extends Thread {
+public class NodeServer extends Thread {
 
-    private static MessageServer instance = null;
+    private static NodeServer instance = null;
 
     final static int MIN_PORT = 9000;
     final static int MAX_PORT = 10000;
 
-    private static final String CLASS_ID = "MessageServer";
+    private static final String CLASS_ID = "NodeServer";
     private static Log log = null;
     private static int SERVER_PORT;
     private static String SERVER_IP;
@@ -37,7 +38,9 @@ public class MessageServer extends Thread {
     /**
      * Constructor
      */
-    protected MessageServer() {
+    protected NodeServer() {
+
+        ipLookup();
 
         try {
             // Get instance of Log
@@ -46,9 +49,15 @@ public class MessageServer extends Thread {
             // Set is running and port
             isRunning = true;
 
+            NetworkInterface iface = NetworkInterface.getByName("en0");
+            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+            InetAddress addr = addresses.nextElement();
+            String ip = (addresses.nextElement()).getHostAddress();
+
             SERVER_IP = InetAddress.getLocalHost().getHostAddress();
             SERVER_PORT = genPort();
         } catch (UnknownHostException e) {
+        } catch (SocketException e) {
         }
 
         start();
@@ -56,14 +65,14 @@ public class MessageServer extends Thread {
     }
 
     /**
-     * Returns a single instance of MessageServer
+     * Returns a single instance of NodeServer
      *
-     * @return Instance of MessageServer
+     * @return Instance of NodeServer
      */
-    public static MessageServer getInstance() {
+    public static NodeServer getInstance() {
 
         if (instance == null) {
-            instance = new MessageServer();
+            instance = new NodeServer();
         }
 
         return instance;
@@ -71,7 +80,7 @@ public class MessageServer extends Thread {
 
 
     /**
-     * MessageServer Thread execution 
+     * NodeServer Thread execution 
      */
     public void run() {
 
@@ -109,7 +118,7 @@ public class MessageServer extends Thread {
     }
 
     /**
-     * Shuts down the MessageServer
+     * Shuts down the NodeServer
      */
     public void shutdown() {
 
@@ -145,6 +154,27 @@ public class MessageServer extends Thread {
 
     }
 
+    public static void ipLookup() {
+        String ip;
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                //filters out 127.0.0.1 and inactive interfaces
+                if (iface.isLoopback() || !iface.isUp()) continue;
+
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while(addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    ip = addr.getHostAddress();
+                    System.out.println(iface.getDisplayName() + " " + ip);
+                }
+            }
+        } catch (SocketException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      *
      */
@@ -153,7 +183,7 @@ public class MessageServer extends Thread {
     }
 
     /**
-     * Get the current port that MessageServer is listening on
+     * Get the current port that NodeServer is listening on
      */
     public static int getPort() {
 
@@ -189,8 +219,8 @@ public class MessageServer extends Thread {
             try {
 
                 // Get reader/writer
-                PrintWriter out = new PrintWriter(
-                        clientSocket.getOutputStream(), true);
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+                            clientSocket.getOutputStream()));
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                             clientSocket.getInputStream()));
 
@@ -209,19 +239,20 @@ public class MessageServer extends Thread {
                     // Handle `ping` message
                     if (inputLine.equals("/ping")) {
 
-                        out.println("/pong");
+                        out.write("/pong\n");
 
                     }
 
                     // Handle `help` or `?` message
                     if (inputLine.equals("/?") || inputLine.equals("/help")) {
-                        out.println("/ping - ping");
-                        out.println("/quit - disconnect");
+                        out.write("/ping - ping\n");
+                        out.write("/quit - disconnect\n");
                     }
 
                     // Return OK message so that client knows message is
                     // received
-                    out.println("OK");
+                    out.write("OK\n");
+                    out.flush();
                     // Log message to stdout
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
 

@@ -77,7 +77,7 @@ public class BroadcastClient extends Thread {
                 BroadcastMessage bMsg = new BroadcastMessage(msg);
                 bMsg.printMessage();
                 peerlist.list.add(new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port));
-                (new MessageClient(bMsg.ip, (int) bMsg.port)).start();
+                (new NodeClient(bMsg.ip, (int) bMsg.port)).start();
 
             }
 
