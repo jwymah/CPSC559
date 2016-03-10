@@ -40,7 +40,7 @@ public class NodeServer extends Thread {
      */
     protected NodeServer() {
 
-        ipLookup();
+        //ipLookup();
 
         try {
             // Get instance of Log
@@ -49,12 +49,17 @@ public class NodeServer extends Thread {
             // Set is running and port
             isRunning = true;
 
-            NetworkInterface iface = NetworkInterface.getByName("en0");
-            Enumeration<InetAddress> addresses = iface.getInetAddresses();
-            InetAddress addr = addresses.nextElement();
-            String ip = (addresses.nextElement()).getHostAddress();
+            String ip;
+            if (System.getProperty("os.name").equals("Mac OS X")) {
+                NetworkInterface iface = NetworkInterface.getByName("en0");
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                InetAddress addr = addresses.nextElement();
+                ip = addr.getHostAddress();
+            } else {
+                ip = InetAddress.getLocalHost().getHostAddress();
+            }
 
-            SERVER_IP = InetAddress.getLocalHost().getHostAddress();
+            SERVER_IP = ip;
             SERVER_PORT = genPort();
         } catch (UnknownHostException e) {
         } catch (SocketException e) {
@@ -167,7 +172,7 @@ public class NodeServer extends Thread {
                 while(addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     ip = addr.getHostAddress();
-                    System.out.println(iface.getDisplayName() + " " + ip);
+                    System.out.println(iface.getDisplayName() + "\t" + ip);
                 }
             }
         } catch (SocketException e) {
