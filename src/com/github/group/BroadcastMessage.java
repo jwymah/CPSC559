@@ -27,7 +27,7 @@ public class BroadcastMessage extends Message {
     public String username;
     public String id;
     public String ip;
-    public long port;
+    public int port;
 
     private JSONObject msg;
     private NetworkInterface net;
@@ -77,7 +77,7 @@ public class BroadcastMessage extends Message {
             username = (String) msg.get("Username");
             id = (String) msg.get("ID");
             ip = (String) msg.get("IP");
-            port = (long) msg.get("Port");
+            port = ((Long) msg.get("Port")).intValue();
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
         }

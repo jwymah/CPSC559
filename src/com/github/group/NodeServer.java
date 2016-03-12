@@ -207,7 +207,7 @@ public class NodeServer extends Thread {
         public MessageHandler(Socket c) {
 
             client = c;
-
+//            PeerList.getInstance().list.add()
         }
 
         /**
@@ -225,9 +225,9 @@ public class NodeServer extends Thread {
 
                 // Get reader/writer
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                            clientSocket.getOutputStream()));
+                            client.getOutputStream()));
                 BufferedReader in = new BufferedReader(new InputStreamReader(
-                            clientSocket.getInputStream()));
+                            client.getInputStream()));
 
                 String inputLine;
 

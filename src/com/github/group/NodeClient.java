@@ -22,11 +22,12 @@ public class NodeClient extends Thread {
 
     private String ip;
     private int port;
+    private Peer peer;
 
     /**
      * Construction
      */
-    public NodeClient(String s, int p) {
+    public NodeClient(String s, int p, Peer peer) {
 
         try {
             // Get instance of Log
@@ -35,6 +36,7 @@ public class NodeClient extends Thread {
             // Set IP, Port
             ip = InetAddress.getByName(s).getHostAddress();
             port = p;
+            this.peer = peer;
         } catch (UnknownHostException e) {
         }
 
@@ -48,9 +50,11 @@ public class NodeClient extends Thread {
         Socket connectToPeer = null;
 
         try {
-            connectToPeer = new Socket(ip, port);
-            String addr = connectToPeer.getInetAddress().getHostAddress() + ":" + connectToPeer.getPort();
-            log.printLogMessage(Log.INFO, CLASS_ID, "Connected: " + addr);
+        	connectToPeer = peer.getConn();
+        	
+//            connectToPeer = new Socket(ip, port);
+//            String addr = connectToPeer.getInetAddress().getHostAddress() + ":" + connectToPeer.getPort();
+//            log.printLogMessage(Log.INFO, CLASS_ID, "Connected: " + addr);
 
             PrintWriter out = new PrintWriter(
                     connectToPeer.getOutputStream(), true);
