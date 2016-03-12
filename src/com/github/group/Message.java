@@ -7,7 +7,7 @@
  */ 
 package com.github.group;
 
-public class Message {
+public abstract class Message {
 
     private final String CLASS_ID = "Message";
     private static Log log;

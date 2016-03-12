@@ -10,6 +10,8 @@ package com.github.group;
 import java.io.IOException;
 import java.net.Socket;
 
+import org.json.simple.JSONObject;
+
 public class Peer {
 	private static String CLASS_ID = "PEER.java";
     
@@ -30,18 +32,18 @@ public class Peer {
         id = d;
         ip = i;
         port = p;
+        connect();
     }
 
     /**
      * TODO should this throw or handle its own exceptions? the caller has to check a null either way.
      * @param sock
      */
-    public void setConnection(Socket sock)
+    public void connect()
     {
-        Socket connectToPeer = null;
 		try
 		{
-			connectToPeer = new Socket(ip, port);
+			Socket connectToPeer = new Socket(ip, port);
 	        String addr = connectToPeer.getInetAddress().getHostAddress() + ":" + connectToPeer.getPort();
 	        log.printLogMessage(Log.INFO, CLASS_ID, "Connected: " + addr);
 			
@@ -49,8 +51,7 @@ public class Peer {
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to connect to peer");
 		}
     }
     public void clearConnection()
@@ -61,4 +62,22 @@ public class Peer {
     {
     	return tcpConn;
     }
+
+	public String getInetString()
+	{
+		return ip + ":" + String.valueOf(port);
+	}
+	
+	@Override
+	public String toString()
+	{
+        JSONObject msg = new JSONObject();
+        msg.put("Username", username);
+        msg.put("ID", id);
+        msg.put("IP", ip);
+        msg.put("Port", port);
+        msg.put("TcpConn", tcpConn.getInetAddress());
+        
+        return msg.toString();
+	}
 }
