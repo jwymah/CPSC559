@@ -227,24 +227,28 @@ public class NodeServer extends Thread {
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                             client.getInputStream()));
 
-                String inputLine = in.readLine();
+                String inputLine;
+                inputLine = in.readLine();
                 parseAndStoreConnectingPeer(inputLine);
+                
+//                out.write("recevied OK");
+//                out.flush();
+
+                GroupList.getInstance().mockMessageGroup("sending message to group members [from new broadcaster]");
+                System.out.println("------------------");
+                PeerList.displayPeerList();
                 
                 // Read input from client
                 while ((inputLine = in.readLine()) != null) {
 
                     // Handle `quit` message
                     if (inputLine.equals("/quit")) {
-
                         break;
-
                     }
 
                     // Handle `ping` message
                     if (inputLine.equals("/ping")) {
-
                         out.write("/pong\n");
-
                     }
 
                     // Handle `help` or `?` message
@@ -259,7 +263,6 @@ public class NodeServer extends Thread {
                     out.flush();
                     // Log message to stdout
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
-
                 }
 
                 log.printLogMessage(Log.INFO, CLASS_ID, 
@@ -284,9 +287,9 @@ public class NodeServer extends Thread {
 			// The first thing received on this socket is the contact info of the connecting peer
 			BroadcastMessage bMsg = new BroadcastMessage(inputLine);
 			
-			bMsg.printMessage();
 			Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port);
 			PeerList.getInstance().addPeer(newPeer);
+			bMsg.printMessage();
 		}
 
     }

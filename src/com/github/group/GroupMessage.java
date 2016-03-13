@@ -79,26 +79,22 @@ public class GroupMessage extends Message {
 	
 	public void send()
 	{
-		try
-		{
-			while(true)
-			{
-				Socket socket = new Socket(dst, port);
-				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				signMessage();
-				out.writeChars(msg.toString());
-				socket.shutdownOutput();
-				if (in.read() == 0) //does this actually happen?
-				{
-					break;
-				}
-			}
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try
+//		{	// TODO: cannot use this logic anymore
+//			Socket socket = null;
+//			socket = new Socket(dst, port);
+//			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+//			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//			signMessage();
+//			out.writeChars(msg.toString());
+//			socket.shutdownOutput();
+//			// TODO: retry logic?
+//			socket.close();
+//		}
+//		catch (IOException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }

@@ -44,6 +44,8 @@ public class P2PChat {
         (new BroadcastServer()).start();
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastClient");
         (new BroadcastClient()).start();
+        
+        
 
     }
 

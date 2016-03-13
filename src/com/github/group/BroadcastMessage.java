@@ -80,6 +80,7 @@ public class BroadcastMessage extends Message {
             port = ((Long) msg.get("Port")).intValue();
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
+            System.out.println(m);
         }
 
     }

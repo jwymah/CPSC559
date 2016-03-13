@@ -7,8 +7,10 @@
  */
 package com.github.group;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class PeerList {
 	private static Log log = Log.getInstance();
@@ -50,8 +52,6 @@ public class PeerList {
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
     	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
-    	
-    	displayPeerList();
     }
     
     public Peer getPeer(String username)
@@ -64,11 +64,18 @@ public class PeerList {
     	return peersByIP.get(ip + ":" + String.valueOf(port));
     }
     
-    public void displayPeerList()
+    public Collection<Peer> getAllPeers()
     {
+    	return peersByName.values();
+    }
+    
+    public static void displayPeerList()
+    {
+    	int i = 0;
     	for (Peer e : peersByName.values())
     	{
-    		System.out.println(e.toString());
+    		System.out.println(i + ": " + e.toString());
+    		i++;
     	}
     }
 

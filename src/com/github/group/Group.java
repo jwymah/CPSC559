@@ -7,21 +7,25 @@
  */
 package com.github.group;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.json.simple.JSONObject;
-
 public class Group {
 
-    public Set<Peer> group;
+    private Set<Peer> groupMembers;
+    private String id;    
 
     /**
      * Constructor
      */
-    protected Group() {
-        group = new TreeSet<Peer>();
+    public Group() {
+    	id = "1"; // TODO: be dynamic
+        groupMembers = new HashSet<Peer>();
     }
 
 //    msg = new JSONObject();
@@ -31,17 +35,29 @@ public class Group {
 //    msg.put("dstid", "DST");
 //    msg.put("msgsig", "MSGSIG");
 //    msg.put("msgbody", "MSGBODY");
+    
     public void messageGroup(String msgBody)
     {
     	GroupMessage msg = new GroupMessage();
-    	for(Peer e : group)
+    	for(Peer p : groupMembers)
     	{
-    		msg.setDst(e.ip, e.port);
+    		msg.setDst(p.ip, p.port);
     		//msg.setDstId TODO
-    		msg.setMsgBody(msgBody);
-    		
-    		new MessageSender(msg).run();
-    		
+
+
+            Socket conn = p.getConn();
+
+            try {
+                PrintWriter out = new PrintWriter(
+                        conn.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                            conn.getInputStream()));
+                out.println(msgBody);
+            }
+            catch(Exception ex)
+            {
+            	ex.printStackTrace();
+            }
     	}
     }
     
@@ -49,7 +65,7 @@ public class Group {
     {
     	//TODO: stub
     }
-    
+
     private class MessageSender extends Thread
     {
     	GroupMessage msg;
@@ -57,10 +73,20 @@ public class Group {
     	{
     		this.msg = msg;
     	}
-    	
+
     	public void run()
     	{
     		msg.send();
     	}    	
     }    
+
+    public void addPeer(Peer peerToAdd)
+    {
+    	groupMembers.add(peerToAdd);
+    }
+    
+    public String getId()
+    {
+    	return id;
+    }
 }
