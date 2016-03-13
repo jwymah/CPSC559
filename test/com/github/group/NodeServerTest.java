@@ -5,13 +5,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MessageServerTest {
+public class NodeServerTest {
 
-    static MessageServer m = null;
+    static NodeServer m = null;
 
     @Before
     public void setUp() {
-        m = MessageServer.getInstance();
+        m = NodeServer.getInstance();
     }
 
     @After
@@ -21,7 +21,7 @@ public class MessageServerTest {
     }
 
     @Test
-    public void testMessageServer() {
+    public void testNodeServer() {
         Assert.assertNotNull(m);
     }
 
