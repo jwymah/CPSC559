@@ -76,15 +76,13 @@ public class BroadcastClient extends Thread {
                 String msg = new String(buf, 0, buf.length);
                 BroadcastMessage bMsg = new BroadcastMessage(msg);
                 bMsg.printMessage();
-                peerlist.list.add(new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port));
-                (new NodeClient(bMsg.ip, (int) bMsg.port)).start();
-
+                Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port);
+                peerlist.addPeer(newPeer);
+                (new NodeClient(bMsg.ip, (int) bMsg.port, newPeer)).start();
             }
 
         } catch (IOException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to join group");
-
         }
 
     }

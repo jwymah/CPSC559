@@ -34,7 +34,7 @@ public class P2PChat {
         c = Crypto.getInstance();
 
         // Get Port, Username and ID
-        username = "cjhutchi";
+        username = "cjhutchi-" + c.getID();
         id = c.getID();
 
         // Start services

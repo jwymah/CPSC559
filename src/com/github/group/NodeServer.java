@@ -205,9 +205,7 @@ public class NodeServer extends Thread {
          * Constructor
          */
         public MessageHandler(Socket c) {
-
             client = c;
-
         }
 
         /**
@@ -225,12 +223,13 @@ public class NodeServer extends Thread {
 
                 // Get reader/writer
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                            clientSocket.getOutputStream()));
+                            client.getOutputStream()));
                 BufferedReader in = new BufferedReader(new InputStreamReader(
-                            clientSocket.getInputStream()));
+                            client.getInputStream()));
 
-                String inputLine;
-
+                String inputLine = in.readLine();
+                parseAndStoreConnectingPeer(inputLine, client);
+                
                 // Read input from client
                 while ((inputLine = in.readLine()) != null) {
 
@@ -279,6 +278,16 @@ public class NodeServer extends Thread {
             }
 
         }
+
+		public void parseAndStoreConnectingPeer(String inputLine, Socket sock)
+		{
+			// The first thing received on this socket is the contact info of the connecting peer
+			BroadcastMessage bMsg = new BroadcastMessage(inputLine);
+			
+			bMsg.printMessage();
+			Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port, sock);
+			PeerList.getInstance().addPeer(newPeer);
+		}
 
     }
 
