@@ -25,7 +25,7 @@ public class Peer {
     private Log log = Log.getInstance();
     
     /**
-     * Constructor
+     * Use this constructor when a TCP connection is not yet established
      */
     public Peer(String u, String d, String i, int p) {
         username = u;
@@ -33,6 +33,16 @@ public class Peer {
         ip = i;
         port = p;
         connect();
+    }
+    /**
+     * use this constructor if a connection is already established
+     */
+    public Peer(String u, String d, String i, int p, Socket sock) {
+        username = u;
+        id = d;
+        ip = i;
+        port = p;
+        tcpConn = sock;
     }
 
     /**
