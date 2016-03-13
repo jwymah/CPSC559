@@ -228,7 +228,7 @@ public class NodeServer extends Thread {
                             client.getInputStream()));
 
                 String inputLine = in.readLine();
-                parseAndStoreConnectingPeer(inputLine);
+                parseAndStoreConnectingPeer(inputLine, client);
                 
                 // Read input from client
                 while ((inputLine = in.readLine()) != null) {
@@ -279,13 +279,13 @@ public class NodeServer extends Thread {
 
         }
 
-		public void parseAndStoreConnectingPeer(String inputLine)
+		public void parseAndStoreConnectingPeer(String inputLine, Socket sock)
 		{
 			// The first thing received on this socket is the contact info of the connecting peer
 			BroadcastMessage bMsg = new BroadcastMessage(inputLine);
 			
 			bMsg.printMessage();
-			Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port);
+			Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port, sock);
 			PeerList.getInstance().addPeer(newPeer);
 		}
 
