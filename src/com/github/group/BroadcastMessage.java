@@ -36,7 +36,7 @@ public class BroadcastMessage extends Message {
      * Constructor
      */
     public BroadcastMessage() {
-        super();
+        super(MessageType.BROADCAST);
 
         // Get instance of Log
         log = Log.getInstance();
@@ -51,6 +51,7 @@ public class BroadcastMessage extends Message {
         // Package in JSON object
         msg = new JSONObject();
         msg.put("TimeStamp", super.timestamp);
+        msg.put("type", super.type.toString());
         msg.put("Username", username);
         msg.put("ID", id);
         msg.put("IP", ip);
@@ -58,9 +59,10 @@ public class BroadcastMessage extends Message {
     }
 
     /**
-     * Constructor that parses and input message
+     * Constructor that parses an input message
      */
     public BroadcastMessage(String m) {
+    	super(MessageType.BROADCAST);
 
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
@@ -82,7 +84,6 @@ public class BroadcastMessage extends Message {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
             System.out.println(m);
         }
-
     }
 
     /**

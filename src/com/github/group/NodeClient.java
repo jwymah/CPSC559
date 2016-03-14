@@ -51,33 +51,37 @@ public class NodeClient extends Thread {
 //            String ok = in.readLine();
 //            log.printLogMessage(Log.INFO, CLASS_ID, "Received: " + ok);
             
-            GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving broadcast]");
-            System.out.println("+++++++++++++++++");
-            PeerList.displayPeerList();// Read input from client
+//            GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving broadcast]");
+//            System.out.println("+++++++++++++++++");
+//            PeerList.displayPeerList();
             
+            // Read input from client
             String inputLine;
+        	System.out.println("waiting for messagessssss ++++");
+        	
+        	//TODO: refactor this into common library for nodeserver+nodeclient
             while ((inputLine = in.readLine()) != null) {
-
-                // Handle `quit` message
-                if (inputLine.equals("/quit")) {
-                    break;
-                }
-
-                // Handle `ping` message
-                if (inputLine.equals("/ping")) {
-                    out.write("/pong\n");
-                }
-
-                // Handle `help` or `?` message
-                if (inputLine.equals("/?") || inputLine.equals("/help")) {
-                    out.write("/ping - ping\n");
-                    out.write("/quit - disconnect\n");
-                }
-
-                // Return OK message so that client knows message is
-                // received
-//                out.write("OK\n");
-//                out.flush();
+            	switch (Message.parseMessageType(inputLine)){
+            		case BROADCAST:
+            			parseAndStoreConnectingPeer(inputLine, conn);
+                        GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving info]");
+                        out.flush();
+            			break;
+            		case CHAT:
+            			ChatMessage cmsg = new ChatMessage(inputLine);
+            			out.println(new Message((MessageType.CONTROL).toString()).toJsonString());
+            			break;
+					case CONTROL:
+						break;
+					case QUERY:
+						break;
+					case QUERY_RESPONSE:
+						break;
+					case BLANK:
+					default:
+						System.out.println("received  bad message type?");
+						break;
+            	}
                 // Log message to stdout
                 String addr = conn.getInetAddress().getHostAddress() + ":" + conn.getPort();
                 log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
@@ -88,4 +92,15 @@ public class NodeClient extends Thread {
         }
 
     }
+
+	//TODO: refactor this into common library for nodeserver+nodeclient
+    public void parseAndStoreConnectingPeer(String inputLine, Socket sock)
+	{
+		// The first thing received on this socket is the contact info of the connecting peer
+		BroadcastMessage bMsg = new BroadcastMessage(inputLine);
+		
+		Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port, sock);
+		PeerList.getInstance().addPeer(newPeer);
+		bMsg.printMessage();
+	}
 }

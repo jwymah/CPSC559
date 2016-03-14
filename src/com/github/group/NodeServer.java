@@ -199,13 +199,13 @@ public class NodeServer extends Thread {
     private class MessageHandler extends Thread {
 
         private static final String CLASS_ID = "MessageHandler";
-        private Socket client = null;
+        private Socket conn = null;
 
         /**
          * Constructor
          */
         public MessageHandler(Socket c) {
-            client = c;
+            conn = c;
         }
 
         /**
@@ -214,7 +214,7 @@ public class NodeServer extends Thread {
          * @param   client  The client socket
          */
         public void run() {
-            String addr = client.getInetAddress().getHostAddress() + ":" + client.getPort();
+            String addr = conn.getInetAddress().getHostAddress() + ":" + conn.getPort();
 
             log.printLogMessage(Log.INFO, CLASS_ID, 
                     "Connected: " + addr);
@@ -223,43 +223,36 @@ public class NodeServer extends Thread {
 
                 // Get reader/writer
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                            client.getOutputStream()));
+                            conn.getOutputStream()));
                 BufferedReader in = new BufferedReader(new InputStreamReader(
-                            client.getInputStream()));
+                            conn.getInputStream()));
 
-                String inputLine = in.readLine();
-                parseAndStoreConnectingPeer(inputLine, client);
-                
-//                out.write("recevied OK");
-//                out.flush();
-
-                GroupList.getInstance().mockMessageGroup("sending message to group members [from new broadcaster]");
-                System.out.println("------------------");
-                PeerList.displayPeerList();
-                
+//              PeerList.displayPeerList();
+              
+                String inputLine;
                 // Read input from client
                 while ((inputLine = in.readLine()) != null) {
-
-                    // Handle `quit` message
-                    if (inputLine.equals("/quit")) {
-                        break;
-                    }
-
-                    // Handle `ping` message
-                    if (inputLine.equals("/ping")) {
-                        out.write("/pong\n");
-                    }
-
-                    // Handle `help` or `?` message
-                    if (inputLine.equals("/?") || inputLine.equals("/help")) {
-                        out.write("/ping - ping\n");
-                        out.write("/quit - disconnect\n");
-                    }
-
-                    // Return OK message so that client knows message is
-                    // received
-                    out.write("OK\n");
-                    out.flush();
+                	System.out.println("received message ++++++++++ " + inputLine);
+                	switch (Message.parseMessageType(inputLine)){
+                		case BROADCAST:
+                			parseAndStoreConnectingPeer(inputLine, conn);
+                            GroupList.getInstance().mockMessageGroup("sending message to group members [from new broadcaster]");
+                            out.flush();
+                			break;
+                		case CHAT:
+                			ChatMessage cmsg = new ChatMessage(inputLine);
+                			break;
+						case CONTROL:
+							break;
+						case QUERY:
+							break;
+						case QUERY_RESPONSE:
+							break;
+						case BLANK:
+						default:
+							System.out.println("received  bad message type?");
+							break;
+                	}
                     // Log message to stdout
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
                 }

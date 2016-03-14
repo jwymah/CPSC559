@@ -16,34 +16,70 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 		
-public class GroupMessage extends Message {
+public class ChatMessage extends Message {
 
     private final static String CLASS_ID = "GroupMessage";
     private static Log log;
     private JSONObject msg;
-    
+
+	private String src;
     private String dst;
+	private String dstid;
+	private String msgsig;
+	private String msgbody;
 	private int port;
 
     /**
      * Constructor
      */
-    public GroupMessage() {
-        super();
+    public ChatMessage() {
+        super(MessageType.CHAT);
         log = Log.getInstance();
 
         // Package in JSON object
         msg = new JSONObject();
         msg.put("TimeStamp", super.timestamp);
+        msg.put("type", super.type.toString());
         msg.put("src", "SRC");
         msg.put("dst", "IP:PORT");
-        msg.put("dstid", "DST");
+        msg.put("dstid", "DSTID");
         msg.put("msgsig", "MSGSIG");
         msg.put("msgbody", "MSGBODY");
 
         populateSrc();
+    }    
+
+    /**
+     * Constructor that parses and input message
+     */
+    public ChatMessage(String m) {
+    	super(MessageType.CHAT);
+
+        // Remove weird added whitespace that rekt parsing
+        // and initialize JSON parser
+        m = m.trim();   
+        JSONParser parser = new JSONParser();
+
+        // Parse message and get message components
+        try {
+            Object obj = parser.parse(m);
+
+            msg = (JSONObject) obj;
+            timestamp = (long) msg.get("TimeStamp");
+//            type = Message.parseMessageType(m);
+            src = (String) msg.get("src");
+            dst = (String) msg.get("dst");
+            dstid = (String) msg.get("dstid");
+            msgsig = (String) msg.get("msgsig");
+            msgbody = (String) msg.get("msgbody");
+        } catch (ParseException e) {
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
+            System.out.println(m);
+        }
     }
 
 	private void populateSrc()
@@ -71,30 +107,20 @@ public class GroupMessage extends Message {
 		msg.put("msgbody", msgBody);
 	}
 	
+	public String getMsgBody()
+	{
+		return (String) msg.get("msgbody");
+	}
+	
 	public void signMessage()
 	{
 		//TODO hash of msgBody + src
 		msg.put("msgsig", "1111");
 	}
 	
-	public void send()
+	@Override
+	public String toJsonString()
 	{
-//		try
-//		{	// TODO: cannot use this logic anymore
-//			Socket socket = null;
-//			socket = new Socket(dst, port);
-//			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-//			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//			signMessage();
-//			out.writeChars(msg.toString());
-//			socket.shutdownOutput();
-//			// TODO: retry logic?
-//			socket.close();
-//		}
-//		catch (IOException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		return msg.toJSONString();
 	}
 }
