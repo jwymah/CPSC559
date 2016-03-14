@@ -1,3 +1,7 @@
 build/**
 deploy/**
 results/**
+/.idea
+CPSC559.iml
+*.cmd
+*.name
