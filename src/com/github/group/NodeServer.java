@@ -10,9 +10,7 @@ package com.github.group;
 import java.io.*;
 import java.lang.Process;
 import java.net.*;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,6 +27,8 @@ public class NodeServer extends Thread {
     private static Log log = null;
     private static int SERVER_PORT;
     private static String SERVER_IP;
+    private static List<Group> groupList = new ArrayList<Group>();
+
 
     private boolean isRunning = false;
     private ServerSocket serverSocket = null;
@@ -251,6 +251,7 @@ public class NodeServer extends Thread {
                     if (inputLine.substring(0,5).equals("/join"))
                     {
                         String groupID = inputLine.substring(5);
+
 
 
                         // add peer to group list

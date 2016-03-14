@@ -1,5 +1,5 @@
 /**
- * Group.java
+ * GroupList.java
  *
  * @author Cory Hutchison
  * @author Frankie Yuan
@@ -13,15 +13,15 @@ import java.util.TreeSet;
 
 import org.json.simple.JSONObject;
 
-public class Group {
+// group will use list of all peers to find ip addresses
+public class GroupList {
 
-    public Set<Peer> group;
 	public String groupID;
 
     /**
      * Constructor
      */
-    protected Group() {
+    protected GroupList() {
         group = new TreeSet<Peer>();
     }
 
