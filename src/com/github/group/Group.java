@@ -38,21 +38,22 @@ public class Group {
     
     public void messageGroup(String msgBody)
     {
-    	GroupMessage msg = new GroupMessage();
+    	ChatMessage msg = new ChatMessage();
     	for(Peer p : groupMembers)
     	{
     		msg.setDst(p.ip, p.port);
-    		//msg.setDstId TODO
-
+    		msg.setMsgBody(msgBody);
+    		msg.signMessage();
 
             Socket conn = p.getConn();
 
+            //TODO: have spin up a SINGLE THREAD that handles sending over the socket. don't want messages being interleaved
             try {
                 PrintWriter out = new PrintWriter(
                         conn.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                             conn.getInputStream()));
-                out.println(msgBody);
+                out.println(msg.toJsonString());
             }
             catch(Exception ex)
             {
@@ -65,20 +66,6 @@ public class Group {
     {
     	//TODO: stub
     }
-
-    private class MessageSender extends Thread
-    {
-    	GroupMessage msg;
-    	MessageSender(GroupMessage msg)
-    	{
-    		this.msg = msg;
-    	}
-
-    	public void run()
-    	{
-    		msg.send();
-    	}    	
-    }    
 
     public void addPeer(Peer peerToAdd)
     {
