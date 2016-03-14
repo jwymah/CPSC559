@@ -22,7 +22,7 @@ public class BroadcastClient extends Thread {
     private final static String CLASS_ID = "BroadcastClient";
     private static PeerList peerlist;
     private static Log log;
-    
+
     final static String INET_ADDR = "224.0.0.3";
     final static int PORT = 8888;
 
@@ -76,15 +76,13 @@ public class BroadcastClient extends Thread {
                 String msg = new String(buf, 0, buf.length);
                 BroadcastMessage bMsg = new BroadcastMessage(msg);
                 bMsg.printMessage();
-                peerlist.list.add(new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port));
-                (new MessageClient(bMsg.ip, (int) bMsg.port)).start();
-
+                Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port);
+                peerlist.addPeer(newPeer);
+                (new NodeClient(bMsg.ip, (int) bMsg.port, newPeer)).start();
             }
 
         } catch (IOException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to join group");
-
         }
 
     }

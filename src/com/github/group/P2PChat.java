@@ -19,8 +19,7 @@ public class P2PChat {
     private final static String CLASS_ID = "P2PChat";
     private static Log log;
     private static Crypto c;
-    private static MessageServer ms = null;
-
+    private static NodeServer ns = null;
 
     public static String    username;
     public static String    id;
@@ -35,12 +34,12 @@ public class P2PChat {
         c = Crypto.getInstance();
 
         // Get Port, Username and ID
-        username = "cjhutchi";
+        username = "cjhutchi-" + c.getID();
         id = c.getID();
 
         // Start services
-        log.printLogMessage(Log.INFO, CLASS_ID, "Starting MessageServer");
-        ms = MessageServer.getInstance();
+        log.printLogMessage(Log.INFO, CLASS_ID, "Starting NodeServer");
+        ns = NodeServer.getInstance();
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastServer");
         (new BroadcastServer()).start();
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastClient");

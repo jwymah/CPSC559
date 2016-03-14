@@ -12,10 +12,11 @@ import java.io.IOException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.json.simple.JSONObject;
+import org.w3c.dom.Node;
 
 public class BroadcastMessage extends Message {
 
-    private static MessageServer ms = null;
+    private static NodeServer ns = null;
 
     private static String CLASS_ID = "BroadcastMessage";
     private static Log log;
@@ -35,13 +36,13 @@ public class BroadcastMessage extends Message {
 
         // Get instance of Log
         log = Log.getInstance();
-        ms = MessageServer.getInstance();
+        ns = NodeServer.getInstance();
 
         // Set components
         username = P2PChat.username;
         id = P2PChat.id;
         ip = "127.0.0.1";
-        port = ms.getPort();
+        port = ns.getPort();
 
         // Package in JSON object
         msg = new JSONObject();

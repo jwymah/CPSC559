@@ -50,7 +50,7 @@ public class GroupMessage extends Message {
 	{
 		try
 		{
-			msg.put("src", InetAddress.getLocalHost().getHostAddress() + ":" + new Integer(MessageServer.getPort()).toString());
+			msg.put("src", InetAddress.getLocalHost().getHostAddress() + ":" + new Integer(NodeServer.getPort()).toString());
 		}
 		catch (UnknownHostException e)
 		{
