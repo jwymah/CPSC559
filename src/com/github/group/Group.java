@@ -25,7 +25,6 @@ public class Group {
         group = new TreeSet<Peer>();
     }
 
-
 //    msg = new JSONObject();
 //    msg.put("TimeStamp", super.timestamp);
 //    msg.put("src", "SRC");
