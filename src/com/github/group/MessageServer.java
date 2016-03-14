@@ -90,7 +90,6 @@ public class MessageServer extends Thread {
             } catch (IOException e) {
 
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to accept connection");
-
             }
 
         } catch (IOException e) {
@@ -196,6 +195,16 @@ public class MessageServer extends Thread {
                     if (inputLine.equals("/ping")) {
 
                         out.println("/pong");
+
+                    }
+
+                    // join group command
+                    if (inputLine.substring(0,5).equals("/join"))
+                    {
+                        String groupID = inputLine.substring(5);
+                        
+
+                        // add peer to group list
 
                     }
 

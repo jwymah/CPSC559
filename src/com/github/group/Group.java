@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 public class Group {
 
     public Set<Peer> group;
+	public String groupID;
 
     /**
      * Constructor
@@ -23,6 +24,7 @@ public class Group {
     protected Group() {
         group = new TreeSet<Peer>();
     }
+
 
 //    msg = new JSONObject();
 //    msg.put("TimeStamp", super.timestamp);

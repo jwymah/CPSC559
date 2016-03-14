@@ -21,6 +21,7 @@ public class P2PChat {
     private static Crypto c;
     private static MessageServer ms = null;
 
+
     public static String    username;
     public static String    id;
 

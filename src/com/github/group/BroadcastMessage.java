@@ -72,7 +72,7 @@ public class BroadcastMessage extends Message {
             username = (String) msg.get("Username");
             id = (String) msg.get("ID");
             ip = (String) msg.get("IP");
-            port = (int) msg.get("Port");
+            port = (int)((long) msg.get("Port"));
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
         }
