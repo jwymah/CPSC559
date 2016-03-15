@@ -40,7 +40,7 @@ public class PeerList {
         return instance;
     }
     
-    public void addPeer(Peer peerToAdd)
+    public static void addPeer(Peer peerToAdd)
     {
     	if (peersByName.get(peerToAdd.username) != null)
     	{
@@ -51,17 +51,17 @@ public class PeerList {
     	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
     }
     
-    public Peer getPeer(String username)
+    public static Peer getPeer(String username)
     {
     	return peersByName.get(username);
     }
     
-    public Peer getPeer(String ip, int port)
+    public static Peer getPeer(String ip, int port)
     {
     	return peersByIP.get(ip + ":" + String.valueOf(port));
     }
     
-    public Collection<Peer> getAllPeers()
+    public static Collection<Peer> getAllPeers()
     {
     	return peersByName.values();
     }
