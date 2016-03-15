@@ -7,27 +7,27 @@ import org.junit.Test;
 
 public class NodeServerTest {
 
-    static NodeServer n = null;
+    static NodeServer m = null;
 
     @Before
     public void setUp() {
-        n = NodeServer.getInstance();
+        m = NodeServer.getInstance();
     }
 
     @After
     public void tearDown() {
-        n.shutdown();
-        n = null;
+        m.shutdown();
+        m = null;
     }
 
     @Test
-    public void testMessageServer() {
-        Assert.assertNotNull(n);
+    public void testNodeServer() {
+        Assert.assertNotNull(m);
     }
 
     @Test
     public void testGetPort() {
-        int i = n.getPort();
+        int i = NodeServer.getPort();
         Assert.assertTrue((i >= 9000 && i <= 10000));
     }
 

@@ -7,13 +7,6 @@
  */
 package com.github.group;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.lang.CloneNotSupportedException;
-import java.util.Random;
-
-
 public class P2PChat {
 
     private final static String CLASS_ID = "P2PChat";
@@ -28,7 +21,6 @@ public class P2PChat {
      * MAIN
      */
     public static void main (String args[]) {
-
         // Get instances of Crypto and Log
         log = Log.getInstance();
         c = Crypto.getInstance();
@@ -44,7 +36,5 @@ public class P2PChat {
         (new BroadcastServer()).start();
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastClient");
         (new BroadcastClient()).start();
-
     }
-
 }

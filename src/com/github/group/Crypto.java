@@ -7,7 +7,6 @@
  */
 package com.github.group;
 
-import java.security.DigestException;
 import java.security.KeyPairGenerator;
 import java.security.KeyPair;
 import java.security.MessageDigest;

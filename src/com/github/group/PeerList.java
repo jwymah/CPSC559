@@ -6,7 +6,7 @@
  * @author Jeremy Mah
  */
 package com.github.group;
-
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,43 +33,45 @@ public class PeerList {
      * @return An instance of the peerlist
      */
     public static PeerList getInstance() {
-
         if (instance == null) {
             instance = new PeerList();
         }
-
         return instance;
     }
-
+    
     public void addPeer(Peer peerToAdd)
     {
-        if (peersByName.get(peerToAdd.username) != null)
-        {
+    	if (peersByName.get(peerToAdd.username) != null)
+    	{
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to add user to PeerList - a user by this name already exists");
             return;
-        }
-        peersByName.put(peerToAdd.username, peerToAdd);
-        peersByIP.put(peerToAdd.getInetString(), peerToAdd);
-
-        displayPeerList();
+    	}
+    	peersByName.put(peerToAdd.username, peerToAdd);
+    	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
     }
-
+    
     public Peer getPeer(String username)
     {
-        return peersByName.get(username);
+    	return peersByName.get(username);
     }
-
+    
     public Peer getPeer(String ip, int port)
     {
-        return peersByIP.get(ip + ":" + String.valueOf(port));
+    	return peersByIP.get(ip + ":" + String.valueOf(port));
     }
-
-    public void displayPeerList()
+    
+    public Collection<Peer> getAllPeers()
     {
-        for (Peer e : peersByName.values())
-        {
-            System.out.println(e.toString());
-        }
+    	return peersByName.values();
+    }
+    
+    public static void displayPeerList()
+    {
+    	int i = 0;
+    	for (Peer e : peersByName.values())
+    	{
+    		System.out.println(i + ": " + e.toString());
+    		i++;
     }
 
 }

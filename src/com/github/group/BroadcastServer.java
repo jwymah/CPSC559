@@ -18,7 +18,7 @@ public class BroadcastServer extends Thread {
     private static String CLASS_ID = "BroadcastServer";
     private static Log log;
 
-    final static String INET_ADDR = "224.0.0.3";
+    final static String INET_ADDR = "255.255.255.255";
     final static int PORT = 8888;
 
     private BroadcastMessage broadcastMessage;

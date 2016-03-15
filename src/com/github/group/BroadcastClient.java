@@ -69,7 +69,6 @@ public class BroadcastClient extends Thread {
             clientSocket.joinGroup(sockAddress, netInterface);
 
             while (true) {
-
                 DatagramPacket msgPacket = new DatagramPacket(buf, buf.length);
                 clientSocket.receive(msgPacket);
 

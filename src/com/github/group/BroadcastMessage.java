@@ -7,7 +7,7 @@
  */
 package com.github.group;
 
-import java.io.IOException;
+import java.net.NetworkInterface;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -27,26 +27,27 @@ public class BroadcastMessage extends Message {
     public int port;
 
     private JSONObject msg;
+    private NetworkInterface net;
 
     /**
      * Constructor
      */
     public BroadcastMessage() {
-        super();
+        super(MessageType.BROADCAST);
 
         // Get instance of Log
         log = Log.getInstance();
-        ns = NodeServer.getInstance();
 
         // Set components
         username = P2PChat.username;
         id = P2PChat.id;
-        ip = "127.0.0.1";
-        port = ns.getPort();
+        ip = NodeServer.getIP();
+        port = NodeServer.getPort();
 
         // Package in JSON object
         msg = new JSONObject();
         msg.put("TimeStamp", super.timestamp);
+        msg.put("type", super.type.toString());
         msg.put("Username", username);
         msg.put("ID", id);
         msg.put("IP", ip);
@@ -54,9 +55,10 @@ public class BroadcastMessage extends Message {
     }
 
     /**
-     * Constructor that parses and input message
+     * Constructor that parses an input message
      */
     public BroadcastMessage(String m) {
+    	super(MessageType.BROADCAST);
 
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
@@ -73,11 +75,11 @@ public class BroadcastMessage extends Message {
             username = (String) msg.get("Username");
             id = (String) msg.get("ID");
             ip = (String) msg.get("IP");
-            port = (int)((long) msg.get("Port"));
+            port = ((Long) msg.get("Port")).intValue();
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
+            System.out.println(m);
         }
-
     }
 
     /**
@@ -86,16 +88,13 @@ public class BroadcastMessage extends Message {
      * @return JSON BroadcastMessage as string
      */
     public String toString() {
-
         return msg.toString();
-
     }
 
     /**
      * Writes out the key/vals of a BroadcastMessage in a legible format
      */
     public void printMessage() {
-
         log.printLogMessage(Log.INFO, CLASS_ID, "");
 
         System.out.println();
@@ -104,9 +103,7 @@ public class BroadcastMessage extends Message {
         System.out.println("\tID:\t\t" + id);
         System.out.println("\tIP:\t\t" + ip);
         System.out.println("\tPort:\t\t" + port);
-        System.out.println();
-        
+        System.out.println();        
     }
-
 }
 

@@ -13,17 +13,16 @@ import java.net.Socket;
 import org.json.simple.JSONObject;
 
 public class Peer {
-    private static String CLASS_ID = "PEER.java";
+	private static String CLASS_ID = "PEER.java";
 
     public String   username;
     public String   id;
     public String   ip;
     public int     port;
-    private Socket tcpConn;
-
+	private Socket tcpConn;
     // Get instance of Log
     private Log log = Log.getInstance();
-
+    
     /**
      * Use this constructor when a TCP connection is not yet established
      */
@@ -51,43 +50,43 @@ public class Peer {
      */
     public void connect()
     {
-        try
-        {
-            Socket connectToPeer = new Socket(ip, port);
-            String addr = connectToPeer.getInetAddress().getHostAddress() + ":" + connectToPeer.getPort();
-            log.printLogMessage(Log.INFO, CLASS_ID, "Connected: " + addr);
-
-            tcpConn = connectToPeer;
-        }
-        catch (IOException e)
-        {
+		try
+		{
+			Socket connectToPeer = new Socket(ip, port);
+	        String addr = connectToPeer.getInetAddress().getHostAddress() + ":" + connectToPeer.getPort();
+	        log.printLogMessage(Log.INFO, CLASS_ID, "Connected: " + addr);
+			
+	        tcpConn = connectToPeer;
+		}
+		catch (IOException e)
+		{
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to connect to peer");
-        }
+		}
     }
     public void clearConnection()
     {
-        tcpConn = null;
+    	tcpConn = null;
     }
     public Socket getConn()
     {
-        return tcpConn;
+    	return tcpConn;
     }
 
-    public String getInetString()
-    {
-        return ip + ":" + String.valueOf(port);
-    }
-
-    @Override
-    public String toString()
-    {
+	public String getInetString()
+	{
+		return ip + ":" + String.valueOf(port);
+	}
+	
+	@Override
+	public String toString()
+	{
         JSONObject msg = new JSONObject();
         msg.put("Username", username);
         msg.put("ID", id);
         msg.put("IP", ip);
         msg.put("Port", port);
         msg.put("TcpConn", tcpConn.getInetAddress());
-
+        
         return msg.toString();
-    }
+	}
 }

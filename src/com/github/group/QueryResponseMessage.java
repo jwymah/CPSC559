@@ -16,7 +16,7 @@ public class QueryResponseMessage extends Message {
      * Constructor
      */
     public QueryResponseMessage() {
-        super();
+        super(MessageType.QUERY_RESPONSE);
         log = Log.getInstance();
     }
 }
