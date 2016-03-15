@@ -27,7 +27,6 @@ public class NodeServer extends Thread {
     private static Log log = null;
     private static int SERVER_PORT;
     private static String SERVER_IP;
-    private static List<Group> groupList = new ArrayList<Group>();
 
 
     private boolean isRunning = false;

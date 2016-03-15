@@ -22,7 +22,7 @@ public class NodeServerTest {
 
     @Test
     public void testMessageServer() {
-        Assert.assertNotNull(m);
+        Assert.assertNotNull(n);
     }
 
     @Test
