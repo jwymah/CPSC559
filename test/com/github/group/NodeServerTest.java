@@ -27,7 +27,7 @@ public class NodeServerTest {
 
     @Test
     public void testGetPort() {
-        int i = m.getPort();
+        int i = NodeServer.getPort();
         Assert.assertTrue((i >= 9000 && i <= 10000));
     }
 

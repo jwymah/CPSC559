@@ -7,12 +7,7 @@
  */
 package com.github.group;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.json.simple.JSONObject;
@@ -70,7 +65,7 @@ public class ChatMessage extends Message {
 
             msg = (JSONObject) obj;
             timestamp = (long) msg.get("TimeStamp");
-//            type = Message.parseMessageType(m);
+            type = super.type;
             src = (String) msg.get("src");
             dst = (String) msg.get("dst");
             dstid = (String) msg.get("dstid");

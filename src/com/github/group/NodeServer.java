@@ -8,18 +8,11 @@
 package com.github.group;
 
 import java.io.*;
-import java.lang.Process;
 import java.net.*;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Random;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 public class NodeServer extends Thread {
-
     private static NodeServer instance = null;
 
     final static int MIN_PORT = 9000;
@@ -39,9 +32,8 @@ public class NodeServer extends Thread {
      * Constructor
      */
     protected NodeServer() {
-
         //ipLookup();
-
+    	
         try {
             // Get instance of Log
             log = Log.getInstance();
@@ -64,9 +56,7 @@ public class NodeServer extends Thread {
         } catch (UnknownHostException e) {
         } catch (SocketException e) {
         }
-
         start();
-
     }
 
     /**
@@ -75,72 +65,54 @@ public class NodeServer extends Thread {
      * @return Instance of NodeServer
      */
     public static NodeServer getInstance() {
-
         if (instance == null) {
             instance = new NodeServer();
         }
-
         return instance;
     }
-
 
     /**
      * NodeServer Thread execution 
      */
     public void run() {
-
         // Create a server socket
         try {
-
             serverSocket = new ServerSocket(SERVER_PORT);
             log.printLogMessage(Log.INFO, CLASS_ID, "");
             printServerInfo();
 
             try {
-
                 // Accept connections
                 while (isRunning) {
-
                     clientSocket = serverSocket.accept();
-
+                    
                     // Hand off to client handler thread
                     new MessageHandler(clientSocket).start();
-
                 }
-
             } catch (IOException e) {
-
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to accept connection");
-
             }
 
         } catch (IOException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
-
         }
-
     }
 
     /**
      * Shuts down the NodeServer
      */
     public void shutdown() {
-
         isRunning = false;
-
     }
 
     /**
      * Prints server IP:Port
      */
     private void printServerInfo() {
-
         System.out.println();
         System.out.println("\tIP:\t\t127.0.0.1");
         System.out.println("\tPort:\t\t" + getPort());
         System.out.println();
-
     }
 
     /**
@@ -149,14 +121,12 @@ public class NodeServer extends Thread {
      * @return A random integer between MIN_PORT and MAX_PORT
      */
     private static int genPort() {
-
         log.printLogMessage(Log.INFO, CLASS_ID, "Generating Port");
 
         Random rand = new Random();
         int i = rand.nextInt((MAX_PORT - MIN_PORT) + 1) + MIN_PORT;
 
         return i;
-
     }
 
     public static void ipLookup() {
@@ -191,9 +161,7 @@ public class NodeServer extends Thread {
      * Get the current port that NodeServer is listening on
      */
     public static int getPort() {
-
         return SERVER_PORT;
-
     }
 
     private class MessageHandler extends Thread {
@@ -216,33 +184,29 @@ public class NodeServer extends Thread {
         public void run() {
             String addr = conn.getInetAddress().getHostAddress() + ":" + conn.getPort();
 
-            log.printLogMessage(Log.INFO, CLASS_ID, 
-                    "Connected: " + addr);
+            log.printLogMessage(Log.INFO, CLASS_ID, "Connected: " + addr);
 
             try {
-
                 // Get reader/writer
-                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                            conn.getOutputStream()));
-                BufferedReader in = new BufferedReader(new InputStreamReader(
-                            conn.getInputStream()));
+                PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-//              PeerList.displayPeerList();
-              
+            	//TODO: refactor this into common library for nodeserver+nodeclient. after user input is added
                 String inputLine;
                 // Read input from client
-                while ((inputLine = in.readLine()) != null) {
-                	System.out.println("received message ++++++++++ " + inputLine);
+                while ((inputLine = in.readLine()) != null) {                	
                 	switch (Message.parseMessageType(inputLine)){
                 		case BROADCAST:
                 			parseAndStoreConnectingPeer(inputLine, conn);
-                            GroupList.getInstance().mockMessageGroup("sending message to group members [from new broadcaster]");
-                            out.flush();
+                            GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
                 			break;
                 		case CHAT:
-                			ChatMessage cmsg = new ChatMessage(inputLine);
                 			break;
 						case CONTROL:
+                			out.println(new Message(MessageType.CONTROL).toJsonString());
+                			out.println(new Message(MessageType.QUERY).toJsonString());
+                			out.println(new Message(MessageType.QUERY_RESPONSE).toJsonString());
+                			out.println(new Message(MessageType.BLANK).toJsonString());
 							break;
 						case QUERY:
 							break;
@@ -266,12 +230,8 @@ public class NodeServer extends Thread {
                 clientSocket.close();
 
             } catch (IOException e) {
-
-                log.printLogMessage(Log.ERROR, CLASS_ID, 
-                        "Connection interrupted");
-
+                log.printLogMessage(Log.ERROR, CLASS_ID, "Connection interrupted");
             }
-
         }
 
 		public void parseAndStoreConnectingPeer(String inputLine, Socket sock)

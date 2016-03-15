@@ -32,7 +32,6 @@ public class Message {
         // NOTE: Attempted on both Unix and Windows with success
         timestamp = (long) (System.currentTimeMillis() / 1000L);
         this.type = type;
-
     }
     
     /**

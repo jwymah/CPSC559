@@ -7,11 +7,7 @@
  */
 package com.github.group;
 
-import java.io.IOException;
-import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -40,13 +36,12 @@ public class BroadcastMessage extends Message {
 
         // Get instance of Log
         log = Log.getInstance();
-        ns = NodeServer.getInstance();
 
         // Set components
         username = P2PChat.username;
         id = P2PChat.id;
-        ip = ns.getIP();
-        port = ns.getPort();
+        ip = NodeServer.getIP();
+        port = NodeServer.getPort();
 
         // Package in JSON object
         msg = new JSONObject();
@@ -92,16 +87,13 @@ public class BroadcastMessage extends Message {
      * @return JSON BroadcastMessage as string
      */
     public String toString() {
-
         return msg.toString();
-
     }
 
     /**
      * Writes out the key/vals of a BroadcastMessage in a legible format
      */
     public void printMessage() {
-
         log.printLogMessage(Log.INFO, CLASS_ID, "");
 
         System.out.println();
@@ -110,9 +102,7 @@ public class BroadcastMessage extends Message {
         System.out.println("\tID:\t\t" + id);
         System.out.println("\tIP:\t\t" + ip);
         System.out.println("\tPort:\t\t" + port);
-        System.out.println();
-        
+        System.out.println();        
     }
-
 }
 

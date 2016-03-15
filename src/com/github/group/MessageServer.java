@@ -8,14 +8,8 @@
 package com.github.group;
 
 import java.io.*;
-import java.lang.Process;
 import java.net.*;
-import java.util.Iterator;
 import java.util.Random;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class MessageServer extends Thread {
 
@@ -37,7 +31,6 @@ public class MessageServer extends Thread {
      * Constructor
      */
     protected MessageServer() {
-
         // Get instance of Log
         log = Log.getInstance();
 
@@ -45,7 +38,6 @@ public class MessageServer extends Thread {
         isRunning = true;
         SERVER_PORT = genPort();
         start();
-
     }
 
     /**
@@ -54,11 +46,9 @@ public class MessageServer extends Thread {
      * @return Instance of MessageServer
      */
     public static MessageServer getInstance() {
-
         if (instance == null) {
             instance = new MessageServer();
         }
-
         return instance;
     }
 
@@ -79,47 +69,34 @@ public class MessageServer extends Thread {
 
                 // Accept connections
                 while (isRunning) {
-
                     clientSocket = serverSocket.accept();
 
                     // Hand off to client handler thread
                     new ClientHandler(clientSocket).start();
-
                 }
-
             } catch (IOException e) {
-
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to accept connection");
-
             }
-
         } catch (IOException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
-
         }
-
     }
 
     /**
      * Shuts down the MessageServer
      */
     public void shutdown() {
-
         isRunning = false;
-
     }
 
     /**
      * Prints server IP:Port
      */
     private void printServerInfo() {
-
         System.out.println();
         System.out.println("\tIP:\t\t127.0.0.1");
         System.out.println("\tPort:\t\t" + getPort());
         System.out.println();
-
     }
 
     /**
@@ -135,20 +112,16 @@ public class MessageServer extends Thread {
         int i = rand.nextInt((MAX_PORT - MIN_PORT) + 1) + MIN_PORT;
 
         return i;
-
     }
 
     /**
      * Get the current port that MessageServer is listening on
      */
     public static int getPort() {
-
         return SERVER_PORT;
-
     }
 
     private class ClientHandler extends Thread {
-
         private static final String CLASS_ID = "ClientHandler";
         private Socket client = null;
 
@@ -156,9 +129,7 @@ public class MessageServer extends Thread {
          * Constructor
          */
         public ClientHandler(Socket c) {
-
             client = c;
-
         }
 
         /**
@@ -184,12 +155,9 @@ public class MessageServer extends Thread {
 
                 // Read input from client
                 while ((inputLine = in.readLine()) != null) {
-
                     // Handle `quit` message
                     if (inputLine.equals("/quit")) {
-
                         break;
-
                     }
 
                     // Handle `ping` message
@@ -198,10 +166,8 @@ public class MessageServer extends Thread {
                         out.println("/pong");
 
                     }
-
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
 //                    log.printLogMessage(Log.MESSAGE, CLASS_ID, "local address: " + InetAddress.getLocalHost().getHostAddress());
-
                 }
 
                 log.printLogMessage(Log.INFO, CLASS_ID, 
@@ -213,14 +179,9 @@ public class MessageServer extends Thread {
                 clientSocket.close();
 
             } catch (IOException e) {
-
                 log.printLogMessage(Log.ERROR, CLASS_ID, 
                         "Connection interrupted");
-
             }
-
         }
-
     }
-
 }

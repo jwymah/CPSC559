@@ -3,19 +3,8 @@ package com.github.group;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sun.java.swing.plaf.motif.MotifCheckBoxMenuItemUI;
-
 public class GroupList
-{
-
-//  msg = new JSONObject();
-//  msg.put("TimeStamp", super.timestamp);
-//  msg.put("src", "SRC");
-//  msg.put("dst", "IP:PORT");
-//  msg.put("dstid", "DST");
-//  msg.put("msgsig", "MSGSIG");
-//  msg.put("msgbody", "MSGBODY");
-	
+{	
 	private Map<String, Group> groups;
     private static GroupList instance = null;
 	

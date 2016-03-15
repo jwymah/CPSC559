@@ -10,7 +10,6 @@ package com.github.group;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class PeerList {
 	private static Log log = Log.getInstance();
@@ -35,11 +34,9 @@ public class PeerList {
      * @return An instance of the peerlist
      */
     public static PeerList getInstance() {
-
         if (instance == null) {
             instance = new PeerList();
-        } 
-
+        }
         return instance;
     }
     
