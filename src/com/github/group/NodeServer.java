@@ -188,6 +188,7 @@ public class NodeServer extends Thread {
 
             try {
                 // Get reader/writer
+
                 PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -239,6 +240,7 @@ public class NodeServer extends Thread {
 			// The first thing received on this socket is the contact info of the connecting peer
 			BroadcastMessage bMsg = new BroadcastMessage(inputLine);
 			
+			bMsg.printMessage();
 			Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port, sock);
 			PeerList.getInstance().addPeer(newPeer);
 			bMsg.printMessage();
