@@ -49,6 +49,7 @@ public class PeerList {
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
     	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
+    	displayPeerList();
     }
     
     public static Peer getPeer(String username)

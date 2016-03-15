@@ -52,23 +52,14 @@ public class Group {
     {
 //    	ControlMessage msg = new ControlMessage();
     	Message msg = new Message(MessageType.CONTROL); //TODO: change this to ControlMessage, a child of Message
-    	for(Peer p : PeerList.getInstance().getAllPeers())
+		for(Peer p : PeerList.getAllPeers())
     	{
 //    		msg.setDst(p.ip, p.port);
 //    		msg.setMsgBody(msgBody);
 //    		msg.signMessage();
 
-            Socket conn = p.getConn();
-
             //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
-            try {
-                PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
-                out.println(msg.toJsonString());
-            }
-            catch(Exception ex)
-            {
-            	ex.printStackTrace();
-            }    		
+            p.sendMessage(msg);
     	}
     }
 
