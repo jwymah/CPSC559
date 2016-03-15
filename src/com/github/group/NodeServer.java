@@ -26,6 +26,8 @@ public class NodeServer extends Thread {
     private boolean isRunning = false;
     private ServerSocket serverSocket = null;
 
+    private ChatMessageLogList chatMessageLogList;
+
     protected Socket clientSocket;
 
     /**
@@ -34,6 +36,8 @@ public class NodeServer extends Thread {
     protected NodeServer() {
         //ipLookup();
         try {
+            // get instance of ChatMessageLog
+            chatMessageLogList = ChatMessageLogList.getInstance();
             // Get instance of Log
             log = Log.getInstance();
 
@@ -204,6 +208,8 @@ public class NodeServer extends Thread {
                             GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
                 			break;
                 		case CHAT:
+                            // chatMessageLogList.addMessage();
+
                 			break;
 						case CONTROL:
                 			out.println(new Message(MessageType.CONTROL).toJsonString());

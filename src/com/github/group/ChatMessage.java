@@ -26,6 +26,7 @@ public class ChatMessage extends Message {
 	private String dstid;
 	private String msgsig;
 	private String msgbody;
+	private String grpid;
 	private int port;
 
     /**
@@ -43,7 +44,8 @@ public class ChatMessage extends Message {
         msg.put("dst", "IP:PORT");
         msg.put("dstid", "DSTID");
         msg.put("msgsig", "MSGSIG");
-        msg.put("msgbody", "MSGBODY");
+		msg.put("msgbody", "MSGBODY");
+		msg.put("grpid", "GROUPID");
 
         populateSrc();
     }    
@@ -71,6 +73,7 @@ public class ChatMessage extends Message {
             dstid = (String) msg.get("dstid");
             msgsig = (String) msg.get("msgsig");
             msgbody = (String) msg.get("msgbody");
+			grpid = (String) msg.get("grpid");
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
             System.out.println(m);
@@ -95,6 +98,11 @@ public class ChatMessage extends Message {
 		dst = ip;
 		this.port = port;
 		msg.put("dst", ip + new Integer(port).toString());
+	}
+
+	public void setGroup(String GroupID)
+	{
+		msg.put(grpid,GroupID);
 	}
 
 	public void setMsgBody(String msgBody)
