@@ -5,19 +5,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MessageServerTest {
+public class NodeServerTest {
 
-    static MessageServer m = null;
+    static NodeServer n = null;
 
     @Before
     public void setUp() {
-        m = MessageServer.getInstance();
+        n = NodeServer.getInstance();
     }
 
     @After
     public void tearDown() {
-        m.shutdown();
-        m = null;
+        n.shutdown();
+        n = null;
     }
 
     @Test
@@ -27,7 +27,7 @@ public class MessageServerTest {
 
     @Test
     public void testGetPort() {
-        int i = m.getPort();
+        int i = n.getPort();
         Assert.assertTrue((i >= 9000 && i <= 10000));
     }
 
