@@ -68,10 +68,10 @@ public class PeerList {
     public static void displayPeerList()
     {
     	int i = 0;
-    	for (Peer e : peersByName.values())
-    	{
-    		System.out.println(i + ": " + e.toString());
-    		i++;
+    	for (Peer e : peersByName.values()) {
+            System.out.println(i + ": " + e.toString());
+            i++;
+        }
     }
 
 }
