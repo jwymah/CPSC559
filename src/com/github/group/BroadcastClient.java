@@ -20,7 +20,6 @@ import java.net.UnknownHostException;
 public class BroadcastClient extends Thread {
 
     private final static String CLASS_ID = "BroadcastClient";
-    private static PeerList peerlist;
     private static Log log;
     
     final static String INET_ADDR = "224.0.0.3";
@@ -32,7 +31,6 @@ public class BroadcastClient extends Thread {
     public BroadcastClient() {
 
         log = Log.getInstance();
-        peerlist = PeerList.getInstance();
 
     }
 
@@ -76,7 +74,7 @@ public class BroadcastClient extends Thread {
                 BroadcastMessage bMsg = new BroadcastMessage(msg);
                 bMsg.printMessage();
                 Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port);
-                peerlist.addPeer(newPeer);
+                PeerList.addPeer(newPeer);
                 (new NodeClient(bMsg.ip, (int) bMsg.port, newPeer)).start();
             }
 
