@@ -70,9 +70,9 @@ public class PeerList {
     public static void displayPeerList()
     {
     	int i = 0;
-    	for (Peer e : peersByName.values())
+    	for (Peer p : peersByName.values())
     	{
-    		System.out.println(i + ": " + e.toString());
+    		System.out.println(i + ": " + p.toJsonString());
     		i++;
     	}
     }

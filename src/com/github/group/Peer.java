@@ -96,15 +96,44 @@ public class Peer {
     	return tcpConn;
     }
     
-    public void sendMessage(Message msg)
+    public synchronized void sendMessage(Message msg)
     {
-    	out.write(msg.toJsonString());
+    	out.println(msg.toJsonString());
     	System.out.println("=======SENDING MESSAGE: \n" + msg.toJsonString());
     }
-        
+    
+    public synchronized void setWriter(PrintWriter writer)
+    {
+    	out = writer;
+    }
+    
+    public synchronized void setReader(BufferedReader reader)
+    {
+    	in = reader;
+    }
+    
     public BufferedReader getReader()
     {
     	return in;
+    }
+    
+    /**
+     * Wrapper class that reads a line from the socket.
+     * Though it is synchronized only ONE place should read from it
+     * @return
+     */
+    public synchronized String getNextLine()
+    {
+    	try
+		{
+			return in.readLine();
+		}
+		catch (IOException e)
+		{
+			log.printLogMessage(Log.ERROR, CLASS_ID, "Could not read from socket of peer: " + username);
+			e.printStackTrace();
+		}
+		return "";
     }
 
 	public String getInetString()
@@ -112,8 +141,7 @@ public class Peer {
 		return ip + ":" + String.valueOf(port);
 	}
 	
-	@Override
-	public String toString()
+	public String toJsonString()
 	{
         JSONObject msg = new JSONObject();
         msg.put("Username", username);
