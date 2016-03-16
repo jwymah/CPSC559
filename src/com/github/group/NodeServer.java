@@ -201,14 +201,16 @@ public class NodeServer extends Thread {
             	//TODO: refactor this into common library for nodeserver+nodeclient. after user input is added
                 String inputLine;
                 // Read input from client
-                while ((inputLine = in.readLine()) != null) {                	
+                while ((inputLine = in.readLine()) != null) {
                 	switch (Message.parseMessageType(inputLine)){
                 		case BROADCAST:
                 			parseAndStoreConnectingPeer(inputLine, conn);
                             GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
                 			break;
                 		case CHAT:
-                            // chatMessageLogList.addMessage();
+                            // TODO decide on what we want to record from messages
+                             ChatMessage chatMessage = new ChatMessage(inputLine);
+                             chatMessageLogList.addMessage(chatMessage,chatMessage.getMsgGroup());
 
                 			break;
 						case CONTROL:

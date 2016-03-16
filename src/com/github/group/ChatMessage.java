@@ -58,7 +58,7 @@ public class ChatMessage extends Message {
 
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
-        m = m.trim();   
+        m = m.trim();
         JSONParser parser = new JSONParser();
 
         // Parse message and get message components
@@ -109,11 +109,16 @@ public class ChatMessage extends Message {
 	{
 		msg.put("msgbody", msgBody);
 	}
-	
-	public String getMsgBody()
-	{
-		return (String) msg.get("msgbody");
-	}
+
+    public String getMsgBody()
+    {
+        return (String) msg.get("msgbody");
+    }
+
+    public String getMsgGroup()
+    {
+        return (String) msg.get("grpid");
+    }
 	
 	public void signMessage()
 	{
