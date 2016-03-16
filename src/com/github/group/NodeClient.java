@@ -58,5 +58,15 @@ public class NodeClient extends Thread {
 		    String addr = peer.getConn().getInetAddress().getHostAddress() + ":" + peer.getConn().getPort();
 		    log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
 		}
+        
+        // Log that they have disconnected
+        log.printLogMessage(Log.INFO, CLASS_ID, "Disconnected: " + peer.username);
+
+        // Remove from PeerList
+        PeerList.removePeer(peer);
+
+        // Clean up connections
+        peer.clearConnection();
+
     }
 }
