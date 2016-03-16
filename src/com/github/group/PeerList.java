@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class PeerList {
 	private static Log log = Log.getInstance();
-	private static String CLASS_ID = "PeerList.java";
+	private static String CLASS_ID = "PeerList";
 	
     private static Map<String, Peer> peersByName;
     private static Map<String, Peer> peersByIP;
@@ -40,41 +40,64 @@ public class PeerList {
         return instance;
     }
     
-    public static void addPeer(Peer peerToAdd)
-    {
+    /**
+     *
+     */
+    public static void addPeer(Peer peerToAdd) {
     	if (peersByName.get(peerToAdd.username) != null)
     	{
-            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to add user to PeerList - a user by this name already exists");
+            log.printLogMessage(Log.ERROR, CLASS_ID, 
+                    "Unable to add user to PeerList - a user by this name already exists");
             return;
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
     	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
     	displayPeerList();
+        log.printLogMessage(Log.INFO, CLASS_ID, "Added: " + peerToAdd.username);
     }
     
-    public static Peer getPeer(String username)
-    {
+    /**
+     * Retrieve the peer with an associated username
+     *
+     * @return the Peer with the associated username
+     */
+    public static Peer getPeer(String username) {
     	return peersByName.get(username);
     }
     
-    public static Peer getPeer(String ip, int port)
-    {
+    /**
+     *
+     */
+    public static Peer getPeer(String ip, int port) {
     	return peersByIP.get(ip + ":" + String.valueOf(port));
     }
     
-    public static Collection<Peer> getAllPeers()
-    {
+    /**
+     *
+     */
+    public static Collection<Peer> getAllPeers() {
     	return peersByName.values();
     }
     
-    public static void displayPeerList()
-    {
+    /**
+     *
+     */
+    public static void displayPeerList() {
     	int i = 0;
     	for (Peer p : peersByName.values())
     	{
     		System.out.println(i + ": " + p.toJsonString());
     		i++;
     	}
+    }
+
+    /**
+     * Removes a disconnected/error Peer
+     */
+    public static void removePeer(Peer p) {
+        log.printLogMessage(Log.INFO, CLASS_ID, "Removed: " + p.username);
+        peersByName.remove(p.username);
+        peersByIP.remove(p.getInetString());
     }
 
 }

@@ -168,6 +168,7 @@ public class NodeServer extends Thread {
 
         private static final String CLASS_ID = "MessageHandler";
         private Socket conn = null;
+        private Peer peer;
 
         /**
          * Constructor
@@ -195,7 +196,7 @@ public class NodeServer extends Thread {
 
                 String inputLine = in.readLine();
                 
-    			Peer peer = parseAndStoreConnectingPeer(inputLine, conn);
+    			peer = parseAndStoreConnectingPeer(inputLine, conn);
     			peer.setWriter(out);
     			peer.setReader(in);
     			out = null;	//clear these so that they don't get used outside the Peer wrappers
@@ -204,12 +205,16 @@ public class NodeServer extends Thread {
     			
                 GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
 
-            	//TODO: refactor this into common library for nodeserver+nodeclient. after user input is added
+            	//TODO: Refactor this into common library for 
+                //      nodeserver+nodeclient. after user input is added
+
                 // Read input from client
                 while ((inputLine = peer.getNextLine()) != null) {                	
                 	switch (Message.parseMessageType(inputLine)){
-                		case BROADCAST:
-                			break;
+                        // These aren't taken care of here, they're done in the
+                        // Broadcast Server. 
+                		//case BROADCAST:
+                			//break;
                 		case CHAT:
                 			break;
 						case CONTROL:
@@ -224,22 +229,32 @@ public class NodeServer extends Thread {
 							break;
 						case BLANK:
 						default:
-							System.out.println("received  bad message type?");
+                            log.printLogMessage(Log.ERROR, CLASS_ID, 
+                                    "Received invalid message");
 							break;
                 	}
                     // Log message to stdout
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
                 }
 
+                // Log that they have disconnected
                 log.printLogMessage(Log.INFO, CLASS_ID, "Disconnected: " + addr);
 
+                // Remove from PeerList
+                PeerList.removePeer(peer);
+
                 // Clean up connections
-//                out.close();
-//                in.close();
-//                clientSocket.close(); // TODO: to be handled elsewhere properly
+                peer.clearConnection();
 
             } catch (IOException e) {
-                log.printLogMessage(Log.ERROR, CLASS_ID, "Connection interrupted");
+                // Remove from PeerList
+                PeerList.removePeer(peer);
+
+                // Clean up connections
+                peer.clearConnection();
+
+                // Log the error
+                log.printLogMessage(Log.ERROR, CLASS_ID, "Error disconnect: " + peer.username);
             }
         }
 

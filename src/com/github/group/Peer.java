@@ -16,7 +16,7 @@ import java.net.Socket;
 import org.json.simple.JSONObject;
 
 public class Peer {
-	private static String CLASS_ID = "PEER.java";
+	private static String CLASS_ID = "Peer";
     
     public String   username;
     public String   id;
@@ -46,12 +46,15 @@ public class Peer {
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
-			log.printLogMessage(Log.ERROR, CLASS_ID, "unable to get a reader or writer for peer socket with username: " + username);
+			log.printLogMessage(Log.ERROR, CLASS_ID, 
+                    "unable to get a reader or writer for peer socket with username: " 
+                    + username);
 			e.printStackTrace();
 		}
     }
+
     /**
-     * use this constructor if a connection is already established
+     * Use this constructor if a connection is already established
      */
     public Peer(String u, String d, String i, int p, Socket sock) {
         username = u;
@@ -62,7 +65,9 @@ public class Peer {
     }
 
     /**
-     * TODO should this throw or handle its own exceptions? the caller has to check a null either way.
+     * TODO: Should this throw or handle its own exceptions? the caller has 
+     * to check a null either way.
+     *
      * @param sock
      */
     public void connect()
@@ -81,9 +86,26 @@ public class Peer {
 		}
     }
     
-    public void clearConnection()
-    {
-    	tcpConn = null;
+    /**
+     * Disconnects Socket, InputBuffer and OutputBuffer
+     */
+    public void clearConnection() {
+        // Kill Socket
+        try {
+            tcpConn.close();
+        } catch (IOException e) {
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to close Socket");
+        }
+
+        // Kill InputBuffer
+        try {
+            in.close();
+        } catch (IOException e) {
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to close InputBuffer");
+        }
+
+        // Kill OutputBuffer
+        out.close();
     }
     
     /**
@@ -99,7 +121,8 @@ public class Peer {
     public synchronized void sendMessage(Message msg)
     {
     	out.println(msg.toJsonString());
-    	System.out.println("=======SENDING MESSAGE: \n" + msg.toJsonString());
+        log.printLogMessage(Log.INFO, CLASS_ID, "Sending: " + msg.toJsonString());
+    	//System.out.println("=======SENDING MESSAGE: \n" + msg.toJsonString());
     }
     
     public synchronized void setWriter(PrintWriter writer)
