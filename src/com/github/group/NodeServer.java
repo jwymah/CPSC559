@@ -211,10 +211,8 @@ public class NodeServer extends Thread {
                 // Read input from client
                 while ((inputLine = peer.getNextLine()) != null) {                	
                 	switch (Message.parseMessageType(inputLine)){
-                        // These aren't taken care of here, they're done in the
-                        // Broadcast Server. 
-                		//case BROADCAST:
-                			//break;
+                		case BROADCAST:
+                			break;
                 		case CHAT:
                 			break;
 						case CONTROL:
