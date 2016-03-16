@@ -7,6 +7,7 @@
  */
 package com.github.group;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,15 +34,13 @@ public class PeerList {
      * @return An instance of the peerlist
      */
     public static PeerList getInstance() {
-
         if (instance == null) {
             instance = new PeerList();
-        } 
-
+        }
         return instance;
     }
     
-    public void addPeer(Peer peerToAdd)
+    public static void addPeer(Peer peerToAdd)
     {
     	if (peersByName.get(peerToAdd.username) != null)
     	{
@@ -50,25 +49,30 @@ public class PeerList {
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
     	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
-    	
-    	displayPeerList();
     }
     
-    public Peer getPeer(String username)
+    public static Peer getPeer(String username)
     {
     	return peersByName.get(username);
     }
     
-    public Peer getPeer(String ip, int port)
+    public static Peer getPeer(String ip, int port)
     {
     	return peersByIP.get(ip + ":" + String.valueOf(port));
     }
     
-    public void displayPeerList()
+    public static Collection<Peer> getAllPeers()
     {
+    	return peersByName.values();
+    }
+    
+    public static void displayPeerList()
+    {
+    	int i = 0;
     	for (Peer e : peersByName.values())
     	{
-    		System.out.println(e.toString());
+    		System.out.println(i + ": " + e.toString());
+    		i++;
     	}
     }
 

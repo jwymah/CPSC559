@@ -23,7 +23,7 @@ public class QueryMessage extends Message {
      * Constructor
      */
     public QueryMessage() {
-        super();
+        super(MessageType.QUERY);
         log = Log.getInstance();
     }
 }
