@@ -56,6 +56,9 @@ public class Message {
         }
     }
     
+    /**
+     * @param jsonMessageString The incoming message in JSON formatted string
+     */
     public static MessageType parseMessageType(String jsonMessageString)
     {
     	MessageType type = null;
