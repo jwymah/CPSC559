@@ -18,7 +18,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class BroadcastClient extends Thread {
-
     private final static String CLASS_ID = "BroadcastClient";
     private static Log log;
     
@@ -29,13 +28,10 @@ public class BroadcastClient extends Thread {
      * Constructor
      */
     public BroadcastClient() {
-
         log = Log.getInstance();
-
     }
 
     public void run() {
-
         // Initialization
         InetAddress address = null;
         SocketAddress sockAddress = null;
@@ -43,19 +39,14 @@ public class BroadcastClient extends Thread {
 
         // Lookup address and attempt to connect
         try {
-
             address = InetAddress.getByName(INET_ADDR);
             sockAddress = new InetSocketAddress(address, PORT);
             netInterface = NetworkInterface.getByName("en0");
 
         } catch (UnknownHostException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to locate host");
-
         } catch (SocketException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
-
         }
 
         // Create buffer

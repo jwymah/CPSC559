@@ -113,6 +113,12 @@ public class ChatMessage extends Message {
 		msg.put("msgsig", "1111");
 	}
 	
+
+    /**
+     * Returns a ChatMessage as JSON in a string format
+     *
+     * @return JSON ChatMessage as string
+     */
 	@Override
 	public String toJsonString()
 	{

@@ -187,27 +187,36 @@ public class NodeServer extends Thread {
             log.printLogMessage(Log.INFO, CLASS_ID, "Connected: " + addr);
 
             try {
+            	//NodeServer needs to read the peer information from the socket
                 // Get reader/writer
 
                 PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
+                String inputLine = in.readLine();
+                
+    			Peer peer = parseAndStoreConnectingPeer(inputLine, conn);
+    			peer.setWriter(out);
+    			peer.setReader(in);
+    			out = null;	//clear these so that they don't get used outside the Peer wrappers
+    			in = null;
+    			conn = null;
+    			
+                GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
+
             	//TODO: refactor this into common library for nodeserver+nodeclient. after user input is added
-                String inputLine;
                 // Read input from client
-                while ((inputLine = in.readLine()) != null) {                	
+                while ((inputLine = peer.getNextLine()) != null) {                	
                 	switch (Message.parseMessageType(inputLine)){
                 		case BROADCAST:
-                			parseAndStoreConnectingPeer(inputLine, conn);
-                            GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
                 			break;
                 		case CHAT:
                 			break;
 						case CONTROL:
-                			out.println(new Message(MessageType.CONTROL).toJsonString());
-                			out.println(new Message(MessageType.QUERY).toJsonString());
-                			out.println(new Message(MessageType.QUERY_RESPONSE).toJsonString());
-                			out.println(new Message(MessageType.BLANK).toJsonString());
+                			peer.sendMessage(new Message(MessageType.CONTROL));
+                			peer.sendMessage(new Message(MessageType.QUERY));
+                			peer.sendMessage(new Message(MessageType.QUERY_RESPONSE));
+                			peer.sendMessage(new Message(MessageType.BLANK));
 							break;
 						case QUERY:
 							break;
@@ -222,28 +231,26 @@ public class NodeServer extends Thread {
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
                 }
 
-                log.printLogMessage(Log.INFO, CLASS_ID, 
-                        "Disconnected: " + addr);
+                log.printLogMessage(Log.INFO, CLASS_ID, "Disconnected: " + addr);
 
                 // Clean up connections
-                out.close();
-                in.close();
-                clientSocket.close();
+//                out.close();
+//                in.close();
+//                clientSocket.close(); // TODO: to be handled elsewhere properly
 
             } catch (IOException e) {
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Connection interrupted");
             }
         }
 
-		public void parseAndStoreConnectingPeer(String inputLine, Socket sock)
+		public Peer parseAndStoreConnectingPeer(String inputLine, Socket sock)
 		{
 			// The first thing received on this socket is the contact info of the connecting peer
 			BroadcastMessage bMsg = new BroadcastMessage(inputLine);
-			
-			bMsg.printMessage();
 			Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port, sock);
-			PeerList.getInstance().addPeer(newPeer);
-			bMsg.printMessage();
+			PeerList.addPeer(newPeer);
+
+			return newPeer;
 		}
 
     }

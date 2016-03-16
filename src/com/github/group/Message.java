@@ -74,6 +74,11 @@ public class Message {
     	return type;
     }
 
+    /**
+     * Returns a Message as JSON in a string format
+     *
+     * @return JSON Message as string
+     */
     public String toJsonString()
     {
     	JSONObject msg = new JSONObject();
