@@ -1,5 +1,5 @@
 /**
- *  GroupMessage.java
+ *  ChatMessage.java
  *
  *  @author Cory Hutchison
  *  @author Frankie Yuan
@@ -17,7 +17,7 @@ import org.json.simple.parser.ParseException;
 		
 public class ChatMessage extends Message {
 
-    private final static String CLASS_ID = "GroupMessage";
+    private final static String CLASS_ID = "ChatMessage";
     private static Log log;
     private JSONObject msg;
 
@@ -75,7 +75,7 @@ public class ChatMessage extends Message {
             msgbody = (String) msg.get("msgbody");
 			grpid = (String) msg.get("grpid");
         } catch (ParseException e) {
-            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid ChatMessage");
             System.out.println(m);
         }
     }
@@ -126,6 +126,12 @@ public class ChatMessage extends Message {
 		msg.put("msgsig", "1111");
 	}
 	
+
+    /**
+     * Returns a ChatMessage as JSON in a string format
+     *
+     * @return JSON ChatMessage as string
+     */
 	@Override
 	public String toJsonString()
 	{

@@ -12,7 +12,6 @@ public class P2PChat {
     private final static String CLASS_ID = "P2PChat";
     private static Log log;
     private static Crypto c;
-    private static NodeServer ns = null;
 
     public static String    username;
     public static String    id;
@@ -31,7 +30,8 @@ public class P2PChat {
 
         // Start services
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting NodeServer");
-        ns = NodeServer.getInstance();
+        NodeServer.getInstance();	//init
+        PeerList.getInstance();	//init
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastServer");
         (new BroadcastServer()).start();
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastClient");

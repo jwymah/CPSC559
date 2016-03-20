@@ -87,7 +87,8 @@ public class BroadcastMessage extends Message {
      *
      * @return JSON BroadcastMessage as string
      */
-    public String toString() {
+    @Override
+    public String toJsonString() {
         return msg.toString();
     }
 

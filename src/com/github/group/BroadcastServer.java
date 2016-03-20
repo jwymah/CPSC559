@@ -34,7 +34,7 @@ public class BroadcastServer extends Thread {
         // Create BroadcastMessage and convert to Byte array
         // for transmission
         broadcastMessage = new BroadcastMessage();
-        byte[] msg = broadcastMessage.toString().getBytes();
+        byte[] msg = broadcastMessage.toJsonString().getBytes();
 
         // Attempt to connect to Multicast
         InetAddress addr = null;

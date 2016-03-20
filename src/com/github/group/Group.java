@@ -48,9 +48,19 @@ public class Group {
     	}
     }
     
-    public void updateGroupMembers()
+    public void updateGroupStatus()
     {
-    	//TODO: stub
+//    	ControlMessage msg = new ControlMessage();
+    	Message msg = new Message(MessageType.CONTROL); //TODO: change this to ControlMessage, a child of Message
+		for(Peer p : PeerList.getAllPeers())
+    	{
+//    		msg.setDst(p.ip, p.port);
+//    		msg.setMsgBody(msgBody);
+//    		msg.signMessage();
+
+            //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
+            p.sendMessage(msg);
+    	}
     }
 
     public void addPeer(Peer peerToAdd)

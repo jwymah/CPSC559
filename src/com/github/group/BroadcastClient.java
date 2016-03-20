@@ -18,9 +18,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class BroadcastClient extends Thread {
-
     private final static String CLASS_ID = "BroadcastClient";
-    private static PeerList peerlist;
     private static Log log;
 
     final static String INET_ADDR = "224.0.0.3";
@@ -30,14 +28,10 @@ public class BroadcastClient extends Thread {
      * Constructor
      */
     public BroadcastClient() {
-
         log = Log.getInstance();
-        peerlist = PeerList.getInstance();
-
     }
 
     public void run() {
-
         // Initialization
         InetAddress address = null;
         SocketAddress sockAddress = null;
@@ -45,19 +39,14 @@ public class BroadcastClient extends Thread {
 
         // Lookup address and attempt to connect
         try {
-
             address = InetAddress.getByName(INET_ADDR);
             sockAddress = new InetSocketAddress(address, PORT);
             netInterface = NetworkInterface.getByName("en0");
 
         } catch (UnknownHostException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to locate host");
-
         } catch (SocketException e) {
-
             log.printLogMessage(Log.ERROR, CLASS_ID, "Unable to create socket");
-
         }
 
         // Create buffer
@@ -76,7 +65,7 @@ public class BroadcastClient extends Thread {
                 BroadcastMessage bMsg = new BroadcastMessage(msg);
                 bMsg.printMessage();
                 Peer newPeer = new Peer(bMsg.username, bMsg.id, bMsg.ip, bMsg.port);
-                peerlist.addPeer(newPeer);
+                PeerList.addPeer(newPeer);
                 (new NodeClient(bMsg.ip, (int) bMsg.port, newPeer)).start();
             }
 
