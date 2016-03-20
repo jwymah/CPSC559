@@ -15,7 +15,7 @@ import java.util.Set;
 public class Group {
 
     private Set<Peer> groupMembers;
-    private String id;    
+    private String id;
 
     /**
      * Constructor

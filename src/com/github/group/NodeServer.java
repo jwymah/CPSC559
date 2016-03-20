@@ -211,8 +211,7 @@ public class NodeServer extends Thread {
                             // TODO decide on what we want to record from messages
                              ChatMessage chatMessage = new ChatMessage(inputLine);
                              chatMessageLogList.addMessage(chatMessage,chatMessage.getMsgGroup());
-
-                			break;
+                            break;
 						case CONTROL:
                 			out.println(new Message(MessageType.CONTROL).toJsonString());
                 			out.println(new Message(MessageType.QUERY).toJsonString());
