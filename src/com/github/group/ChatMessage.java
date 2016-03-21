@@ -102,7 +102,7 @@ public class ChatMessage extends Message {
 
 	public void setGroup(String GroupID)
 	{
-		msg.put(grpid,GroupID);
+		msg.put("grpid",GroupID);
 	}
 
 	public void setMsgBody(String msgBody)
