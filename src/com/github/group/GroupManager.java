@@ -5,6 +5,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import controlMessages.ControlMessage;
+import controlMessages.DumpReq;
+import controlMessages.DumpResp;
 import controlMessages.Join;
 import controlMessages.Leave;
 import controlMessages.ControlAction;
@@ -48,8 +50,28 @@ public class GroupManager
 				}
 				
 				break;
-			case DUMP:
-				// return own group list
+			case DUMPREQ:
+				DumpReq d = new DumpReq(msgBody);
+				targetGroup = grouplist.getGroup(d.getTargetGroup());
+				
+				if (targetGroup != null)
+				{
+					DumpResp dumpRespBody = new DumpResp(targetGroup, String.join(",", targetGroup.getMembersIds()));
+					ControlMessage dumpRespMsg = new ControlMessage();
+					dumpRespMsg.setMsgBody(dumpRespBody.toJsonString());
+					
+					peer.sendMessage(dumpRespMsg);
+				}
+				
+				break;
+			case DUMPRESP:
+				DumpResp dr = new DumpResp(msgBody);
+				targetGroup = grouplist.getGroup(dr.getTargetGroup());
+				
+				//assumed that a dumpResp does not come with a null group
+				//TODO: self peer will be in this list. filter own id out.
+				
+				
 				break;
 				
 			default:

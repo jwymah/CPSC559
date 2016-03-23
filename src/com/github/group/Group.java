@@ -9,6 +9,7 @@ package com.github.group;
 
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -106,4 +107,16 @@ public class Group {
     {
     	return groupMembers.size();
     }
+
+	public String[] getMembersIds()
+	{
+		String[] ids = new String[groupMembers.size()];
+		int index = 0;
+		for(Peer p : groupMembers)
+		{
+			ids[index] = p.id;
+			index++;
+		}
+		return ids;
+	}
 }

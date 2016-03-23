@@ -12,10 +12,10 @@ import com.github.group.Group;
 import com.github.group.Log;
 
 		
-public class Leave {
+public class DumpReq {
 
-    private static final String CLASS_ID = "Leave";
-    private static final String LEAVE = "leave";
+    private static final String CLASS_ID = "Dump";
+    private static final String DUMP = "dumpreq";
     private static final String ACTION = "action";
     private static final String TARGET_GROUP_ID = "targetgroupid";
     private static Log log;
@@ -25,19 +25,19 @@ public class Leave {
     /**
      * Constructor
      */
-    public Leave(Group group) {
+    public DumpReq(Group group) {
         log = Log.getInstance();
 
         // Package in JSON object
         actionDetails = new JSONObject();
-        actionDetails.put(ACTION, LEAVE);
+        actionDetails.put(ACTION, DUMP);
         actionDetails.put(TARGET_GROUP_ID, group.getId());
     }    
 
     /**
      * Constructor that parses and input message
      */
-    public Leave(String m) {
+    public DumpReq(String m) {
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
         m = m.trim();   
@@ -50,7 +50,7 @@ public class Leave {
             actionDetails = (JSONObject) obj;
             targetGroup = (String) actionDetails.get(TARGET_GROUP_ID);
         } catch (ParseException e) {
-            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid Leave Action");
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid Dump action");
             System.out.println(m);
         }
     }

@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.Random;
 
 import controlMessages.ControlMessage;
+import controlMessages.DumpReq;
 import controlMessages.Join;
 import controlMessages.Leave;
 
@@ -226,6 +227,12 @@ public class NodeServer extends Thread {
 							joinMsg.setMsgBody(body.toJsonString());
 							
                 			peer.sendMessage(joinMsg);
+                			
+                			DumpReq dBody = new DumpReq(newGroup);
+                			ControlMessage dumpMessage = new ControlMessage();
+                			dumpMessage.setMsgBody(dBody.toJsonString());
+                			
+                			peer.sendMessage(dumpMessage);
                 			
                 			try
 							{

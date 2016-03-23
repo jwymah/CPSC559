@@ -58,7 +58,7 @@ public class Join{
             groupName = (String) actionDetails.get(GROUP_NAME);
             externalContactId = (String) actionDetails.get(EXTERNAL_CONTACT_ID);
         } catch (ParseException e) {
-            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid ChatMessage");
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid Join Action");
             System.out.println(m);
         }
     }
