@@ -35,7 +35,7 @@ public class ControlMessage extends Message {
      * Constructor
      */
     public ControlMessage() {
-        super(MessageType.CHAT);
+        super(MessageType.CONTROL);
         log = Log.getInstance();
 
         // Package in JSON object
@@ -67,13 +67,23 @@ public class ControlMessage extends Message {
             Object obj = parser.parse(m);
 
             msg = (JSONObject) obj;
-            timestamp = (long) msg.get("timeStamp");
-            type = super.type;
+            timestamp = (long) msg.get("timestamp");
+            type = MessageType.CONTROL;
             src = (String) msg.get("src");
             dst = (String) msg.get("dst");
             dstid = (String) msg.get("dstid");
             msgsig = (String) msg.get("msgsig");
             msgbody = (String) msg.get("msgbody");
+            
+            
+            /**{"dst":"IP:PORT",
+             * "src":"192.168.0.19:0",
+             * "msgsig":"MSGSIG",
+             * "dstid":"DSTID",
+             * "type":"control",
+             * "msgbody":"{\"targetgroupid\":\"12\",\"externalcontactid\":\"662af6ed167fab65bb5049216a980d1419425f75\",\"action\":\"join\",\"groupname\":\"helluva group\"}",
+             * "timestamp":1458718049}
+             */
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid ChatMessage");
             System.out.println(m);

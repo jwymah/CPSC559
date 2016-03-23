@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.github.group.Group;
 import com.github.group.Log;
 
 		
@@ -28,8 +29,15 @@ public class Join{
     /**
      * Constructor
      */
-    public Join() {
-    	super();
+    public Join(Group group) {
+        log = Log.getInstance();
+
+        // Package in JSON object
+        actionDetails = new JSONObject();
+        actionDetails.put(ACTION, JOIN);
+        actionDetails.put(TARGET_GROUP_ID, group.getId());
+        actionDetails.put(EXTERNAL_CONTACT_ID, group.getExternalContact());
+        actionDetails.put(GROUP_NAME, group.getName());
     }    
 
     /**
@@ -56,29 +64,14 @@ public class Join{
         }
     }
     
-    public void setExternalContact(String contactId)
-    {
-    	externalContactId = contactId;
-    }
-    
     public String getExternalContact()
     {
     	return externalContactId;
     }
     
-    public void setGroupName(String name)
-    {
-    	groupName = name;
-    }
-    
     public String getGroupName()
     {
     	return groupName;
-    }
-    
-    public void setTargetGroup(String target)
-    {
-    	targetGroup = target;
     }
     
     public String getTargetGroup()

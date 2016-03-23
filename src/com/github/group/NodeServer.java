@@ -12,6 +12,9 @@ import java.net.*;
 import java.util.Enumeration;
 import java.util.Random;
 
+import controlMessages.ControlMessage;
+import controlMessages.Join;
+
 public class NodeServer extends Thread {
     private static NodeServer instance = null;
 
@@ -216,7 +219,13 @@ public class NodeServer extends Thread {
                 		case CHAT:
                 			break;
 						case CONTROL:
-                			peer.sendMessage(new Message(MessageType.CONTROL));
+							Group newGroup = new Group("12", "helluva group", P2PChat.id);
+							Join body = new Join(newGroup);
+							ControlMessage joinMsg = new ControlMessage();
+							joinMsg.setMsgBody(body.toJsonString());
+							
+                			peer.sendMessage(joinMsg);
+                			
                 			peer.sendMessage(new Message(MessageType.BLANK));
 							break;
 						case BLANK:

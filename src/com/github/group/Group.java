@@ -32,6 +32,7 @@ public class Group {
     	id = groupId;
     	this.groupName = groupName;
     	this.externalContact = externalContact;
+    	groupMembers = new HashSet<Peer>();
 	}
 
 	public void messageGroup(String msgBody)

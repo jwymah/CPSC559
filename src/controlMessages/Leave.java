@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.github.group.Group;
 import com.github.group.Log;
 
 		
@@ -24,13 +25,13 @@ public class Leave {
     /**
      * Constructor
      */
-    public Leave() {
+    public Leave(Group group) {
         log = Log.getInstance();
 
         // Package in JSON object
         actionDetails = new JSONObject();
         actionDetails.put(ACTION, LEAVE);
-        actionDetails.put(TARGET_GROUP_ID, "");
+        actionDetails.put(TARGET_GROUP_ID, group.getId());
     }    
 
     /**
@@ -52,11 +53,6 @@ public class Leave {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid ChatMessage");
             System.out.println(m);
         }
-    }
-    
-    public void setTargetGroup(String target)
-    {
-    	targetGroup = target;
     }
     
     public String getTargetGroup()
