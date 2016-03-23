@@ -14,6 +14,7 @@ import java.util.Random;
 
 import controlMessages.ControlMessage;
 import controlMessages.Join;
+import controlMessages.Leave;
 
 public class NodeServer extends Thread {
     private static NodeServer instance = null;
@@ -226,7 +227,22 @@ public class NodeServer extends Thread {
 							
                 			peer.sendMessage(joinMsg);
                 			
-                			peer.sendMessage(new Message(MessageType.BLANK));
+                			try
+							{
+								Thread.sleep(5000);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+                			
+                			Leave leaveBody = new Leave(newGroup);
+                			ControlMessage leaveMsg = new ControlMessage();
+                			leaveMsg.setMsgBody(leaveBody.toJsonString());
+                			
+                			peer.sendMessage(leaveMsg);
+                			
 							break;
 						case BLANK:
 						default:

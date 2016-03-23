@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 
 import controlMessages.ControlMessage;
 import controlMessages.Join;
+import controlMessages.Leave;
 import controlMessages.ControlAction;
 
 public class GroupManager
@@ -18,20 +19,17 @@ public class GroupManager
 	public static void handleControlMessage(Peer peer, ControlMessage controlMsg)
 	{
 		String msgBody = controlMsg.getMsgBody();
+		Group targetGroup = null;
 		switch (parseAction(msgBody))
 		{
 			case JOIN:
 				// add peer to specified group if exists.
 				// otherwise create group with specified contact
 				Join j = new Join(msgBody);
-				Group targetGroup = grouplist.getGroup(j.getTargetGroup());
+				targetGroup = grouplist.getGroup(j.getTargetGroup());
 				
 				if (targetGroup == null)
 				{
-					System.out.println(j.getGroupName());
-					System.out.println(j.getGroupName());
-					System.out.println(j.getGroupName());
-					System.out.println(j.getGroupName());
 					targetGroup = new Group(j.getTargetGroup(), j.getGroupName(), j.getExternalContact());
 					GroupList.getInstance().addGroup(targetGroup);
 				}
@@ -41,6 +39,14 @@ public class GroupManager
 				break;
 			case LEAVE:
 				// remove said peer from specified group
+				Leave l = new Leave(msgBody);
+				targetGroup = grouplist.getGroup(l.getTargetGroup());
+				
+				if (targetGroup != null)
+				{
+					targetGroup.removePeer(peer);
+				}
+				
 				break;
 			case DUMP:
 				// return own group list
