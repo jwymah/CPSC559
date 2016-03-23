@@ -28,7 +28,12 @@ public class GroupManager
 				
 				if (targetGroup == null)
 				{
+					System.out.println(j.getGroupName());
+					System.out.println(j.getGroupName());
+					System.out.println(j.getGroupName());
+					System.out.println(j.getGroupName());
 					targetGroup = new Group(j.getTargetGroup(), j.getGroupName(), j.getExternalContact());
+					GroupList.getInstance().addGroup(targetGroup);
 				}
 
 				targetGroup.addPeer(peer);

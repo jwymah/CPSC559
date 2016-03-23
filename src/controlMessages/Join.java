@@ -57,7 +57,6 @@ public class Join{
             targetGroup = (String) actionDetails.get(TARGET_GROUP_ID);
             groupName = (String) actionDetails.get(GROUP_NAME);
             externalContactId = (String) actionDetails.get(EXTERNAL_CONTACT_ID);
-            groupName = (String) actionDetails.get(GROUP_NAME);
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid ChatMessage");
             System.out.println(m);

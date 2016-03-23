@@ -29,10 +29,10 @@ public class Group {
     
     public Group(String groupId, String groupName, String externalContact)
 	{
+    	groupMembers = new HashSet<Peer>();
     	id = groupId;
     	this.groupName = groupName;
     	this.externalContact = externalContact;
-    	groupMembers = new HashSet<Peer>();
 	}
 
 	public void messageGroup(String msgBody)
@@ -100,5 +100,10 @@ public class Group {
     public String getExternalContact()
     {
     	return externalContact;
+    }
+    
+    public int size()
+    {
+    	return groupMembers.size();
     }
 }

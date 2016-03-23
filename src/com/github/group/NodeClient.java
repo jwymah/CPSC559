@@ -48,6 +48,7 @@ public class NodeClient extends Thread {
 				case CONTROL:
 					ControlMessage controlMsg = new ControlMessage(inputLine);
 					GroupManager.handleControlMessage(peer,controlMsg);
+					GroupList.getInstance().displayAllGroups();
 					break;
 				case BLANK:
 				default:

@@ -37,9 +37,17 @@ public class GroupList
 		return groups.get(groupID);
 	}
 
-	public void removeGroup(String groupID)
+	public void removeGroup(Group groupToRemove)
 	{
-		
+		groups.remove(groupToRemove);
+	}
+	
+	public void displayAllGroups()
+	{
+		for (Group g : groups.values())
+		{
+			System.out.println(g.getName() + ":::" + g.size());
+		}
 	}
 	
 	public void mockMessageGroup(String msg)
