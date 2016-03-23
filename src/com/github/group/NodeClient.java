@@ -7,6 +7,8 @@
  */
 package com.github.group;
 
+import controlMessages.ControlMessage;
+
 public class NodeClient extends Thread {
 
     private static Log log;
@@ -40,14 +42,12 @@ public class NodeClient extends Thread {
 		            GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving info] [2]");
 					break;
 				case CHAT:
-					ChatMessage cmsg = new ChatMessage(inputLine);
+					ChatMessage chatMsg = new ChatMessage(inputLine);
 					peer.sendMessage(new Message(MessageType.CONTROL));
 					break;
 				case CONTROL:
-					break;
-				case QUERY:
-					break;
-				case QUERY_RESPONSE:
+					ControlMessage controlMsg = new ControlMessage(inputLine);
+					GroupManager.handleControlMessage(peer,controlMsg);
 					break;
 				case BLANK:
 				default:

@@ -1,11 +1,8 @@
 /**
- *  ChatMessage.java
+ *  ControlMessage.java
  *
- *  @author Cory Hutchison
- *  @author Frankie Yuan
- *  @author Jeremy Mah
  */
-package com.github.group;
+package controlMessages;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -14,10 +11,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-		
-public class ChatMessage extends Message {
+import com.github.group.Log;
+import com.github.group.Message;
+import com.github.group.MessageServer;
+import com.github.group.MessageType;
 
-    private final static String CLASS_ID = "ChatMessage";
+		
+public class ControlMessage extends Message {
+
+    private final static String CLASS_ID = "ControlMessage";
     private static Log log;
     private JSONObject msg;
 
@@ -26,12 +28,13 @@ public class ChatMessage extends Message {
 	private String dstid;
 	private String msgsig;
 	private String msgbody;
+//	private ControlType controlType;
 	private int port;
 
     /**
      * Constructor
      */
-    public ChatMessage() {
+    public ControlMessage() {
         super(MessageType.CHAT);
         log = Log.getInstance();
 
@@ -51,8 +54,8 @@ public class ChatMessage extends Message {
     /**
      * Constructor that parses and input message
      */
-    public ChatMessage(String m) {
-    	super(MessageType.CHAT);
+    public ControlMessage(String m) {
+    	super(MessageType.CONTROL);
 
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
@@ -64,7 +67,7 @@ public class ChatMessage extends Message {
             Object obj = parser.parse(m);
 
             msg = (JSONObject) obj;
-            timestamp = (long) msg.get("timestamp");
+            timestamp = (long) msg.get("timeStamp");
             type = super.type;
             src = (String) msg.get("src");
             dst = (String) msg.get("dst");
@@ -107,13 +110,17 @@ public class ChatMessage extends Message {
 		return (String) msg.get("msgbody");
 	}
 	
+//	public ControlType getControlType()
+//	{
+//		return controlType;
+//	}
+	
 	public void signMessage()
 	{
-		//TODO hash of msgBody + src
+		//TODO hash of msgBody + src + timestamp + controlType
 		msg.put("msgsig", "1111");
 	}
 	
-
     /**
      * Returns a ChatMessage as JSON in a string format
      *

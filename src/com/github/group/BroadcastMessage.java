@@ -45,12 +45,12 @@ public class BroadcastMessage extends Message {
 
         // Package in JSON object
         msg = new JSONObject();
-        msg.put("TimeStamp", super.timestamp);
+        msg.put("timestamp", super.timestamp);
         msg.put("type", super.type.toString());
-        msg.put("Username", username);
-        msg.put("ID", id);
-        msg.put("IP", ip);
-        msg.put("Port", port);
+        msg.put("username", username);
+        msg.put("id", id);
+        msg.put("ip", ip);
+        msg.put("port", port);
     }
 
     /**
@@ -70,11 +70,11 @@ public class BroadcastMessage extends Message {
 
             msg = (JSONObject) obj;
 
-            timestamp = (long) msg.get("TimeStamp");
-            username = (String) msg.get("Username");
-            id = (String) msg.get("ID");
-            ip = (String) msg.get("IP");
-            port = ((Long) msg.get("Port")).intValue();
+            timestamp = (long) msg.get("timestamp");
+            username = (String) msg.get("username");
+            id = (String) msg.get("id");
+            ip = (String) msg.get("ip");
+            port = ((Long) msg.get("port")).intValue();
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
             System.out.println(m);
@@ -98,11 +98,11 @@ public class BroadcastMessage extends Message {
         log.printLogMessage(Log.INFO, CLASS_ID, "");
 
         System.out.println();
-        System.out.println("\tTimeStamp:\t" + timestamp);
-        System.out.println("\tUsername:\t" + username);
-        System.out.println("\tID:\t\t" + id);
-        System.out.println("\tIP:\t\t" + ip);
-        System.out.println("\tPort:\t\t" + port);
+        System.out.println("\ttimestamp:\t" + timestamp);
+        System.out.println("\tusername:\t" + username);
+        System.out.println("\tid:\t\t" + id);
+        System.out.println("\tip:\t\t" + ip);
+        System.out.println("\tport:\t\t" + port);
         System.out.println();        
     }
 }

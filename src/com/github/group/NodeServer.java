@@ -217,13 +217,7 @@ public class NodeServer extends Thread {
                 			break;
 						case CONTROL:
                 			peer.sendMessage(new Message(MessageType.CONTROL));
-                			peer.sendMessage(new Message(MessageType.QUERY));
-                			peer.sendMessage(new Message(MessageType.QUERY_RESPONSE));
                 			peer.sendMessage(new Message(MessageType.BLANK));
-							break;
-						case QUERY:
-							break;
-						case QUERY_RESPONSE:
 							break;
 						case BLANK:
 						default:

@@ -1,13 +1,12 @@
-package com.github.group;
+package controlMessages;
 
 /**
  * An enumeration of the valid MessageTypes that should be used/parsed in the JSON messages *
  */
-public enum MessageType {
-	BLANK("BLANK_TYPE"),
-    BROADCAST("broadcast"),
-    CHAT("chat"),
-    CONTROL("control")
+public enum ControlAction {
+    JOIN("join"),
+    LEAVE("leave"),
+    DUMP("dump"),
     ;
 
     private final String type;
@@ -15,25 +14,25 @@ public enum MessageType {
     /**
      * @param text
      */
-    private MessageType(final String type) {
+    private ControlAction(final String type) {
         this.type = type;
     }
 
     /** 
-     * @return String - the string representation of the MessageType.type
+     * @return String - the string representation of the ControlAction.type
      */
     @Override
     public String toString() {
         return type;
     }
     
-    public static MessageType fromString(String s)
+    public static ControlAction fromString(String s)
     {
-    	for (MessageType t : MessageType.values()) {
+    	for (ControlAction t : ControlAction.values()) {
     		if (s.equalsIgnoreCase(t.toString())) {
     			return t;
     		}
     	}
-		return BLANK;
+		return null;
     }
 }

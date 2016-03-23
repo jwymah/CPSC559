@@ -48,7 +48,7 @@ public class Message {
 
             JSONObject msg = (JSONObject) obj;
 
-            timestamp = (long) msg.get("TimeStamp");
+            timestamp = (long) msg.get("timeStamp");
             
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
@@ -85,7 +85,7 @@ public class Message {
     public String toJsonString()
     {
     	JSONObject msg = new JSONObject();
-        msg.put("TimeStamp", timestamp);
+        msg.put("timeStamp", timestamp);
         msg.put("type", type.toString());
         return msg.toJSONString();
     }

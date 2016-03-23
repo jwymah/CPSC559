@@ -15,7 +15,9 @@ import java.util.Set;
 public class Group {
 
     private Set<Peer> groupMembers;
-    private String id;    
+    private String id;
+    private String groupName;
+    private String externalContact;
 
     /**
      * Constructor
@@ -25,7 +27,14 @@ public class Group {
         groupMembers = new HashSet<Peer>();
     }
     
-    public void messageGroup(String msgBody)
+    public Group(String groupId, String groupName, String externalContact)
+	{
+    	id = groupId;
+    	this.groupName = groupName;
+    	this.externalContact = externalContact;
+	}
+
+	public void messageGroup(String msgBody)
     {
     	ChatMessage msg = new ChatMessage();
     	for(Peer p : groupMembers)
@@ -63,13 +72,32 @@ public class Group {
     	}
     }
 
+    /**
+     * adds a Peer from PeerList to this collection.
+     * @args Peer - reference to a peer
+     */
     public void addPeer(Peer peerToAdd)
     {
     	groupMembers.add(peerToAdd);
     }
     
+    public void removePeer(Peer peerToRemove)
+    {
+    	groupMembers.remove(peerToRemove);
+    }
+    
     public String getId()
     {
     	return id;
+    }
+    
+    public String getName()
+    {
+    	return groupName;
+    }
+    
+    public String getExternalContact()
+    {
+    	return externalContact;
     }
 }
