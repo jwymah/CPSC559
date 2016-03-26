@@ -216,6 +216,10 @@ public class NodeServer extends Thread {
                 		//case BROADCAST:
                 			//break;
                 		case CHAT:
+                            // print out chat message
+                            ChatMessage cmsg = new ChatMessage(inputLine);
+                            System.out.println("["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+                            cmsg.toJsonString();
                 			break;
 						case CONTROL:
                 			peer.sendMessage(new Message(MessageType.CONTROL));

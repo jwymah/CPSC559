@@ -68,7 +68,6 @@ public class Peer {
      * TODO: Should this throw or handle its own exceptions? the caller has 
      * to check a null either way.
      *
-     * @param sock
      */
     public void connect()
     {
@@ -122,6 +121,7 @@ public class Peer {
     {
     	out.println(msg.toJsonString());
         log.printLogMessage(Log.INFO, CLASS_ID, "Sending: " + msg.toJsonString());
+
     	//System.out.println("=======SENDING MESSAGE: \n" + msg.toJsonString());
     }
     
@@ -172,7 +172,7 @@ public class Peer {
         msg.put("IP", ip);
         msg.put("Port", port);
         msg.put("TcpConn", tcpConn.getInetAddress());
-        
+
         return msg.toString();
 	}
 }

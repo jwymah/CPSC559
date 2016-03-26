@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class GroupList
 {	
-	private Map<String, Group> groups;
+	private static Map<String, Group> groups;
     private static GroupList instance = null;
 	
 	protected GroupList()
 	{
 		groups = new HashMap<String, Group>();
-		groups.put("1", new Group());
+		groups.put("testG", new Group());
 	}
 
     /**
@@ -44,7 +44,7 @@ public class GroupList
 	
 	public void mockMessageGroup(String msg)
 	{
-		Group mocky = getGroup("1");
+		Group mocky = getGroup("testG");
 		addAllPeersToGroup(mocky);
 		mocky.messageGroup(msg);
 	}
@@ -56,4 +56,18 @@ public class GroupList
 			group.addPeer(e);
 		}
 	}
+
+    /***
+     * displays all groups by id in the GroupList
+     */
+    public static void displayGroupList()
+    {
+        int i = 0;
+        for (String s: groups.keySet())
+        {
+            System.out.println(i + ": " + s);
+            i++;
+
+        }
+    }
 }

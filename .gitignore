@@ -2,3 +2,8 @@ build/**
 deploy/**
 results/**
 .DS_Store
+.idea/workspace.xml
+*.name
+CPSC559.iml
+.idea/**
+a.cmd

@@ -52,16 +52,19 @@ public class PeerList {
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
     	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
-    	displayPeerList();
+    	//displayPeerList();
         log.printLogMessage(Log.INFO, CLASS_ID, "Added: " + peerToAdd.username);
     }
     
     /**
      * Retrieve the peer with an associated username
      *
-     * @return the Peer with the associated username
+     * @return the Peer with the associated username, null if there is no such peer
      */
     public static Peer getPeer(String username) {
+        if (!peersByName.containsKey(username)){
+            return null;
+        }
     	return peersByName.get(username);
     }
     
@@ -78,18 +81,31 @@ public class PeerList {
     public static Collection<Peer> getAllPeers() {
     	return peersByName.values();
     }
-    
+
     /**
      *
      */
     public static void displayPeerList() {
-    	int i = 0;
-    	for (Peer p : peersByName.values())
-    	{
-    		System.out.println(i + ": " + p.toJsonString());
-    		i++;
-    	}
+        int i = 0;
+        for (Peer p : peersByName.values())
+        {
+            System.out.println(i + ": " + p.toJsonString());
+            i++;
+        }
     }
+
+    /**
+     *
+     */
+    public static void displayPeerListUsernames() {
+        for (String p : peersByName.keySet())
+        {
+            System.out.println(p);
+        }
+    }
+
+
+
 
     /**
      * Removes a disconnected/error Peer
