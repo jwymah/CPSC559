@@ -226,6 +226,8 @@ public class NodeServer extends Thread {
 							ControlMessage joinMsg = new ControlMessage();
 							joinMsg.setMsgBody(body.toJsonString());
 							
+							//iterate over peerList
+							//iterate over peerList
                 			peer.sendMessage(joinMsg);
                 			
                 			DumpReq dBody = new DumpReq(newGroup);

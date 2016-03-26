@@ -6,6 +6,8 @@ package controlMessages;
 public enum ControlAction {
     JOIN("join"),
     LEAVE("leave"),
+    METADATA("metadata"),
+    METADATADUMP("metadatadump"),
     DUMPREQ("dumpreq"),
     DUMPRESP("dumpresp"),
     ;
