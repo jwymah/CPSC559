@@ -7,15 +7,10 @@
  */
 package com.github.group;
 
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Scanner;
 
 public class Shell extends Thread
 {
-    private Peer lastPeerMessaged;
     private Group lastGroupMessaged;
 
 
@@ -36,14 +31,8 @@ public class Shell extends Thread
         String input = "";
         while ((input = s.nextLine())!= null)
         {
-            //System.out.println("" + input);
-
             String[] splitArray = input.split(" ",3);
             System.out.println("sa length" + splitArray.length);
-            /*for (String a : splitArray)
-            {
-                System.out.println(a);
-            }*/
 
             switch (splitArray[0])
             {
@@ -78,16 +67,26 @@ public class Shell extends Thread
 
                 // whisper one peer
                 case "/w":
-                    if (splitArray.length > 2) {
+                    if (splitArray.length > 2)
+                    {
 
-                        lastPeerMessaged = PeerList.getPeer(splitArray[1]);
-                        if (lastPeerMessaged != null) {
+                        Peer p = PeerList.getPeer(splitArray[1]);
+
+
+                        if (p != null)
+                        {
+                            System.out.println( p.toJsonString());
                             ChatMessage m = new ChatMessage();
-                            m.setDst(lastPeerMessaged.ip, lastPeerMessaged.port);
 
+                            m.setDst(p.ip, p.port);
                             m.setMsgBody(splitArray[2]);
                             m.signMessage();
+                            System.out.println("shell sending chat msg");
+                            p.sendMessage(m);
+                            System.out.println("shell sent chat msg");
 
+
+                            /*
                             Socket conn = lastPeerMessaged.getConn();
                             try {
                                 PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
@@ -95,11 +94,22 @@ public class Shell extends Thread
                                 out.flush();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
-                            }
-                            //lastPeerMessaged.sendMessage(m);
+                            }*/
+                        } else
+                        {
+                            System.out.println("no such peer exists");
                         }
-                    } else {
+                    } else
+                    {
                         System.out.println("Improper input");
+                    }
+                    break;
+
+                case "/c":
+                    Peer p = PeerList.getPeer(splitArray[1]);
+                    if (p != null) {
+                        Message m = new Message(MessageType.CONTROL);
+                        p.sendMessage(m);
                     }
                     break;
                 default:

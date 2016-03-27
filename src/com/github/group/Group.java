@@ -33,8 +33,10 @@ public class Group {
     		msg.setDst(p.ip, p.port);
     		msg.setMsgBody(msgBody);
     		msg.signMessage();
-
+            p.sendMessage(msg);
+            /*
             Socket conn = p.getConn();
+
 
             //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
             try {
@@ -44,7 +46,7 @@ public class Group {
             catch(Exception ex)
             {
             	ex.printStackTrace();
-            }
+            }*/
     	}
     }
     
