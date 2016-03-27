@@ -7,11 +7,11 @@
  */
 package com.github.group;
 
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.json.simple.JSONObject;
 
 public class Group {
 
@@ -108,7 +108,26 @@ public class Group {
     {
     	return groupMembers.size();
     }
+    
+    /**
+     * get shallow information about the group: id, name, and external contact
+     * @return JSONString
+        {"id": id, "groupname": groupName, "externalcontact": externalContact};
+     */
+    public String getMetadata()
+    {
+        JSONObject details = new JSONObject();
+        details.put("id", id);
+        details.put("groupname", groupName);
+        details.put("externalcontact", externalContact);
+        
+        return details.toJSONString();
+    }
 
+    /**
+     * get Ids of all members of this group
+     * @return
+     */
 	public String[] getMembersIds()
 	{
 		String[] ids = new String[groupMembers.size()];

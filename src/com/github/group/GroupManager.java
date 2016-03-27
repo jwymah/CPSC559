@@ -9,6 +9,7 @@ import controlMessages.DumpReq;
 import controlMessages.DumpResp;
 import controlMessages.Join;
 import controlMessages.Leave;
+import controlMessages.MetadatasDump;
 import controlMessages.ControlAction;
 
 public class GroupManager
@@ -35,10 +36,26 @@ public class GroupManager
 					targetGroup = new Group(j.getTargetGroup(), j.getGroupName(), j.getExternalContact());
 					GroupList.getInstance().addGroup(targetGroup);
 				}
-
+System.out.println("---------------------------------------------");
+MetadatasDump metadataDump = new MetadatasDump();
+System.out.println(metadataDump.toJsonString());
+System.out.println("---------------------------------------------");
 				targetGroup.addPeer(peer);
 				
 				break;
+			case METADATA:
+				//respond with known group metadata
+				ControlMessage metaMsg = new ControlMessage();
+				metaMsg.setMsgBody(new MetadatasDump().toJsonString());
+				peer.sendMessage(metaMsg);
+				break;
+				
+			case METADATADUMP:
+				//unpack metadatadump and add members to groups
+//				MetadatasDump metadataDump = new MetadatasDump();
+				
+				break;
+				
 			case LEAVE:
 				// remove said peer from specified group
 				Leave l = new Leave(msgBody);
@@ -67,11 +84,8 @@ public class GroupManager
 			case DUMPRESP:
 				DumpResp dr = new DumpResp(msgBody);
 				targetGroup = grouplist.getGroup(dr.getTargetGroup());
-				
 				//assumed that a dumpResp does not come with a null group
-				//TODO: self peer will be in this list. filter own id out.
-				
-				
+								
 				break;
 				
 			default:

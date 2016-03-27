@@ -1,7 +1,10 @@
 package com.github.group;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.json.simple.JSONArray;
 
 public class GroupList
 {	
@@ -49,6 +52,23 @@ public class GroupList
 			System.out.println(g.getName() + ":::" + g.size());
 		}
 	}
+
+	/**
+	 * get meta data for all groups
+	 * @return ArrayList of groups meta data
+	 * 	["groupId,groupName,externalContact","groupId,groupName,externalContact",...]
+	 */
+	public ArrayList<String> getAllMetadata()
+	{
+		JSONArray array = new JSONArray();
+		ArrayList<String> metadatas = new ArrayList<String>();
+		for (Group g : groups.values())
+		{
+			array.add(g.getMetadata());
+//			metadatas.add(String.join(",", g.getMetadata()));
+		}
+		return array;
+	}
 	
 	public void mockMessageGroup(String msg)
 	{
@@ -57,6 +77,10 @@ public class GroupList
 		mocky.messageGroup(msg);
 	}
 	
+	/**
+	 * mock testing method that inserts all known peers into the provided group
+	 * @param group
+	 */
 	public void addAllPeersToGroup(Group group)
 	{
 		for (Peer e : PeerList.getInstance().getAllPeers())
