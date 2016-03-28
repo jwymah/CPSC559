@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class Group {
@@ -83,6 +84,15 @@ public class Group {
     {
     	groupMembers.add(peerToAdd);
     }
+
+	public void addMemberDump(JSONArray memberDump)
+	{
+		for(int i=0; i<memberDump.size(); i++)
+		{
+			JSONObject ob = (JSONObject) memberDump.get(i);
+			PeerList.getPeer((String) ob.get("id"));
+		}
+	}
     
     public void removePeer(Peer peerToRemove)
     {

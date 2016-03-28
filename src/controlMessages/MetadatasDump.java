@@ -54,6 +54,11 @@ public class MetadatasDump {
             System.out.println(m);
         }
     }
+    
+    public JSONArray getMetadatas()
+    {
+    	return metadatas;
+    }
 
     /**
      * Returns a Leave action as JSON string format

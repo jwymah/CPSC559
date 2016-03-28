@@ -43,7 +43,7 @@ public class PeerList {
     /**
      *
      */
-    public static void addPeer(Peer peerToAdd) {
+    public synchronized static void addPeer(Peer peerToAdd) {
     	if (peersByName.get(peerToAdd.username) != null)
     	{
             log.printLogMessage(Log.ERROR, CLASS_ID, 
@@ -61,28 +61,29 @@ public class PeerList {
      *
      * @return the Peer with the associated username
      */
-    public static Peer getPeer(String username) {
+    public synchronized static Peer getPeer(String username) {
     	return peersByName.get(username);
     }
     
     /**
      *
      */
-    public static Peer getPeer(String ip, int port) {
+    public synchronized static Peer getPeer(String ip, int port) {
     	return peersByIP.get(ip + ":" + String.valueOf(port));
     }
     
     /**
      *
      */
-    public static Collection<Peer> getAllPeers() {
+    public synchronized static Collection<Peer> getAllPeers() {
+    	//TODO: this should return a copy of the collection. currently it is backed by the collection and can cause iteration/concurrency problems
     	return peersByName.values();
     }
     
     /**
      *
      */
-    public static void displayPeerList() {
+    public synchronized static void displayPeerList() {
     	int i = 0;
     	for (Peer p : peersByName.values())
     	{
@@ -94,7 +95,7 @@ public class PeerList {
     /**
      * Removes a disconnected/error Peer
      */
-    public static void removePeer(Peer p) {
+    public synchronized static void removePeer(Peer p) {
         log.printLogMessage(Log.INFO, CLASS_ID, "Removed: " + p.username);
         peersByName.remove(p.username);
         peersByIP.remove(p.getInetString());

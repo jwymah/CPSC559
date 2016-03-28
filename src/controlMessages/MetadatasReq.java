@@ -9,40 +9,33 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.github.group.Group;
+import com.github.group.GroupList;
 import com.github.group.Log;
 
 		
-public class DumpResp {
+public class MetadatasReq {
 
-    private static final String CLASS_ID = "Dump";
-    private static final String DUMP = "dumpresp";
+    private static final String CLASS_ID = "MetadatasReq";
+    private static final String METADATASREQ = "metadatas";
     private static final String ACTION = "action";
-    private static final String TARGET_GROUP_ID = "targetgroupid";
-    private static final String MEMBER_DUMP = "memberdump";
     private static Log log;
     private JSONObject actionDetails;
-    private String targetGroup;
-    private JSONArray memberDump;
 
     /**
      * Constructor
-     * @param memberDump 
      */
-    public DumpResp(Group group) {
+    public MetadatasReq() {
         log = Log.getInstance();
 
         // Package in JSON object
         actionDetails = new JSONObject();
-        actionDetails.put(ACTION, DUMP);
-        actionDetails.put(TARGET_GROUP_ID, group.getId());
-        actionDetails.put(MEMBER_DUMP, String.join(",", group.getMembersIds()));
+        actionDetails.put(ACTION, METADATASREQ);
     }    
 
     /**
      * Constructor that parses and input message
      */
-    public DumpResp(String m) {
+    public MetadatasReq(String m) {
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
         m = m.trim();   
@@ -53,22 +46,10 @@ public class DumpResp {
             Object obj = parser.parse(m);
 
             actionDetails = (JSONObject) obj;
-            targetGroup = (String) actionDetails.get(TARGET_GROUP_ID);
-            memberDump = (JSONArray) actionDetails.get(MEMBER_DUMP);
         } catch (ParseException e) {
-            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid Dump action");
+            log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid DumpReq action");
             System.out.println(m);
         }
-    }
-    
-    public String getTargetGroup()
-    {
-    	return targetGroup;
-    }
-    
-    public JSONArray getMemberDump()
-    {
-    	return memberDump;
     }
 
     /**
