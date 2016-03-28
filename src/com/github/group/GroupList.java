@@ -1,11 +1,15 @@
 package com.github.group;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.json.simple.JSONArray;
 
 public class GroupList
 {	
 	private Map<String, Group> groups;
+	private static Log log = Log.getInstance();
     private static GroupList instance = null;
 	
 	protected GroupList()
@@ -27,27 +31,50 @@ public class GroupList
         return instance;
     }
 
-	public void addGroup(Group groupToAdd)
+	public synchronized void addGroup(Group groupToAdd)
 	{
+		if (groups.get(groupToAdd.getId()) != null)
+		{
+			//TODO change to logger
+			System.out.println("tried to add a group to grouplist but the ID already exists");
+			return;
+		}
 		groups.put(groupToAdd.getId(), groupToAdd);
 	}
 
-	public Group getGroup(String groupID)
+	public synchronized Group getGroup(String groupID)
 	{
 		return groups.get(groupID);
 	}
 
-	public void removeGroup(Group groupToRemove)
+	public synchronized void removeGroup(Group groupToRemove)
 	{
 		groups.remove(groupToRemove);
 	}
 	
-	public void displayAllGroups()
+	public synchronized void displayAllGroups()
 	{
 		for (Group g : groups.values())
 		{
 			System.out.println(g.getName() + ":::" + g.size());
 		}
+	}
+
+	/**
+	 * get meta data for all groups
+	 * @return ArrayList of groups meta data
+	 * 	["groupId,groupName,externalContact","groupId,groupName,externalContact",...]
+	 */
+	public synchronized ArrayList<String> getAllMetadata()
+	{
+		JSONArray array = new JSONArray();
+		ArrayList<String> metadatas = new ArrayList<String>();
+		for (Group g : groups.values())
+		{
+			array.add(g.getMetadata());
+//			metadatas.add(String.join(",", g.getMetadata()));
+		}
+		return array;
 	}
 	
 	public void mockMessageGroup(String msg)
@@ -57,6 +84,10 @@ public class GroupList
 		mocky.messageGroup(msg);
 	}
 	
+	/**
+	 * mock testing method that inserts all known peers into the provided group
+	 * @param group
+	 */
 	public void addAllPeersToGroup(Group group)
 	{
 		for (Peer e : PeerList.getInstance().getAllPeers())

@@ -9,6 +9,7 @@ import controlMessages.DumpReq;
 import controlMessages.DumpResp;
 import controlMessages.Join;
 import controlMessages.Leave;
+import controlMessages.MetadatasDump;
 import controlMessages.ControlAction;
 
 public class GroupManager
@@ -35,10 +36,28 @@ public class GroupManager
 					targetGroup = new Group(j.getTargetGroup(), j.getGroupName(), j.getExternalContact());
 					GroupList.getInstance().addGroup(targetGroup);
 				}
-
+				
 				targetGroup.addPeer(peer);
 				
 				break;
+			case METADATA:
+				//respond with known group metadata
+				ControlMessage metaDumpMsg = new ControlMessage();
+				metaDumpMsg.setMsgBody(new MetadatasDump().toJsonString());
+				peer.sendMessage(metaDumpMsg);
+				break;
+				
+			case METADATADUMP:
+				//unpack metadatadump and add members to groups
+				MetadatasDump md = new MetadatasDump(msgBody);
+				for (int i=0; i<md.getMetadatas().size(); i++)
+				{
+					JSONObject ob = (JSONObject) md.getMetadatas().get(i);
+					GroupList.getInstance().addGroup(new Group((String) ob.get("id"), (String) ob.get("groupname"), (String) ob.get("externalcontact")));
+				}
+				
+				break;
+				
 			case LEAVE:
 				// remove said peer from specified group
 				Leave l = new Leave(msgBody);
@@ -50,13 +69,14 @@ public class GroupManager
 				}
 				
 				break;
+				
 			case DUMPREQ:
 				DumpReq d = new DumpReq(msgBody);
 				targetGroup = grouplist.getGroup(d.getTargetGroup());
 				
 				if (targetGroup != null)
 				{
-					DumpResp dumpRespBody = new DumpResp(targetGroup, String.join(",", targetGroup.getMembersIds()));
+					DumpResp dumpRespBody = new DumpResp(targetGroup);
 					ControlMessage dumpRespMsg = new ControlMessage();
 					dumpRespMsg.setMsgBody(dumpRespBody.toJsonString());
 					
@@ -67,11 +87,9 @@ public class GroupManager
 			case DUMPRESP:
 				DumpResp dr = new DumpResp(msgBody);
 				targetGroup = grouplist.getGroup(dr.getTargetGroup());
-				
-				//assumed that a dumpResp does not come with a null group
-				//TODO: self peer will be in this list. filter own id out.
-				
-				
+				//assumed that the targetgroup does not equate to a null group on this side
+				targetGroup.addMemberDump(dr.getMemberDump());
+								
 				break;
 				
 			default:
