@@ -36,23 +36,25 @@ public class GroupManager
 					targetGroup = new Group(j.getTargetGroup(), j.getGroupName(), j.getExternalContact());
 					GroupList.getInstance().addGroup(targetGroup);
 				}
-System.out.println("---------------------------------------------");
-MetadatasDump metadataDump = new MetadatasDump();
-System.out.println(metadataDump.toJsonString());
-System.out.println("---------------------------------------------");
+				
 				targetGroup.addPeer(peer);
 				
 				break;
 			case METADATA:
 				//respond with known group metadata
-				ControlMessage metaMsg = new ControlMessage();
-				metaMsg.setMsgBody(new MetadatasDump().toJsonString());
-				peer.sendMessage(metaMsg);
+				ControlMessage metaDumpMsg = new ControlMessage();
+				metaDumpMsg.setMsgBody(new MetadatasDump().toJsonString());
+				peer.sendMessage(metaDumpMsg);
 				break;
 				
 			case METADATADUMP:
 				//unpack metadatadump and add members to groups
-//				MetadatasDump metadataDump = new MetadatasDump();
+				MetadatasDump md = new MetadatasDump(msgBody);
+				for (int i=0; i<md.getMetadatas().size(); i++)
+				{
+					JSONObject ob = (JSONObject) md.getMetadatas().get(i);
+					GroupList.getInstance().addGroup(new Group((String) ob.get("id"), (String) ob.get("groupname"), (String) ob.get("externalcontact")));
+				}
 				
 				break;
 				
@@ -67,13 +69,14 @@ System.out.println("---------------------------------------------");
 				}
 				
 				break;
+				
 			case DUMPREQ:
 				DumpReq d = new DumpReq(msgBody);
 				targetGroup = grouplist.getGroup(d.getTargetGroup());
 				
 				if (targetGroup != null)
 				{
-					DumpResp dumpRespBody = new DumpResp(targetGroup, String.join(",", targetGroup.getMembersIds()));
+					DumpResp dumpRespBody = new DumpResp(targetGroup);
 					ControlMessage dumpRespMsg = new ControlMessage();
 					dumpRespMsg.setMsgBody(dumpRespBody.toJsonString());
 					
@@ -84,7 +87,8 @@ System.out.println("---------------------------------------------");
 			case DUMPRESP:
 				DumpResp dr = new DumpResp(msgBody);
 				targetGroup = grouplist.getGroup(dr.getTargetGroup());
-				//assumed that a dumpResp does not come with a null group
+				//assumed that the targetgroup does not equate to a null group on this side
+				targetGroup.addMemberDump(dr.getMemberDump());
 								
 				break;
 				
