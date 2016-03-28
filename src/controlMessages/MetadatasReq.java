@@ -46,6 +46,7 @@ public class MetadatasReq {
             Object obj = parser.parse(m);
 
             actionDetails = (JSONObject) obj;
+            
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid DumpReq action");
             System.out.println(m);
