@@ -33,6 +33,7 @@ public class Group {
     		msg.setDst(p.ip, p.port);
     		msg.setMsgBody(msgBody);
     		msg.signMessage();
+
             p.sendMessage(msg);
             /*
             Socket conn = p.getConn();
@@ -64,6 +65,7 @@ public class Group {
             p.sendMessage(msg);
     	}
     }
+
 
     public void addPeer(Peer peerToAdd)
     {

@@ -119,12 +119,10 @@ public class Peer {
     
     public synchronized void sendMessage(Message msg)
     {
-        System.out.println("=======SENDING MESSAGE: \n" + msg.toJsonString());
+        //System.out.println("=======SENDING MESSAGE: \n" + msg.toJsonString());
     	out.println(msg.toJsonString());
-        System.out.println("sent");
+        //System.out.println("sent");
         //log.printLogMessage(Log.INFO, CLASS_ID, "Sending: " + msg.toJsonString());
-
-
     }
     
     public synchronized void setWriter(PrintWriter writer)
@@ -147,7 +145,7 @@ public class Peer {
      * Though it is synchronized only ONE place should read from it
      * @return
      */
-    public synchronized String getNextLine()
+    public String getNextLine()
     {
     	try
 		{

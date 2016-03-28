@@ -13,8 +13,6 @@ public class Shell extends Thread
 {
     private Group lastGroupMessaged;
 
-
-
     /**
      * Constructor
      */
@@ -38,10 +36,19 @@ public class Shell extends Thread
             {
                 // join/create group
                 case "/j":
+
+                    // TODO impiliment
+                    GroupList.getInstance();
                     break;
 
                 // leave group
                 case "/l":
+
+                    if (splitArray.length > 1)
+                    {
+                        Group g = GroupList.getInstance().getGroup(splitArray[1]);
+                        g.messageGroup("I am leaving this group"); // TODO: make group leave message.
+                    }
                     break;
 
                 // show online peers
@@ -54,15 +61,29 @@ public class Shell extends Thread
 
                 // show all groups on network
                 case "/e":
+                    //PeerList.displayPeerList();
+                    System.out.println("Listing all Groups on network :");
                     GroupList.displayGroupList();
+                    System.out.println("-------------------");
                     break;
 
-                // show groups which i am a part of
+                // show members of a group that i am a part of
                 case "/m":
+                    /*
+                    if (splitArray.length > 2)
+                    {
+                        Group g = GroupList.getInstance().getGroup(splitArray[1]);
+
+                    }*/
                     break;
 
                 // group message
                 case "/g":
+                    if (splitArray.length > 2)
+                    {
+                        lastGroupMessaged = GroupList.getInstance().getGroup(splitArray[1]);
+                        lastGroupMessaged.messageGroup(splitArray[2]);
+                    }
                     break;
 
                 // whisper one peer
@@ -71,12 +92,12 @@ public class Shell extends Thread
                     {
 
                         Peer p = PeerList.getPeer(splitArray[1]);
+                        ChatMessage m = new ChatMessage();
 
 
                         if (p != null)
                         {
                             System.out.println( p.toJsonString());
-                            ChatMessage m = new ChatMessage();
 
                             m.setDst(p.ip, p.port);
                             m.setMsgBody(splitArray[2]);
@@ -113,6 +134,8 @@ public class Shell extends Thread
                     }
                     break;
                 default:
+                    if(lastGroupMessaged != null)
+                        lastGroupMessaged.messageGroup(input);
             }
         }
 

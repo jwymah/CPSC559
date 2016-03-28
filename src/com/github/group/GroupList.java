@@ -11,7 +11,7 @@ public class GroupList
 	protected GroupList()
 	{
 		groups = new HashMap<String, Group>();
-		groups.put("testG", new Group());
+		groups.put("test", new Group());
 	}
 
     /**
@@ -44,7 +44,7 @@ public class GroupList
 	
 	public void mockMessageGroup(String msg)
 	{
-		Group mocky = getGroup("testG");
+		Group mocky = getGroup("test");
 		addAllPeersToGroup(mocky);
 		mocky.messageGroup(msg);
 	}
@@ -62,11 +62,9 @@ public class GroupList
      */
     public static void displayGroupList()
     {
-        int i = 0;
         for (String s: groups.keySet())
         {
-            System.out.println(i + ": " + s);
-            i++;
+            System.out.println( s);
 
         }
     }
