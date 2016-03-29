@@ -7,6 +7,10 @@
  */
 package com.github.group;
 
+import controlMessages.ControlMessage;
+import controlMessages.DumpReq;
+import controlMessages.Join;
+
 import java.util.Scanner;
 
 public class Shell extends Thread
@@ -36,9 +40,37 @@ public class Shell extends Thread
             {
                 // join/create group
                 case "/j":
+                    if (splitArray.length > 1)
+                    {
+                        boolean newGroup = false;
+                        Group g = GroupList.getInstance().getGroup(splitArray[1]);
+                        if (g == null)
+                        {
+                            // create new group if it does not exist
+                            g = new Group(splitArray[1], "new group name", P2PChat.username); // TODO use ID P2PChat.id);
+                            GroupList.getInstance().addGroup(g);
+                        } else {
+                            // send dumpReq to external contact if group is already there
+                            DumpReq dBody = new DumpReq(g);
+                            ControlMessage dumpMessage = new ControlMessage();
+                            dumpMessage.setMsgBody(dBody.toJsonString());
+                            System.out.println(g.getExternalContact());
+                            PeerList.getPeer(g.getExternalContact()).sendMessage(dumpMessage);
+                        }
+                        System.out.println("got out of block");
+
+                        Join body = new Join(g);
+                        ControlMessage joinMsg = new ControlMessage();
+                        joinMsg.setMsgBody(body.toJsonString());
+                        for (Peer p: PeerList.getAllPeers())
+                        {
+                            p.sendMessage(joinMsg);
+                        }
+
+                    }
 
                     // TODO impiliment
-                    GroupList.getInstance();
+                    //GroupList.getInstance();
                     break;
 
                 // leave group

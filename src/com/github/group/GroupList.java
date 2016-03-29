@@ -45,6 +45,8 @@ public class GroupList
 
 	public synchronized Group getGroup(String groupID)
 	{
+		if(!groups.containsKey(groupID))
+            return null;
 		return groups.get(groupID);
 	}
 
@@ -104,7 +106,7 @@ public class GroupList
     {
         for (String s: groups.keySet())
         {
-            System.out.println( s);
+            System.out.println(s);
 
         }
     }

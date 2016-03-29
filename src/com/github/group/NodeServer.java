@@ -225,7 +225,7 @@ public class NodeServer extends Thread {
                             cmsg.toJsonString();
                 			break;
 						case CONTROL:
-							Group newGroup = new Group("12", "helluva group", P2PChat.id);
+							/*Group newGroup = new Group("12", "helluva group", P2PChat.id);
 							Join body = new Join(newGroup);
 							ControlMessage joinMsg = new ControlMessage();
 							joinMsg.setMsgBody(body.toJsonString());
@@ -237,7 +237,6 @@ public class NodeServer extends Thread {
                 			DumpReq dBody = new DumpReq(newGroup);
                 			ControlMessage dumpMessage = new ControlMessage();
                 			dumpMessage.setMsgBody(dBody.toJsonString());
-                			
                 			peer.sendMessage(dumpMessage);
                 			
                 			try
@@ -255,7 +254,11 @@ public class NodeServer extends Thread {
                 			leaveMsg.setMsgBody(leaveBody.toJsonString());
                 			
                 			peer.sendMessage(leaveMsg);
-                			
+                			*/
+
+                            ControlMessage controlMsg = new ControlMessage(inputLine);
+                            GroupManager.handleControlMessage(peer,controlMsg);
+
 							break;
 						case BLANK:
 						default:
