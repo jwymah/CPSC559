@@ -63,6 +63,19 @@ public class Group {
             }*/
     	}
     }
+
+    /**
+     * overload function
+     * mainly used to send control messages
+     * @param msg
+     */
+    public void messageGroup(Message msg)
+    {
+        for (Peer p : groupMembers)
+        {
+            p.sendMessage(msg);
+        }
+    }
     
     public void updateGroupStatus()
     {
@@ -135,6 +148,14 @@ public class Group {
         details.put("externalcontact", externalContact);
         
         return details.toJSONString();
+    }
+
+    /**
+     * clears all members from this group
+     */
+    public void clearGroup()
+    {
+        groupMembers = new HashSet<Peer>();
     }
 
     /**

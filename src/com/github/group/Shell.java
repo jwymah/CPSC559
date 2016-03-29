@@ -10,6 +10,7 @@ package com.github.group;
 import controlMessages.ControlMessage;
 import controlMessages.DumpReq;
 import controlMessages.Join;
+import controlMessages.Leave;
 
 import java.util.Scanner;
 
@@ -57,7 +58,6 @@ public class Shell extends Thread
                             System.out.println(g.getExternalContact());
                             PeerList.getPeer(g.getExternalContact()).sendMessage(dumpMessage);
                         }
-                        System.out.println("got out of block");
 
                         Join body = new Join(g);
                         ControlMessage joinMsg = new ControlMessage();
@@ -75,11 +75,14 @@ public class Shell extends Thread
 
                 // leave group
                 case "/l":
-
                     if (splitArray.length > 1)
                     {
                         Group g = GroupList.getInstance().getGroup(splitArray[1]);
-                        g.messageGroup("I am leaving this group"); // TODO: make group leave message.
+                        Leave leaveBody = new Leave(g);
+                        ControlMessage leaveMsg = new ControlMessage();
+                        leaveMsg.setMsgBody(leaveBody.toJsonString());
+                        g.messageGroup(leaveMsg);
+                        g.clearGroup();
                     }
                     break;
 
