@@ -101,10 +101,14 @@ public class ChatMessage extends Message {
 	{
 		msg.put("msgbody", msgBody);
 	}
-	
+
 	public String getMsgBody()
 	{
 		return (String) msg.get("msgbody");
+	}
+	public String getSender()
+	{
+		return (String) msg.get("src");
 	}
 	
 	public void signMessage()

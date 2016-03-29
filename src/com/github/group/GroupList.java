@@ -7,15 +7,16 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 
 public class GroupList
-{	
+{
 	private Map<String, Group> groups;
 	private static Log log = Log.getInstance();
+
     private static GroupList instance = null;
 	
 	protected GroupList()
 	{
 		groups = new HashMap<String, Group>();
-		groups.put("1", new Group());
+		groups.put("test", new Group());
 	}
 
     /**
@@ -44,6 +45,8 @@ public class GroupList
 
 	public synchronized Group getGroup(String groupID)
 	{
+		if(!groups.containsKey(groupID))
+            return null;
 		return groups.get(groupID);
 	}
 
@@ -77,7 +80,7 @@ public class GroupList
 	
 	public void mockMessageGroup(String msg)
 	{
-		Group mocky = getGroup("1");
+		Group mocky = getGroup("test");
 		addAllPeersToGroup(mocky);
 		mocky.messageGroup(msg);
 	}
@@ -93,4 +96,16 @@ public class GroupList
 			group.addPeer(e);
 		}
 	}
+
+    /***
+     * displays all groups by id in the GroupList
+     */
+    public synchronized void displayGroupList()
+    {
+        for (String s: groups.keySet())
+        {
+            System.out.println(s);
+
+        }
+    }
 }

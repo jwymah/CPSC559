@@ -12,7 +12,7 @@ import org.json.simple.parser.ParseException;
 import com.github.group.Group;
 import com.github.group.Log;
 
-		
+
 public class DumpResp {
 
     private static final String CLASS_ID = "Dump";
@@ -27,7 +27,7 @@ public class DumpResp {
 
     /**
      * Constructor
-     * @param memberDump 
+     * @param memberDump
      */
     public DumpResp(Group group) {
         log = Log.getInstance();
@@ -39,10 +39,9 @@ public class DumpResp {
         JSONArray array = new JSONArray();
         for (String m : group.getMembersIds())
         {
-        	array.add(m);
+            array.add(m);
         }
-        actionDetails.put(MEMBER_DUMP, array);
-    }    
+    }
 
     /**
      * Constructor that parses and input message
@@ -50,7 +49,7 @@ public class DumpResp {
     public DumpResp(String m) {
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
-        m = m.trim();   
+        m = m.trim();
         JSONParser parser = new JSONParser();
 
         // Parse message and get message components
@@ -65,15 +64,15 @@ public class DumpResp {
             System.out.println(m);
         }
     }
-    
+
     public String getTargetGroup()
     {
-    	return targetGroup;
+        return targetGroup;
     }
-    
+
     public JSONArray getMemberDump()
     {
-    	return memberDump;
+        return memberDump;
     }
 
     /**
@@ -81,8 +80,8 @@ public class DumpResp {
      *
      * @return JSON ChatMessage as string
      */
-	public String toJsonString()
-	{
-		return actionDetails.toJSONString();
-	}
+    public String toJsonString()
+    {
+        return actionDetails.toJSONString();
+    }
 }

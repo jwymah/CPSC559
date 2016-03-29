@@ -46,7 +46,10 @@ public class Group {
     		msg.setMsgBody(msgBody);
     		msg.signMessage();
 
+            p.sendMessage(msg);
+            /*
             Socket conn = p.getConn();
+
 
             //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
             try {
@@ -57,8 +60,21 @@ public class Group {
             catch(Exception ex)
             {
             	ex.printStackTrace();
-            }
+            }*/
     	}
+    }
+
+    /**
+     * overload function
+     * mainly used to send control messages
+     * @param msg
+     */
+    public void messageGroup(Message msg)
+    {
+        for (Peer p : groupMembers)
+        {
+            p.sendMessage(msg);
+        }
     }
     
     public void updateGroupStatus()
@@ -132,6 +148,14 @@ public class Group {
         details.put("externalcontact", externalContact);
         
         return details;
+    }
+
+    /**
+     * clears all members from this group
+     */
+    public void clearGroup()
+    {
+        groupMembers = new HashSet<Peer>();
     }
 
     /**

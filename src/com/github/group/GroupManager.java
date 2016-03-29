@@ -35,15 +35,14 @@ public class GroupManager
 				// otherwise create group with specified contact
 				Join j = new Join(msgBody);
 				targetGroup = grouplist.getGroup(j.getTargetGroup());
-				
 				if (targetGroup == null)
 				{
 					targetGroup = new Group(j.getTargetGroup(), j.getGroupName(), j.getExternalContact());
 					GroupList.getInstance().addGroup(targetGroup);
 				}
-				
 				targetGroup.addPeer(peer);
-				
+
+
 				break;
 			case METADATA:
 				//respond with known group metadata
@@ -95,7 +94,7 @@ public class GroupManager
 			case DUMPRESP:
 				DumpResp dr = new DumpResp(msgBody);
 				targetGroup = grouplist.getGroup(dr.getTargetGroup());
-				//assumed that the targetgroup does not equate to a null group on this side
+				// assumed that the targetgroup does not equate to a null group on this side
 				targetGroup.addMemberDump(dr.getMemberDump());
 								
 				break;

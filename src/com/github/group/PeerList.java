@@ -52,16 +52,20 @@ public class PeerList {
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
     	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
-    	displayPeerList();
+    	//displayPeerList();
         log.printLogMessage(Log.INFO, CLASS_ID, "Added: " + peerToAdd.username);
     }
     
     /**
      * Retrieve the peer with an associated username
      *
-     * @return the Peer with the associated username
+     * @return the Peer with the associated username, null if there is no such peer
      */
     public synchronized static Peer getPeer(String username) {
+        if (!peersByName.containsKey(username)){
+            return null;
+        }
+
     	return peersByName.get(username);
     }
     
@@ -79,7 +83,7 @@ public class PeerList {
     	//TODO: this should return a copy of the collection. currently it is backed by the collection and can cause iteration/concurrency problems
     	return peersByName.values();
     }
-    
+
     /**
      *
      */
@@ -91,6 +95,19 @@ public class PeerList {
     		i++;
     	}
     }
+
+    /**
+     *
+     */
+    public static void displayPeerListUsernames() {
+        for (String p : peersByName.keySet())
+        {
+            System.out.println(p);
+        }
+    }
+
+
+
 
     /**
      * Removes a disconnected/error Peer

@@ -7,6 +7,8 @@
  */
 package com.github.group;
 
+import java.util.Random;
+
 public class P2PChat {
 
     private final static String CLASS_ID = "P2PChat";
@@ -25,16 +27,20 @@ public class P2PChat {
         c = Crypto.getInstance();
 
         // Get Port, Username and ID
-        username = "cjhutchi-" + c.getID();
+        Random r = new Random();
+        username = String.valueOf(r.nextInt(10));//"cjhutchi-" + c.getID();
         id = c.getID();
 
         // Start services
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting NodeServer");
-        NodeServer.getInstance();	//init
-        PeerList.getInstance();	//init
+        NodeServer ns = NodeServer.getInstance();	// init
+        PeerList.getInstance();	    // init
+        GroupList.getInstance();    // init
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastServer");
         (new BroadcastServer()).start();
         log.printLogMessage(Log.INFO, CLASS_ID, "Starting BroadcastClient");
         (new BroadcastClient()).start();
+
+        (new Shell(ns)).start();
     }
 }

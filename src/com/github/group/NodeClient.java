@@ -42,8 +42,9 @@ public class NodeClient extends Thread {
 		            GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving info] [2]");
 					break;
 				case CHAT:
-					ChatMessage chatMsg = new ChatMessage(inputLine);
-					peer.sendMessage(new Message(MessageType.CONTROL));
+					ChatMessage cmsg = new ChatMessage(inputLine);
+					System.out.println("nc["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+					cmsg.toJsonString();
 					break;
 				case CONTROL:
 					ControlMessage controlMsg = new ControlMessage(inputLine);
