@@ -121,17 +121,17 @@ public class Group {
     
     /**
      * get shallow information about the group: id, name, and external contact
-     * @return JSONString
+     * @return JSONSObject
         {"id": id, "groupname": groupName, "externalcontact": externalContact};
      */
-    public String getMetadata()
+    public JSONObject getMetadata()
     {
         JSONObject details = new JSONObject();
         details.put("id", id);
         details.put("groupname", groupName);
         details.put("externalcontact", externalContact);
         
-        return details.toJSONString();
+        return details;
     }
 
     /**

@@ -62,17 +62,15 @@ public class GroupList
 
 	/**
 	 * get meta data for all groups
-	 * @return ArrayList of groups meta data
+	 * @return JSONArray of groups meta data
 	 * 	["groupId,groupName,externalContact","groupId,groupName,externalContact",...]
 	 */
-	public synchronized ArrayList<String> getAllMetadata()
+	public synchronized JSONArray getAllMetadata()
 	{
 		JSONArray array = new JSONArray();
-		ArrayList<String> metadatas = new ArrayList<String>();
 		for (Group g : groups.values())
 		{
 			array.add(g.getMetadata());
-//			metadatas.add(String.join(",", g.getMetadata()));
 		}
 		return array;
 	}

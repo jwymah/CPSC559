@@ -21,6 +21,11 @@ public class GroupManager
 
 	public static void handleControlMessage(Peer peer, ControlMessage controlMsg)
 	{
+		System.out.println("****************Handling control message:***************");
+		System.out.println(controlMsg.getMsgBody());
+		System.out.println(parseAction(controlMsg.getMsgBody()));
+		System.out.println("*******************************");
+		
 		String msgBody = controlMsg.getMsgBody();
 		Group targetGroup = null;
 		switch (parseAction(msgBody))
@@ -54,7 +59,10 @@ public class GroupManager
 				{
 					JSONObject ob = (JSONObject) md.getMetadatas().get(i);
 					GroupList.getInstance().addGroup(new Group((String) ob.get("id"), (String) ob.get("groupname"), (String) ob.get("externalcontact")));
+					System.out.println("##########################################");
+					GroupList.getInstance().displayAllGroups();
 				}
+				
 				
 				break;
 				
