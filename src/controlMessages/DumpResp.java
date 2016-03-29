@@ -41,6 +41,7 @@ public class DumpResp {
         {
             array.add(m);
         }
+        actionDetails.put(MEMBER_DUMP, array);
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.github.group;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 
@@ -54,14 +54,6 @@ public class GroupList
 	{
 		groups.remove(groupToRemove);
 	}
-	
-	public synchronized void displayAllGroups()
-	{
-		for (Group g : groups.values())
-		{
-			System.out.println(g.getName() + ":::" + g.size());
-		}
-	}
 
 	/**
 	 * get meta data for all groups
@@ -102,9 +94,11 @@ public class GroupList
      */
     public synchronized void displayGroupList()
     {
-        for (String s: groups.keySet())
+        for (Entry e: groups.entrySet())
         {
-            System.out.println(s);
+            System.out.print("ID: " + e.getKey());
+            Group g = (Group) e.getValue();
+			System.out.println(", name: " + g.getName() + ", size: " + g.size() + ", externalContact: " + g.getExternalContact());
 
         }
     }

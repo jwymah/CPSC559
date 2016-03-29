@@ -55,7 +55,7 @@ public class Shell extends Thread
                             DumpReq dBody = new DumpReq(g);
                             ControlMessage dumpMessage = new ControlMessage();
                             dumpMessage.setMsgBody(dBody.toJsonString());
-                            System.out.println(g.getExternalContact());
+//                            System.out.println(g.getExternalContact());
                             PeerList.getPeer(g.getExternalContact()).sendMessage(dumpMessage);
                         }
 

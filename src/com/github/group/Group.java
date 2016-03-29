@@ -105,8 +105,7 @@ public class Group {
 	{
 		for(int i=0; i<memberDump.size(); i++)
 		{
-			JSONObject ob = (JSONObject) memberDump.get(i);
-			PeerList.getPeer((String) ob.get("id"));
+			groupMembers.add(PeerList.getPeer((String) memberDump.get(i)));
 		}
 	}
     
@@ -164,13 +163,14 @@ public class Group {
      */
 	public String[] getMembersIds()
 	{
-		String[] ids = new String[groupMembers.size()];
+		String[] ids = new String[groupMembers.size() + 1];
 		int index = 0;
 		for(Peer p : groupMembers)
 		{
 			ids[index] = p.id;
 			index++;
 		}
+		ids[index] = P2PChat.id; 
 		return ids;
 	}
 }

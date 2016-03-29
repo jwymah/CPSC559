@@ -118,4 +118,13 @@ public class PeerList {
         peersByIP.remove(p.getInetString());
     }
 
+	public static Peer getAPeer()
+	{
+		if (peersByIP.size() > 0)
+		{
+			return (Peer) peersByIP.values().toArray()[0];
+		}
+		return null;
+	}
+
 }
