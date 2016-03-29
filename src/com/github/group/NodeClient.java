@@ -43,7 +43,7 @@ public class NodeClient extends Thread {
 					break;
 				case CHAT:
 					ChatMessage cmsg = new ChatMessage(inputLine);
-					System.out.println("["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+					System.out.println("nc["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
 					cmsg.toJsonString();
 					break;
 				case CONTROL:

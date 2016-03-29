@@ -221,7 +221,7 @@ public class NodeServer extends Thread {
                 		case CHAT:
                             // print out chat message
                             ChatMessage cmsg = new ChatMessage(inputLine);
-                            System.out.println("["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+                            System.out.println("ns["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
                             cmsg.toJsonString();
                 			break;
 						case CONTROL:
