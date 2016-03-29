@@ -16,7 +16,7 @@ import com.github.group.Log;
 public class MetadatasDump {
 
     private static final String CLASS_ID = "MetadatasDump";
-    private static final String METADATASDUMP = "metadatasdump";
+    private static final String METADATASDUMP = "metadatadump";
     private static final String ACTION = "action";
     private static Log log;
     private JSONObject actionDetails;
