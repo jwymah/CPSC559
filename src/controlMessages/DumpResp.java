@@ -36,7 +36,12 @@ public class DumpResp {
         actionDetails = new JSONObject();
         actionDetails.put(ACTION, DUMP);
         actionDetails.put(TARGET_GROUP_ID, group.getId());
-        actionDetails.put(MEMBER_DUMP, String.join(",", group.getMembersIds()));
+        JSONArray array = new JSONArray();
+        for (String m : group.getMembersIds())
+        {
+        	array.add(m);
+        }
+        actionDetails.put(MEMBER_DUMP, array);
     }    
 
     /**
