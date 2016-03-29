@@ -63,7 +63,7 @@ public class Shell extends Thread
                 case "/e":
                     //PeerList.displayPeerList();
                     System.out.println("Listing all Groups on network :");
-                    GroupList.displayGroupList();
+                    GroupList.getInstance().displayGroupList();
                     System.out.println("-------------------");
                     break;
 

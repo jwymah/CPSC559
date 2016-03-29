@@ -5,11 +5,9 @@ package com.github.group;
  */
 public enum MessageType {
 	BLANK("BLANK_TYPE"),
-    BROADCAST("Broadcast"),
-    CHAT("Chat"),
-    CONTROL("Control"),
-    QUERY("Query"),
-    QUERY_RESPONSE("Query response")
+    BROADCAST("broadcast"),
+    CHAT("chat"),
+    CONTROL("control")
     ;
 
     private final String type;

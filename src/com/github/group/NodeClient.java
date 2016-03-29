@@ -7,6 +7,8 @@
  */
 package com.github.group;
 
+import controlMessages.ControlMessage;
+
 public class NodeClient extends Thread {
 
     private static Log log;
@@ -43,15 +45,11 @@ public class NodeClient extends Thread {
 					ChatMessage cmsg = new ChatMessage(inputLine);
 					System.out.println("["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
 					cmsg.toJsonString();
-
-
-					//peer.sendMessage(new Message(MessageType.CONTROL));
 					break;
 				case CONTROL:
-					break;
-				case QUERY:
-					break;
-				case QUERY_RESPONSE:
+					ControlMessage controlMsg = new ControlMessage(inputLine);
+					GroupManager.handleControlMessage(peer,controlMsg);
+					GroupList.getInstance().displayAllGroups();
 					break;
 				case BLANK:
 				default:

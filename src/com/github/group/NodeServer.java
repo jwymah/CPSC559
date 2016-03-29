@@ -12,6 +12,11 @@ import java.net.*;
 import java.util.Enumeration;
 import java.util.Random;
 
+import controlMessages.ControlMessage;
+import controlMessages.DumpReq;
+import controlMessages.Join;
+import controlMessages.Leave;
+
 public class NodeServer extends Thread {
     private static NodeServer instance = null;
 
@@ -211,10 +216,8 @@ public class NodeServer extends Thread {
                 // Read input from client
                 while ((inputLine = peer.getNextLine()) != null) {                	
                 	switch (Message.parseMessageType(inputLine)){
-                        // These aren't taken care of here, they're done in the
-                        // Broadcast Server. 
-                		//case BROADCAST:
-                			//break;
+                		case BROADCAST:
+                			break;
                 		case CHAT:
                             // print out chat message
                             ChatMessage cmsg = new ChatMessage(inputLine);
@@ -222,14 +225,37 @@ public class NodeServer extends Thread {
                             cmsg.toJsonString();
                 			break;
 						case CONTROL:
-                			peer.sendMessage(new Message(MessageType.CONTROL));
-                			peer.sendMessage(new Message(MessageType.QUERY));
-                			peer.sendMessage(new Message(MessageType.QUERY_RESPONSE));
-                			peer.sendMessage(new Message(MessageType.BLANK));
-							break;
-						case QUERY:
-							break;
-						case QUERY_RESPONSE:
+							Group newGroup = new Group("12", "helluva group", P2PChat.id);
+							Join body = new Join(newGroup);
+							ControlMessage joinMsg = new ControlMessage();
+							joinMsg.setMsgBody(body.toJsonString());
+							
+							//iterate over peerList
+							//iterate over peerList
+                			peer.sendMessage(joinMsg);
+                			
+                			DumpReq dBody = new DumpReq(newGroup);
+                			ControlMessage dumpMessage = new ControlMessage();
+                			dumpMessage.setMsgBody(dBody.toJsonString());
+                			
+                			peer.sendMessage(dumpMessage);
+                			
+                			try
+							{
+								Thread.sleep(5000);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+                			
+                			Leave leaveBody = new Leave(newGroup);
+                			ControlMessage leaveMsg = new ControlMessage();
+                			leaveMsg.setMsgBody(leaveBody.toJsonString());
+                			
+                			peer.sendMessage(leaveMsg);
+                			
 							break;
 						case BLANK:
 						default:

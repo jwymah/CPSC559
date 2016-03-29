@@ -1,11 +1,8 @@
 /**
- *  ChatMessage.java
+ *  ControlMessage.java
  *
- *  @author Cory Hutchison
- *  @author Frankie Yuan
- *  @author Jeremy Mah
  */
-package com.github.group;
+package controlMessages;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -14,10 +11,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-		
-public class ChatMessage extends Message {
+import com.github.group.Log;
+import com.github.group.Message;
+import com.github.group.MessageServer;
+import com.github.group.MessageType;
 
-    private final static String CLASS_ID = "ChatMessage";
+		
+public class ControlMessage extends Message {
+
+    private final static String CLASS_ID = "ControlMessage";
     private static Log log;
     private JSONObject msg;
 
@@ -26,13 +28,14 @@ public class ChatMessage extends Message {
 	private String dstid;
 	private String msgsig;
 	private String msgbody;
+//	private ControlType controlType;
 	private int port;
 
     /**
      * Constructor
      */
-    public ChatMessage() {
-        super(MessageType.CHAT);
+    public ControlMessage() {
+        super(MessageType.CONTROL);
         log = Log.getInstance();
 
         // Package in JSON object
@@ -51,8 +54,8 @@ public class ChatMessage extends Message {
     /**
      * Constructor that parses and input message
      */
-    public ChatMessage(String m) {
-    	super(MessageType.CHAT);
+    public ControlMessage(String m) {
+    	super(MessageType.CONTROL);
 
         // Remove weird added whitespace that rekt parsing
         // and initialize JSON parser
@@ -65,12 +68,22 @@ public class ChatMessage extends Message {
 
             msg = (JSONObject) obj;
             timestamp = (long) msg.get("timestamp");
-            type = super.type;
+            type = MessageType.CONTROL;
             src = (String) msg.get("src");
             dst = (String) msg.get("dst");
             dstid = (String) msg.get("dstid");
             msgsig = (String) msg.get("msgsig");
             msgbody = (String) msg.get("msgbody");
+            
+            
+            /**{"dst":"IP:PORT",
+             * "src":"192.168.0.19:0",
+             * "msgsig":"MSGSIG",
+             * "dstid":"DSTID",
+             * "type":"control",
+             * "msgbody":"{\"targetgroupid\":\"12\",\"externalcontactid\":\"662af6ed167fab65bb5049216a980d1419425f75\",\"action\":\"join\",\"groupname\":\"helluva group\"}",
+             * "timestamp":1458718049}
+             */
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid ChatMessage");
             System.out.println(m);
@@ -101,23 +114,23 @@ public class ChatMessage extends Message {
 	{
 		msg.put("msgbody", msgBody);
 	}
-
+	
 	public String getMsgBody()
 	{
 		return (String) msg.get("msgbody");
 	}
-	public String getSender()
-	{
-		return (String) msg.get("src");
-	}
+	
+//	public ControlType getControlType()
+//	{
+//		return controlType;
+//	}
 	
 	public void signMessage()
 	{
-		//TODO hash of msgBody + src
+		//TODO hash of msgBody + src + timestamp + controlType
 		msg.put("msgsig", "1111");
 	}
 	
-
     /**
      * Returns a ChatMessage as JSON in a string format
      *
