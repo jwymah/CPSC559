@@ -40,10 +40,13 @@ public class Group {
 	public void messageGroup(String msgBody)
     {
     	ChatMessage msg = new ChatMessage();
+		msg.setMsgBody(msgBody);
+		
     	for(Peer p : groupMembers)
     	{
+    		if(p == null)
+    			System.out.println("why the fuck is it null? WHY");
     		msg.setDst(p.ip, p.port);
-    		msg.setMsgBody(msgBody);
     		msg.signMessage();
 
             p.sendMessage(msg);
@@ -105,8 +108,7 @@ public class Group {
 	{
 		for(int i=0; i<memberDump.size(); i++)
 		{
-			JSONObject ob = (JSONObject) memberDump.get(i);
-			PeerList.getPeer((String) ob.get("id"));
+			groupMembers.add(PeerList.getPeerById((String) memberDump.get(i)));
 		}
 	}
     
@@ -137,17 +139,17 @@ public class Group {
     
     /**
      * get shallow information about the group: id, name, and external contact
-     * @return JSONString
+     * @return JSONSObject
         {"id": id, "groupname": groupName, "externalcontact": externalContact};
      */
-    public String getMetadata()
+    public JSONObject getMetadata()
     {
         JSONObject details = new JSONObject();
         details.put("id", id);
         details.put("groupname", groupName);
         details.put("externalcontact", externalContact);
         
-        return details.toJSONString();
+        return details;
     }
 
     /**
@@ -164,13 +166,14 @@ public class Group {
      */
 	public String[] getMembersIds()
 	{
-		String[] ids = new String[groupMembers.size()];
+		String[] ids = new String[groupMembers.size() + 1];
 		int index = 0;
 		for(Peer p : groupMembers)
 		{
 			ids[index] = p.id;
 			index++;
 		}
+		ids[index] = P2PChat.id; 
 		return ids;
 	}
 }

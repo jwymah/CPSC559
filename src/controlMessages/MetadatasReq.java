@@ -16,7 +16,7 @@ import com.github.group.Log;
 public class MetadatasReq {
 
     private static final String CLASS_ID = "MetadatasReq";
-    private static final String METADATASREQ = "metadatas";
+    private static final String METADATASREQ = "metadatareq";
     private static final String ACTION = "action";
     private static Log log;
     private JSONObject actionDetails;

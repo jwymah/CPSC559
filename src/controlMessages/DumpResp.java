@@ -39,7 +39,7 @@ public class DumpResp {
         JSONArray array = new JSONArray();
         for (String m : group.getMembersIds())
         {
-        	array.add(m);
+            array.add(m);
         }
         actionDetails.put(MEMBER_DUMP, array);
     }

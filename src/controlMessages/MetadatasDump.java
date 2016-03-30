@@ -16,7 +16,7 @@ import com.github.group.Log;
 public class MetadatasDump {
 
     private static final String CLASS_ID = "MetadatasDump";
-    private static final String METADATASDUMP = "metadatasdump";
+    private static final String METADATASDUMP = "metadatadump";
     private static final String ACTION = "action";
     private static Log log;
     private JSONObject actionDetails;
@@ -32,6 +32,9 @@ public class MetadatasDump {
         actionDetails = new JSONObject();
         actionDetails.put(ACTION, METADATASDUMP);
         actionDetails.put(METADATASDUMP, GroupList.getInstance().getAllMetadata());
+        System.out.println("++++++++++++++++++++++++");
+        System.out.println(GroupList.getInstance().getAllMetadata().toJSONString());
+        System.out.println("++++++++++++++++++++++++");
     }    
 
     /**

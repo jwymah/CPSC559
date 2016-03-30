@@ -14,8 +14,10 @@ import java.util.Random;
 
 import controlMessages.ControlMessage;
 import controlMessages.DumpReq;
+import controlMessages.DumpResp;
 import controlMessages.Join;
 import controlMessages.Leave;
+import controlMessages.MetadatasReq;
 
 public class NodeServer extends Thread {
     private static NodeServer instance = null;
@@ -238,6 +240,20 @@ public class NodeServer extends Thread {
                 			ControlMessage dumpMessage = new ControlMessage();
                 			dumpMessage.setMsgBody(dBody.toJsonString());
                 			peer.sendMessage(dumpMessage);
+                			
+                			System.out.println("-----------------------------");
+                			DumpResp drBody = new DumpResp(newGroup);
+                			System.out.println("-----------------------------");
+                			System.out.println(drBody.toJsonString());
+                			System.out.println("-----------------------------");
+                			DumpResp drParsed = new DumpResp(drBody.toJsonString());
+                			System.out.println(drParsed.toJsonString());
+                			System.out.println("-----------------------------");
+                			
+                			MetadatasReq mdr = new MetadatasReq();
+                			ControlMessage mdrMessage = new ControlMessage();
+                			mdrMessage.setMsgBody(mdr.toJsonString());
+                			peer.sendMessage(mdrMessage);
                 			
                 			try
 							{

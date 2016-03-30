@@ -55,8 +55,8 @@ public class Shell extends Thread
                             DumpReq dBody = new DumpReq(g);
                             ControlMessage dumpMessage = new ControlMessage();
                             dumpMessage.setMsgBody(dBody.toJsonString());
-                            System.out.println(g.getExternalContact());
-                            PeerList.getPeer(g.getExternalContact()).sendMessage(dumpMessage);
+//                            System.out.println(g.getExternalContact());
+                            PeerList.getPeerByName(g.getExternalContact()).sendMessage(dumpMessage);
                         }
 
                         Join body = new Join(g);
@@ -90,7 +90,8 @@ public class Shell extends Thread
                 case "/p":
                     //PeerList.displayPeerList();
                     System.out.println("Listing all peers :");
-                    PeerList.displayPeerListUsernames();
+//                    PeerList.displayPeerListUsernames();
+                    PeerList.displayPeerList();
                     System.out.println("-------------------");
                     break;
 
@@ -126,7 +127,7 @@ public class Shell extends Thread
                     if (splitArray.length > 2)
                     {
 
-                        Peer p = PeerList.getPeer(splitArray[1]);
+                        Peer p = PeerList.getPeerByName(splitArray[1]);
                         ChatMessage m = new ChatMessage();
 
 
@@ -162,7 +163,7 @@ public class Shell extends Thread
                     break;
 
                 case "/c":
-                    Peer p = PeerList.getPeer(splitArray[1]);
+                    Peer p = PeerList.getPeerByName(splitArray[1]);
                     if (p != null) {
                         Message m = new Message(MessageType.CONTROL);
                         p.sendMessage(m);

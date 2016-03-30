@@ -16,7 +16,7 @@ public class PeerList {
 	private static String CLASS_ID = "PeerList";
 	
     private static Map<String, Peer> peersByName;
-    private static Map<String, Peer> peersByIP;
+    private static Map<String, Peer> peersId;
     private static PeerList instance = null;
 
     /**
@@ -25,7 +25,7 @@ public class PeerList {
     protected PeerList() {
         // The purpose of having two maps is to search by by name or IP+port
         peersByName = new HashMap<String, Peer>();
-        peersByIP = new HashMap<String, Peer>();
+        peersId = new HashMap<String, Peer>();
     }
 
     /**
@@ -51,17 +51,17 @@ public class PeerList {
             return;
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
-    	peersByIP.put(peerToAdd.getInetString(), peerToAdd);
+    	peersId.put(peerToAdd.id, peerToAdd);
     	//displayPeerList();
         log.printLogMessage(Log.INFO, CLASS_ID, "Added: " + peerToAdd.username);
     }
     
     /**
-     * Retrieve the peer with an associated username
+     * Retrieve the peer with an associated username. only returns the first instance of a user with specified name
      *
      * @return the Peer with the associated username, null if there is no such peer
      */
-    public synchronized static Peer getPeer(String username) {
+    public synchronized static Peer getPeerByName(String username) {
         if (!peersByName.containsKey(username)){
             return null;
         }
@@ -72,8 +72,8 @@ public class PeerList {
     /**
      *
      */
-    public synchronized static Peer getPeer(String ip, int port) {
-    	return peersByIP.get(ip + ":" + String.valueOf(port));
+    public synchronized static Peer getPeerById(String id) {
+    	return peersId.get(id);
     }
     
     /**
@@ -89,6 +89,7 @@ public class PeerList {
      */
     public synchronized static void displayPeerList() {
     	int i = 0;
+    	System.out.println("No. of peers: " + peersByName.size());
     	for (Peer p : peersByName.values())
     	{
     		System.out.println(i + ": " + p.toJsonString());
@@ -106,16 +107,25 @@ public class PeerList {
         }
     }
 
-
-
-
     /**
      * Removes a disconnected/error Peer
      */
     public synchronized static void removePeer(Peer p) {
         log.printLogMessage(Log.INFO, CLASS_ID, "Removed: " + p.username);
         peersByName.remove(p.username);
-        peersByIP.remove(p.getInetString());
+        peersId.remove(p.id);
     }
 
+    /**
+     * just returns any peer in the peerlist
+     * @return
+     */
+	public static Peer getAPeer()
+	{
+		if (peersId.size() > 0)
+		{
+			return (Peer) peersId.values().toArray()[0];
+		}
+		return null;
+	}
 }
