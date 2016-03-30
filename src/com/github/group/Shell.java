@@ -47,15 +47,17 @@ public class Shell extends Thread
                         Group g = GroupList.getInstance().getGroup(splitArray[1]);
 
 
-                        Join body = new Join(g);
-                        ControlMessage joinMsg = new ControlMessage();
-                        joinMsg.setMsgBody(body.toJsonString());
 
                         if (g == null)
                         {
                             // create new group if it does not exist
                             g = new Group(splitArray[1], "new group name", P2PChat.username); // TODO use ID P2PChat.id);
                             GroupList.getInstance().addGroup(g);
+
+                            Join body = new Join(g);
+                            ControlMessage joinMsg = new ControlMessage();
+                            joinMsg.setMsgBody(body.toJsonString());
+
                             PeerList.messageAllPeers(joinMsg);
                         } else {
                             // send dumpReq to external contact if group is already there

@@ -62,7 +62,8 @@ public class PeerList {
      * @return the Peer with the associated username, null if there is no such peer
      */
     public synchronized static Peer getPeerByName(String username) {
-        if (!peersByName.containsKey(username)){
+        if (!peersByName.containsKey(username))
+        {
             return null;
         }
 
@@ -72,7 +73,8 @@ public class PeerList {
     /**
      *
      */
-    public synchronized static Peer getPeerById(String id) {
+    public synchronized static Peer getPeerById(String id)
+    {
     	return peersId.get(id);
     }
     

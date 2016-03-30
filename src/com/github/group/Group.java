@@ -106,6 +106,7 @@ public class Group {
 
 	public void addMemberDump(JSONArray memberDump)
 	{
+        System.out.println("memdump " + memberDump.toJSONString());
 		for(int i=0; i<memberDump.size(); i++)
 		{
 			groupMembers.add(PeerList.getPeerById((String) memberDump.get(i)));
