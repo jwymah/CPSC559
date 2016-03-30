@@ -105,7 +105,7 @@ public class PeerList {
     public static void displayPeerListUsernames() {
         for (String p : peersByName.keySet())
         {
-            System.out.println(p);
+            System.out.println(p + " ID: " + peersByName.get(p).id);
         }
     }
 

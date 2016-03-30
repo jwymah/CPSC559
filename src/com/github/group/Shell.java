@@ -67,8 +67,7 @@ public class Shell extends Thread
 //                            System.out.println(g.getExternalContact());
                             PeerList.getPeerByName(g.getExternalContact()).sendMessage(dumpMessage);
                         }
-                        // send join/create message to every peer, groupManager will handle replication of peerlists on their side
-                        }
+                    }
                     break;
 
                 // leave group

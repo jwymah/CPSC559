@@ -95,7 +95,14 @@ public class GroupManager
 				targetGroup = grouplist.getGroup(dr.getTargetGroup());
 				// assumed that the targetgroup does not equate to a null group on this side
 				targetGroup.addMemberDump(dr.getMemberDump());
-								
+
+				Join body = new Join(targetGroup);
+				ControlMessage joinMsg = new ControlMessage();
+				joinMsg.setMsgBody(body.toJsonString());
+
+				targetGroup.messageGroup(joinMsg);
+
+
 				break;
 				
 			default:
