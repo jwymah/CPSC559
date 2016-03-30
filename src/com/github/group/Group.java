@@ -40,10 +40,13 @@ public class Group {
 	public void messageGroup(String msgBody)
     {
     	ChatMessage msg = new ChatMessage();
+		msg.setMsgBody(msgBody);
+		
     	for(Peer p : groupMembers)
     	{
+    		if(p == null)
+    			System.out.println("why the fuck is it null? WHY");
     		msg.setDst(p.ip, p.port);
-    		msg.setMsgBody(msgBody);
     		msg.signMessage();
 
             p.sendMessage(msg);
@@ -105,7 +108,7 @@ public class Group {
 	{
 		for(int i=0; i<memberDump.size(); i++)
 		{
-			groupMembers.add(PeerList.getPeer((String) memberDump.get(i)));
+			groupMembers.add(PeerList.getPeerById((String) memberDump.get(i)));
 		}
 	}
     
