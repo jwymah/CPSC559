@@ -28,7 +28,7 @@ public class Shell extends Thread
 
     public void run()
     {
-        System.out.println("Shell started");
+        System.out.println("Shell started with username: " + P2PChat.username);
         Scanner s = new Scanner(System.in);
 
         String input = "";
@@ -45,11 +45,18 @@ public class Shell extends Thread
                     {
                         boolean newGroup = false;
                         Group g = GroupList.getInstance().getGroup(splitArray[1]);
+
+
+                        Join body = new Join(g);
+                        ControlMessage joinMsg = new ControlMessage();
+                        joinMsg.setMsgBody(body.toJsonString());
+
                         if (g == null)
                         {
                             // create new group if it does not exist
                             g = new Group(splitArray[1], "new group name", P2PChat.username); // TODO use ID P2PChat.id);
                             GroupList.getInstance().addGroup(g);
+                            PeerList.messageAllPeers(joinMsg);
                         } else {
                             // send dumpReq to external contact if group is already there
                             DumpReq dBody = new DumpReq(g);
@@ -58,19 +65,8 @@ public class Shell extends Thread
 //                            System.out.println(g.getExternalContact());
                             PeerList.getPeerByName(g.getExternalContact()).sendMessage(dumpMessage);
                         }
-
-                        Join body = new Join(g);
-                        ControlMessage joinMsg = new ControlMessage();
-                        joinMsg.setMsgBody(body.toJsonString());
-                        for (Peer p: PeerList.getAllPeers())
-                        {
-                            p.sendMessage(joinMsg);
+                        // send join/create message to every peer, groupManager will handle replication of peerlists on their side
                         }
-
-                    }
-
-                    // TODO impiliment
-                    //GroupList.getInstance();
                     break;
 
                 // leave group

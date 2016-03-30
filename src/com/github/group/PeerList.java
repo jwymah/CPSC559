@@ -128,4 +128,12 @@ public class PeerList {
 		}
 		return null;
 	}
+
+    public synchronized static void messageAllPeers(Message msg)
+    {
+        for (Peer p: getAllPeers())
+        {
+            p.sendMessage(msg);
+        }
+    }
 }

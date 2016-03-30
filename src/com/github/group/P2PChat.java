@@ -31,7 +31,7 @@ public class P2PChat {
 
         // Get Port, Username and ID
         Random r = new Random();
-        username = String.valueOf(r.nextInt(10));//"cjhutchi-" + c.getID();
+        username = String.valueOf(r.nextInt(100));//"cjhutchi-" + c.getID();
         id = c.getID();
 
         // Start services

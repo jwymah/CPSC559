@@ -39,7 +39,7 @@ public class NodeClient extends Thread {
 		while ((inputLine = peer.getNextLine()) != null) {
 			switch (Message.parseMessageType(inputLine)){
 				case BROADCAST:
-		            GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving info] [2]");
+		            //GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving info] [2]");
 					break;
 				case CHAT:
 					ChatMessage cmsg = new ChatMessage(inputLine);

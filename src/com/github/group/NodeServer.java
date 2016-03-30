@@ -210,7 +210,7 @@ public class NodeServer extends Thread {
     			in = null;
     			conn = null;
     			
-                GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
+                //GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
 
             	//TODO: Refactor this into common library for 
                 //      nodeserver+nodeclient. after user input is added

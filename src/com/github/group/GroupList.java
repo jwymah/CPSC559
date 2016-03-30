@@ -16,7 +16,7 @@ public class GroupList
 	protected GroupList()
 	{
 		groups = new HashMap<String, Group>();
-		groups.put("test", new Group());
+		//groups.put("test", new Group());
 	}
 
     /**
