@@ -10,8 +10,9 @@ standard communication takes place over a TCP socket. This is primarily backend
 work with a minimal user interfacing command line.
 
 **Building:**
-* Compile: `ant` in the source directory
-* Running: `ant run` in the source directory
+* Cloning: `git clone https://github.com/cjhutchi/CPSC559.git`
+* Compile: `cd CPSC559` then run `ant` in the source directory
+* Running: `cd CPSC559` then run `ant run` in the source directory
 * Running (alternate): `java -classpath libs/*:deploy/libs/* com.github.group.P2PChat` in the source directory
 
 For a list of available methods available while the program is running run
