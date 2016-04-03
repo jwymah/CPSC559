@@ -31,14 +31,14 @@ public class Shell extends Thread
     public void usage() {
         System.out.println();
         System.out.println("Usage:");
-        System.out.println("\t/p\t\tDisplay available Peers");
-        System.out.println("\t/e\t\tDisplay available Groups");
-        System.out.println("\t/g <group>\tWrite group message");
-        System.out.println("\t/j <group>\tJoin/Create group");
-        System.out.println("\t/l <group>\tLeave group");
-        System.out.println("\t/w <username>\tWrite message to peer");
-        System.out.println("\t/c <username>\tWrite control message to peer");
-        System.out.println("\t/?\t\tDisplay this help message");
+        System.out.println("\t/p\t\t\tDisplay available Peers");
+        System.out.println("\t/e\t\t\tDisplay available Groups");
+        System.out.println("\t/g <group> <msg>\tWrite group message");
+        System.out.println("\t/j <group>\t\tJoin/Create group");
+        System.out.println("\t/l <group>\t\tLeave group");
+        System.out.println("\t/w <username> <msg>\tWrite message to peer");
+        //System.out.println("\t/c <username>\tWrite control message to peer");
+        System.out.println("\t/?\t\t\tDisplay this help message");
         System.out.println();
     }
 

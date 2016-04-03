@@ -7,9 +7,9 @@ public class Log {
 
     private static Log instance = null;
 
-    public static final String ERROR   = "ERROR";
-    public static final String INFO    = "INFO";
-    public static final String MESSAGE = "MESSAGE";
+    public static final String ERROR   = "\u001B[31mERROR\u001B[0m";
+    public static final String INFO    = "\u001B[33mINFO\u001B[0m";
+    public static final String MESSAGE = "\u001B[32mMESSAGE\u001B[0m";
 
     /**
      * Constructor

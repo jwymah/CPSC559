@@ -21,7 +21,7 @@ public class GroupManager
 
 	public static void handleControlMessage(Peer peer, ControlMessage controlMsg)
 	{
-        log.printLogMessage(Log.INFO, CLASS_ID, "Handling Control Message");
+        log.printLogMessage(Log.MESSAGE, CLASS_ID, "Handling Control Message");
         controlMsg.printMessage();
 		//System.out.println(controlMsg.toJsonString());
         // System.out.println(parseAction(controlMsg.getMsgBody()));
