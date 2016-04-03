@@ -77,7 +77,7 @@ public class BroadcastMessage extends Message {
             port = ((Long) msg.get("port")).intValue();
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid BroadcastMessage");
-            System.out.println(m);
+            //System.out.println(m);
         }
     }
 
@@ -98,11 +98,11 @@ public class BroadcastMessage extends Message {
         log.printLogMessage(Log.INFO, CLASS_ID, "");
 
         System.out.println();
-        System.out.println("\ttimestamp:\t" + timestamp);
-        System.out.println("\tusername:\t" + username);
-        System.out.println("\tid:\t\t" + id);
-        System.out.println("\tip:\t\t" + ip);
-        System.out.println("\tport:\t\t" + port);
+        System.out.println("\tTimestamp:\t" + timestamp);
+        System.out.println("\tUsername:\t" + username);
+        System.out.println("\tID:\t\t" + id);
+        System.out.println("\tIP:\t\t" + ip);
+        System.out.println("\tPort:\t\t" + port);
         System.out.println();        
     }
 }

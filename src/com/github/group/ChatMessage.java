@@ -9,6 +9,8 @@ package com.github.group;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,6 +24,7 @@ public class ChatMessage extends Message {
     private JSONObject msg;
 
 	private String src;
+    private String srcid;
     private String dst;
 	private String dstid;
 	private String msgsig;
@@ -40,6 +43,7 @@ public class ChatMessage extends Message {
         msg.put("timestamp", super.timestamp);
         msg.put("type", super.type.toString());
         msg.put("src", "SRC");
+        msg.put("srcid", "SRCID");
         msg.put("dst", "IP:PORT");
         msg.put("dstid", "DSTID");
         msg.put("msgsig", "MSGSIG");
@@ -67,13 +71,14 @@ public class ChatMessage extends Message {
             timestamp = (long) msg.get("timestamp");
             type = super.type;
             src = (String) msg.get("src");
+            srcid = (String) msg.get("srcid");
             dst = (String) msg.get("dst");
             dstid = (String) msg.get("dstid");
             msgsig = (String) msg.get("msgsig");
             msgbody = (String) msg.get("msgbody");
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid ChatMessage");
-            System.out.println(m);
+            //System.out.println(m);
         }
     }
 
@@ -81,7 +86,9 @@ public class ChatMessage extends Message {
 	{
 		try
 		{
-			msg.put("src", InetAddress.getLocalHost().getHostAddress() + ":" + new Integer(MessageServer.getPort()).toString());
+			msg.put("src", InetAddress.getLocalHost().getHostAddress() 
+                    + ":" + new Integer(MessageServer.getPort()).toString());
+            msg.put("srcid", P2PChat.username);
 		}
 		catch (UnknownHostException e)
 		{
@@ -96,6 +103,10 @@ public class ChatMessage extends Message {
 		this.port = port;
 		msg.put("dst", ip + new Integer(port).toString());
 	}
+
+    public void setDstId(String id) {
+        msg.put("dstid", id);
+    }
 
 	public void setMsgBody(String msgBody)
 	{
@@ -113,10 +124,22 @@ public class ChatMessage extends Message {
 	
 	public void signMessage()
 	{
-		//TODO hash of msgBody + src
+		// TODO: Hash of msgBody + src
 		msg.put("msgsig", "1111");
 	}
 	
+    /**
+     * Prints out the Chat message
+     */
+    public void printMessage() {
+        // Set formatting options and get timestamp
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String timestamp = sdf.format(cal.getTime());
+
+        // Print out log message
+        System.out.println("[" + timestamp + "] [" + srcid + "] " + getMsgBody());
+    }
 
     /**
      * Returns a ChatMessage as JSON in a string format

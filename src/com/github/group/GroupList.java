@@ -8,6 +8,7 @@ import org.json.simple.JSONArray;
 
 public class GroupList
 {
+	private static final String CLASS_ID = "GroupList";
 	private Map<String, Group> groups;
 	private static Log log = Log.getInstance();
 
@@ -37,7 +38,8 @@ public class GroupList
 		if (groups.get(groupToAdd.getId()) != null)
 		{
 			//TODO change to logger
-			System.out.println("tried to add a group to grouplist but the ID already exists");
+            log.printLogMessage(Log.ERROR, CLASS_ID, "ID already exists in GroupList");
+			//System.out.println("tried to add a group to grouplist but the ID already exists");
 			return;
 		}
 		groups.put(groupToAdd.getId(), groupToAdd);
@@ -89,16 +91,26 @@ public class GroupList
 		}
 	}
 
-    /***
-     * displays all groups by id in the GroupList
+    /**
+     * Displays all groups by id in the GroupList
      */
     public synchronized void displayGroupList()
     {
+        log.printLogMessage(Log.INFO, CLASS_ID, "Displaying Groups");
+        System.out.println();
         for (Entry e: groups.entrySet())
         {
-            System.out.print("ID: " + e.getKey());
             Group g = (Group) e.getValue();
+
+            System.out.println("\tID:\t\t" + e.getKey());
+            System.out.println("\tName:\t\t" + g.getName()); 
+            System.out.println("\tContact:\t" + g.getExternalContact());
+            System.out.println("\tSize:\t\t" + g.size());
+            System.out.println();
+            /*
+            System.out.print("ID: " + e.getKey());
 			System.out.println(", name: " + g.getName() + ", size: " + g.size() + ", externalContact: " + g.getExternalContact());
+            */
 
         }
     }

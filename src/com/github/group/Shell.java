@@ -16,29 +16,52 @@ import java.util.Scanner;
 
 public class Shell extends Thread
 {
+    private final static String CLASS_ID = "Shell";
     private Group lastGroupMessaged;
+    private static Log log = null;
 
     /**
      * Constructor
      */
     protected Shell( NodeServer ns)
     {
+        log = Log.getInstance();
     }
 
+    public void usage() {
+        System.out.println();
+        System.out.println("Usage:");
+        System.out.println("\t/p\t\tDisplay available Peers");
+        System.out.println("\t/e\t\tDisplay available Groups");
+        System.out.println("\t/g <group>\tWrite group message");
+        System.out.println("\t/j <group>\tJoin/Create group");
+        System.out.println("\t/l <group>\tLeave group");
+        System.out.println("\t/w <username>\tWrite message to peer");
+        System.out.println("\t/c <username>\tWrite control message to peer");
+        System.out.println("\t/?\t\tDisplay this help message");
+        System.out.println();
+    }
 
     public void run()
     {
-        System.out.println("Shell started with username: " + P2PChat.username);
+        log.printLogMessage(Log.INFO, CLASS_ID,
+                "Shell started with username: " +
+                P2PChat.username);
         Scanner s = new Scanner(System.in);
 
         String input = "";
         while ((input = s.nextLine())!= null)
         {
             String[] splitArray = input.split(" ",3);
-            System.out.println("sa length" + splitArray.length);
+            //System.out.println("sa length" + splitArray.length);
 
             switch (splitArray[0])
             {
+                // usage
+                case "/?":
+                    usage();
+                    break;
+
                 // join/create group
                 case "/j":
                     if (splitArray.length > 1)
@@ -51,7 +74,8 @@ public class Shell extends Thread
                         if (g == null)
                         {
                             // create new group if it does not exist
-                            g = new Group(splitArray[1], "new group name", P2PChat.username); // TODO use ID P2PChat.id);
+                            // TODO: Use ID as P2PChat.id
+                            g = new Group(splitArray[1], "new group name", P2PChat.username);
                             GroupList.getInstance().addGroup(g);
 
                             Join body = new Join(g);
@@ -60,11 +84,11 @@ public class Shell extends Thread
 
                             PeerList.messageAllPeers(joinMsg);
                         } else {
-                            // send dumpReq to external contact if group is already there
+                            // send dumpReq to external contact if 
+                            // group is already there
                             DumpReq dBody = new DumpReq(g);
                             ControlMessage dumpMessage = new ControlMessage();
                             dumpMessage.setMsgBody(dBody.toJsonString());
-//                            System.out.println(g.getExternalContact());
                             PeerList.getPeerByName(g.getExternalContact()).sendMessage(dumpMessage);
                         }
                     }
@@ -85,19 +109,19 @@ public class Shell extends Thread
 
                 // show online peers
                 case "/p":
-                    //PeerList.displayPeerList();
-                    System.out.println("Listing all peers :");
-//                    PeerList.displayPeerListUsernames();
+                    //log.printLogMessage(Log.INFO, CLASS_ID, "Listing Peers");
+                    //System.out.println("Listing all peers :");
+                    // PeerList.displayPeerListUsernames();
                     PeerList.displayPeerList();
-                    System.out.println("-------------------");
+                    //System.out.println("-------------------");
                     break;
 
                 // show all groups on network
                 case "/e":
                     //PeerList.displayPeerList();
-                    System.out.println("Listing all Groups on network :");
+                    //System.out.println("Listing all Groups on network :");
                     GroupList.getInstance().displayGroupList();
-                    System.out.println("-------------------");
+                    //System.out.println("-------------------");
                     break;
 
                 // show members of a group that i am a part of
@@ -130,14 +154,15 @@ public class Shell extends Thread
 
                         if (p != null)
                         {
-                            System.out.println( p.toJsonString());
+                            //System.out.println( p.toJsonString());
 
                             m.setDst(p.ip, p.port);
+                            m.setDstId(splitArray[1]);
                             m.setMsgBody(splitArray[2]);
                             m.signMessage();
-                            System.out.println("shell sending chat msg");
+                            //System.out.println("shell sending chat msg");
                             p.sendMessage(m);
-                            System.out.println("shell sent chat msg");
+                            //System.out.println("shell sent chat msg");
 
 
                             /*
@@ -149,16 +174,20 @@ public class Shell extends Thread
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }*/
-                        } else
+                        } 
+                        else
                         {
-                            System.out.println("no such peer exists");
+                            log.printLogMessage(Log.ERROR, CLASS_ID, "No such peer");
+                            //System.out.println("no such peer exists");
                         }
                     } else
                     {
-                        System.out.println("Improper input");
+                        log.printLogMessage(Log.ERROR, CLASS_ID, "Invalid input");
+                        //System.out.println("Improper input");
                     }
                     break;
 
+                // Control message(?)
                 case "/c":
                     Peer p = PeerList.getPeerByName(splitArray[1]);
                     if (p != null) {
@@ -166,9 +195,13 @@ public class Shell extends Thread
                         p.sendMessage(m);
                     }
                     break;
+
                 default:
-                    if(lastGroupMessaged != null)
-                        lastGroupMessaged.messageGroup(input);
+                    log.printLogMessage(Log.ERROR, CLASS_ID, "Unrecognized command");
+                    /*
+                        if(lastGroupMessaged != null)
+                            lastGroupMessaged.messageGroup(input);
+                    */
             }
         }
 

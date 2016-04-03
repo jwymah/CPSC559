@@ -20,6 +20,8 @@ public class Group {
     private String id;
     private String groupName;
     private String externalContact;
+    private static Log log = null;
+    private static final String CLASS_ID = "Group";
 
     /**
      * Constructor
@@ -27,6 +29,7 @@ public class Group {
     public Group() {
     	id = "1"; // TODO: be dynamic
         groupMembers = new HashSet<Peer>();
+        log = Log.getInstance();
     }
     
     public Group(String groupId, String groupName, String externalContact)
@@ -44,8 +47,9 @@ public class Group {
 		
     	for(Peer p : groupMembers)
     	{
-    		if(p == null)
-    			System.out.println("why the fuck is it null? WHY");
+    		if (p == null)
+                log.printLogMessage(Log.ERROR, CLASS_ID, "This really shouldn't happen");
+    			//System.out.println("why the fuck is it null? WHY");
     		msg.setDst(p.ip, p.port);
     		msg.signMessage();
 
@@ -162,6 +166,7 @@ public class Group {
 
     /**
      * get Ids of all members of this group
+     *
      * @return
      */
 	public String[] getMembersIds()

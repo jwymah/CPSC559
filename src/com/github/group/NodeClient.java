@@ -43,22 +43,25 @@ public class NodeClient extends Thread {
 					break;
 				case CHAT:
 					ChatMessage cmsg = new ChatMessage(inputLine);
-					System.out.println("nc["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+					//System.out.println("nc["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+                    cmsg.printMessage();
 					cmsg.toJsonString();
 					break;
 				case CONTROL:
 					ControlMessage controlMsg = new ControlMessage(inputLine);
+                    //controlMsg.printMessage();
 					GroupManager.handleControlMessage(peer,controlMsg);
 //					GroupList.getInstance().displayAllGroups();
 					break;
 				case BLANK:
 				default:
-					System.out.println("received BLANK_TYPE message type?");
+                    log.printLogMessage(Log.INFO, CLASS_ID, "Received BLANK_TYPE message");
+					//System.out.println("received BLANK_TYPE message type?");
 					break;
 			}
 		    // Log message to stdout
 		    String addr = peer.getConn().getInetAddress().getHostAddress() + ":" + peer.getConn().getPort();
-		    log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
+		    //log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
 		}
         
         // Log that they have disconnected

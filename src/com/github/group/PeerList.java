@@ -57,7 +57,8 @@ public class PeerList {
     }
     
     /**
-     * Retrieve the peer with an associated username. only returns the first instance of a user with specified name
+     * Retrieve the peer with an associated username. Only returns 
+     * the first instance of a user with specified name.
      *
      * @return the Peer with the associated username, null if there is no such peer
      */
@@ -82,7 +83,9 @@ public class PeerList {
      *
      */
     public synchronized static Collection<Peer> getAllPeers() {
-    	//TODO: this should return a copy of the collection. currently it is backed by the collection and can cause iteration/concurrency problems
+    	// TODO: This should return a copy of the collection. 
+        //       Currently it is backed by the collection and can 
+        //       cause iteration/concurrency problems
     	return peersByName.values();
     }
 
@@ -90,12 +93,18 @@ public class PeerList {
      *
      */
     public synchronized static void displayPeerList() {
-    	int i = 0;
+    	//int i = 0;
+        log.printLogMessage(Log.INFO, CLASS_ID, "Displaying PeerList");
+        System.out.println();
     	System.out.println("No. of peers: " + peersByName.size());
     	for (Peer p : peersByName.values())
     	{
-    		System.out.println(i + ": " + p.toJsonString());
-    		i++;
+            System.out.println("\tUsername:\t" + p.username);
+            System.out.println("\tID:\t\t" + p.id);
+            System.out.println("\tAddress:\t" + p.ip + ":" + p.port);
+            System.out.println();
+    		//System.out.println(i + ": " + p.toJsonString());
+    		//i++;
     	}
     }
 
@@ -119,7 +128,8 @@ public class PeerList {
     }
 
     /**
-     * just returns any peer in the peerlist
+     * Just returns any peer in the peerlist
+     *
      * @return
      */
 	public static Peer getAPeer()

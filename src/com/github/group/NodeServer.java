@@ -219,13 +219,17 @@ public class NodeServer extends Thread {
                 while ((inputLine = peer.getNextLine()) != null) {                	
                 	switch (Message.parseMessageType(inputLine)){
                 		case BROADCAST:
+                            // Ignore
                 			break;
+
                 		case CHAT:
                             // print out chat message
                             ChatMessage cmsg = new ChatMessage(inputLine);
-                            System.out.println("ns["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+                            //System.out.println("ns["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
+                            cmsg.printMessage();
                             cmsg.toJsonString();
                 			break;
+
 						case CONTROL:
 							/*Group newGroup = new Group("12", "helluva group", P2PChat.id);
 							Join body = new Join(newGroup);
@@ -273,6 +277,7 @@ public class NodeServer extends Thread {
                 			*/
 
                             ControlMessage controlMsg = new ControlMessage(inputLine);
+                            //controlMsg.printMessage();
                             GroupManager.handleControlMessage(peer,controlMsg);
 
 							break;
@@ -282,8 +287,9 @@ public class NodeServer extends Thread {
                                     "Received invalid message");
 							break;
                 	}
+
                     // Log message to stdout
-                    log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
+                    //log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
                 }
 
                 // Log that they have disconnected

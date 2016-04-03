@@ -32,9 +32,9 @@ public class MetadatasDump {
         actionDetails = new JSONObject();
         actionDetails.put(ACTION, METADATASDUMP);
         actionDetails.put(METADATASDUMP, GroupList.getInstance().getAllMetadata());
-        System.out.println("++++++++++++++++++++++++");
-        System.out.println(GroupList.getInstance().getAllMetadata().toJSONString());
-        System.out.println("++++++++++++++++++++++++");
+        //System.out.println("++++++++++++++++++++++++");
+        //System.out.println(GroupList.getInstance().getAllMetadata().toJSONString());
+        //System.out.println("++++++++++++++++++++++++");
     }    
 
     /**

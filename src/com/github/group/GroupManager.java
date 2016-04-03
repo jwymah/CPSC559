@@ -21,10 +21,10 @@ public class GroupManager
 
 	public static void handleControlMessage(Peer peer, ControlMessage controlMsg)
 	{
-		System.out.println("****************Handling control message:***************");
-		System.out.println(controlMsg.toJsonString());
-//		System.out.println(parseAction(controlMsg.getMsgBody()));
-		System.out.println("*******************************");
+        log.printLogMessage(Log.INFO, CLASS_ID, "Handling Control Message");
+        controlMsg.printMessage();
+		//System.out.println(controlMsg.toJsonString());
+        // System.out.println(parseAction(controlMsg.getMsgBody()));
 		
 		String msgBody = controlMsg.getMsgBody();
 		Group targetGroup = null;
@@ -37,13 +37,13 @@ public class GroupManager
 				targetGroup = grouplist.getGroup(j.getTargetGroup());
 				if (targetGroup == null)
 				{
-					targetGroup = new Group(j.getTargetGroup(), j.getGroupName(), j.getExternalContact());
+					targetGroup = new Group(j.getTargetGroup(), 
+                            j.getGroupName(), j.getExternalContact());
 					GroupList.getInstance().addGroup(targetGroup);
 				}
 				targetGroup.addPeer(peer);
-
-
 				break;
+
 			case METADATA:
 				//respond with known group metadata
 				ControlMessage metaDumpMsg = new ControlMessage();
@@ -57,11 +57,11 @@ public class GroupManager
 				for (int i=0; i<md.getMetadatas().size(); i++)
 				{
 					JSONObject ob = (JSONObject) md.getMetadatas().get(i);
-					GroupList.getInstance().addGroup(new Group((String) ob.get("id"), (String) ob.get("groupname"), (String) ob.get("externalcontact")));
-//					GroupList.getInstance().displayAllGroups();
+					GroupList.getInstance().addGroup(new Group((String) ob.get("id"), 
+                                (String) ob.get("groupname"), 
+                                (String) ob.get("externalcontact")));
+                    // GroupList.getInstance().displayAllGroups();
 				}
-				
-				
 				break;
 				
 			case LEAVE:
@@ -73,7 +73,6 @@ public class GroupManager
 				{
 					targetGroup.removePeer(peer);
 				}
-				
 				break;
 				
 			case DUMPREQ:
@@ -88,8 +87,8 @@ public class GroupManager
 					
 					peer.sendMessage(dumpRespMsg);
 				}
-				
 				break;
+
 			case DUMPRESP:
 				DumpResp dr = new DumpResp(msgBody);
 				targetGroup = grouplist.getGroup(dr.getTargetGroup());
@@ -101,12 +100,11 @@ public class GroupManager
 				joinMsg.setMsgBody(body.toJsonString());
 
 				targetGroup.messageGroup(joinMsg);
-
-
 				break;
 				
 			default:
-				System.out.println("hi  ----  Got a weird action in group manager");
+                log.printLogMessage(Log.ERROR, CLASS_ID, "Invalid GroupManager action");
+				//System.out.println("hi  ----  Got a weird action in group manager");
 		}
 	}
 

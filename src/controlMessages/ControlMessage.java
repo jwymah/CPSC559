@@ -76,7 +76,8 @@ public class ControlMessage extends Message {
             msgbody = (String) msg.get("msgbody");
             
             
-            /**{"dst":"IP:PORT",
+            /**
+             * {"dst":"IP:PORT",
              * "src":"192.168.0.19:0",
              * "msgsig":"MSGSIG",
              * "dstid":"DSTID",
@@ -130,6 +131,30 @@ public class ControlMessage extends Message {
 		//TODO hash of msgBody + src + timestamp + controlType
 		msg.put("msgsig", "1111");
 	}
+
+    /**
+     * {
+     *      "timestamp":1458718049}
+     *      "type":"control",
+     *      "src":"192.168.0.19:0",
+     *      "dstid":"DSTID",
+     *      "dst":"IP:PORT",
+     *      "msgsig":"MSGSIG",
+     *      "msgbody": "{\"targetgroupid\":\"12\",\"externalcontactid\":\"662af6ed167fab65bb5049216a980d1419425f75\",\"action\":\"join\",\"groupname\":\"helluva group\"}",
+     */
+    public void printMessage() {
+        System.out.println();
+        System.out.println("{");
+        System.out.println("\t\"timestamp\": " + timestamp);
+        System.out.println("\t\"type\": \"" + type + "\"");
+        System.out.println("\t\"src\": \"" + src + "\"");
+        System.out.println("\t\"dstid\": \"" + dstid + "\"");
+        System.out.println("\t\"dst\": \"" + dst + "\"");
+        System.out.println("\t\"msgsig\": \"" + msgsig + "\"");
+        System.out.println("\t\"msgbody\": \"" + msgbody + "\"");
+        System.out.println("}");
+        System.out.println();
+    }
 	
     /**
      * Returns a ChatMessage as JSON in a string format

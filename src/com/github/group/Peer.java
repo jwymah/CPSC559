@@ -67,7 +67,6 @@ public class Peer {
     /**
      * TODO: Should this throw or handle its own exceptions? the caller has 
      * to check a null either way.
-     *
      */
     public void connect()
     {
@@ -110,7 +109,8 @@ public class Peer {
     /**
      * For integrity reasons do not use this method to read or write the socket.
      * Use ONLY for getting connection meta data
-     * @return
+     *
+     * @return The TCP connection
      */
     public Socket getConn()
     {
@@ -143,7 +143,8 @@ public class Peer {
     /**
      * Wrapper class that reads a line from the socket.
      * Though it is synchronized only ONE place should read from it
-     * @return
+     *
+     * @return The input string
      */
     public String getNextLine()
     {
