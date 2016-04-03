@@ -39,19 +39,16 @@ public class NodeClient extends Thread {
 		while ((inputLine = peer.getNextLine()) != null) {
 			switch (Message.parseMessageType(inputLine)){
 				case BROADCAST:
-		            //GroupList.getInstance().mockMessageGroup("sending message to group members [in response to receiving info] [2]");
+					//ignore
 					break;
 				case CHAT:
 					ChatMessage cmsg = new ChatMessage(inputLine);
-					//System.out.println("nc["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
                     cmsg.printMessage();
 					cmsg.toJsonString();
 					break;
 				case CONTROL:
 					ControlMessage controlMsg = new ControlMessage(inputLine);
-                    //controlMsg.printMessage();
 					GroupManager.handleControlMessage(peer,controlMsg);
-//					GroupList.getInstance().displayAllGroups();
 					break;
 				case BLANK:
 				default:

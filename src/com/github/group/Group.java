@@ -51,6 +51,7 @@ public class Group {
                 log.printLogMessage(Log.ERROR, CLASS_ID, "This really shouldn't happen");
     			//System.out.println("why the fuck is it null? WHY");
     		msg.setDst(p.ip, p.port);
+    		msg.setGroupId(id);
     		msg.signMessage();
 
             p.sendMessage(msg);
@@ -113,6 +114,8 @@ public class Group {
 	{
 		for(int i=0; i<memberDump.size(); i++)
 		{
+        	if (((String) memberDump.get(i)).compareTo(P2PChat.id) == 0)
+        		return;	//special case if a peer joins same group multiple times. own ID will be in this dump
 			groupMembers.add(PeerList.getPeerById((String) memberDump.get(i)));
 		}
 	}

@@ -23,6 +23,7 @@ public class ChatMessage extends Message {
     private static Log log;
     private JSONObject msg;
 
+    private String groupid;
 	private String src;
     private String srcid;
     private String dst;
@@ -42,6 +43,7 @@ public class ChatMessage extends Message {
         msg = new JSONObject();
         msg.put("timestamp", super.timestamp);
         msg.put("type", super.type.toString());
+        msg.put("groupid", "-1");
         msg.put("src", "SRC");
         msg.put("srcid", "SRCID");
         msg.put("dst", "IP:PORT");
@@ -70,6 +72,7 @@ public class ChatMessage extends Message {
             msg = (JSONObject) obj;
             timestamp = (long) msg.get("timestamp");
             type = super.type;
+            groupid = (String) msg.get("groupid");
             src = (String) msg.get("src");
             srcid = (String) msg.get("srcid");
             dst = (String) msg.get("dst");
@@ -95,6 +98,17 @@ public class ChatMessage extends Message {
 			//TODO: probably want this fault to propagate
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Set the groupid on messages when messaging a group so that the client side parser
+	 * knows that it was a group message.
+	 * groupid is defaulted to -1 in the case that it a direction 1-1 message.
+	 * @param groupid
+	 */
+	public void setGroupId(String groupid)
+	{
+		msg.put("groupid", groupid);
 	}
 
 	public void setDst(String ip, int port)

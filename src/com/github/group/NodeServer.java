@@ -223,63 +223,14 @@ public class NodeServer extends Thread {
                 			break;
 
                 		case CHAT:
-                            // print out chat message
                             ChatMessage cmsg = new ChatMessage(inputLine);
-                            //System.out.println("ns["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
                             cmsg.printMessage();
                             cmsg.toJsonString();
                 			break;
 
 						case CONTROL:
-							/*Group newGroup = new Group("12", "helluva group", P2PChat.id);
-							Join body = new Join(newGroup);
-							ControlMessage joinMsg = new ControlMessage();
-							joinMsg.setMsgBody(body.toJsonString());
-							
-							//iterate over peerList
-							//iterate over peerList
-                			peer.sendMessage(joinMsg);
-                			
-                			DumpReq dBody = new DumpReq(newGroup);
-                			ControlMessage dumpMessage = new ControlMessage();
-                			dumpMessage.setMsgBody(dBody.toJsonString());
-                			peer.sendMessage(dumpMessage);
-                			
-                			System.out.println("-----------------------------");
-                			DumpResp drBody = new DumpResp(newGroup);
-                			System.out.println("-----------------------------");
-                			System.out.println(drBody.toJsonString());
-                			System.out.println("-----------------------------");
-                			DumpResp drParsed = new DumpResp(drBody.toJsonString());
-                			System.out.println(drParsed.toJsonString());
-                			System.out.println("-----------------------------");
-                			
-                			MetadatasReq mdr = new MetadatasReq();
-                			ControlMessage mdrMessage = new ControlMessage();
-                			mdrMessage.setMsgBody(mdr.toJsonString());
-                			peer.sendMessage(mdrMessage);
-                			
-                			try
-							{
-								Thread.sleep(5000);
-							}
-							catch (InterruptedException e)
-							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-                			
-                			Leave leaveBody = new Leave(newGroup);
-                			ControlMessage leaveMsg = new ControlMessage();
-                			leaveMsg.setMsgBody(leaveBody.toJsonString());
-                			
-                			peer.sendMessage(leaveMsg);
-                			*/
-
                             ControlMessage controlMsg = new ControlMessage(inputLine);
-                            //controlMsg.printMessage();
                             GroupManager.handleControlMessage(peer,controlMsg);
-
 							break;
 						case BLANK:
 						default:
