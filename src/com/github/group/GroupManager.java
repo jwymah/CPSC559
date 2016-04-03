@@ -109,7 +109,7 @@ public class GroupManager
 	}
 
     /**
-     * @param jsonMessageString The incoming message in JSON formatted string
+     * @param messageBody The incoming message in JSON formatted string
      */
     public static ControlAction parseAction(String messageBody)
     {

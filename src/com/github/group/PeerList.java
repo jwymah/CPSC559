@@ -130,7 +130,7 @@ public class PeerList {
     /**
      * Just returns any peer in the peerlist
      *
-     * @return
+     * @return A peer in the peerlist or null if the list is empty
      */
 	public static Peer getAPeer()
 	{

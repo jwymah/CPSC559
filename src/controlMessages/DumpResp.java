@@ -27,7 +27,8 @@ public class DumpResp {
 
     /**
      * Constructor
-     * @param memberDump
+     *
+     * @param group Incoming group
      */
     public DumpResp(Group group) {
         log = Log.getInstance();

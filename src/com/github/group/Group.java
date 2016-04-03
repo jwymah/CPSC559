@@ -100,8 +100,9 @@ public class Group {
     }
 
     /**
-     * adds a Peer from PeerList to this collection.
-     * @args Peer - reference to a peer
+     * Adds a Peer from PeerList to this collection.
+     *
+     * @param peerToAdd Reference to a peer
      */
     public void addPeer(Peer peerToAdd)
     {
@@ -167,7 +168,7 @@ public class Group {
     /**
      * get Ids of all members of this group
      *
-     * @return
+     * @return Member ids
      */
 	public String[] getMembersIds()
 	{
