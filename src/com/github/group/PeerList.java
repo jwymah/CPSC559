@@ -9,7 +9,9 @@ package com.github.group;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class PeerList {
 	private static Log log = Log.getInstance();
@@ -52,7 +54,7 @@ public class PeerList {
     	}
     	peersByName.put(peerToAdd.username, peerToAdd);
     	peersId.put(peerToAdd.id, peerToAdd);
-    	//displayPeerList();
+    	//
         log.printLogMessage(Log.INFO, CLASS_ID, "Added: " + peerToAdd.username);
     }
     
@@ -83,28 +85,23 @@ public class PeerList {
      *
      */
     public synchronized static Collection<Peer> getAllPeers() {
-    	// TODO: This should return a copy of the collection. 
-        //       Currently it is backed by the collection and can 
-        //       cause iteration/concurrency problems
-    	return peersByName.values();
+    	Set<Peer> copy = new HashSet<Peer>();
+    	copy.addAll(peersByName.values());
+    	return copy;
     }
 
     /**
      *
      */
     public synchronized static void displayPeerList() {
-    	//int i = 0;
         log.printLogMessage(Log.INFO, CLASS_ID, "Displaying PeerList");
-        System.out.println();
-    	System.out.println("No. of peers: " + peersByName.size());
+    	System.out.println("\nNo. of peers: " + peersByName.size());
     	for (Peer p : peersByName.values())
     	{
             System.out.println("\tUsername:\t" + p.username);
             System.out.println("\tID:\t\t" + p.id);
             System.out.println("\tAddress:\t" + p.ip + ":" + p.port);
             System.out.println();
-    		//System.out.println(i + ": " + p.toJsonString());
-    		//i++;
     	}
     }
 

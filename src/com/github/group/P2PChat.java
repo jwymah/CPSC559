@@ -31,7 +31,7 @@ public class P2PChat {
 
         // Get Port, Username and ID
         Random r = new Random();
-        username = "peer-" + String.valueOf(r.nextInt(100));//"cjhutchi-" + c.getID();
+        username = "peer-" + String.valueOf(r.nextInt(100));
         id = c.getID();
 
         // Start services
@@ -51,9 +51,8 @@ public class P2PChat {
 		}
 		catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+        
         getGroupSeed();
         
         (new Shell(ns)).start();
@@ -63,7 +62,7 @@ public class P2PChat {
     {
     	try
     	{
-	        //receive a seed of group metadata
+	        //receive a seed of group metadata via receiving ControlMessage of MetadatasDump
 	        MetadatasReq mdr = new MetadatasReq();
 			ControlMessage mdrMessage = new ControlMessage();
 			mdrMessage.setMsgBody(mdr.toJsonString());

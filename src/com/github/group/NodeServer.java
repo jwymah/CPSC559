@@ -191,8 +191,8 @@ public class NodeServer extends Thread {
 
             try {
             	//NodeServer needs to read the peer information from the socket
+            	
                 // Get reader/writer
-
                 PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -204,9 +204,6 @@ public class NodeServer extends Thread {
     			out = null;	//clear these so that they don't get used outside the Peer wrappers
     			in = null;
     			conn = null;
-
-            	//TODO: Refactor this into common library for 
-                //      nodeserver+nodeclient. after user input is added
 
                 // Read input from client
                 while ((inputLine = peer.getNextLine()) != null) {                	
@@ -231,9 +228,6 @@ public class NodeServer extends Thread {
                                     "Received invalid message");
 							break;
                 	}
-
-                    // Log message to stdout
-                    //log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
                 }
 
                 // Log that they have disconnected
