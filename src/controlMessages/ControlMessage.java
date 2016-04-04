@@ -42,11 +42,11 @@ public class ControlMessage extends Message {
         msg = new JSONObject();
         msg.put("timestamp", super.timestamp);
         msg.put("type", super.type.toString());
-        msg.put("src", "SRC");
-        msg.put("dst", "IP:PORT");
-        msg.put("dstid", "DSTID");
-        msg.put("msgsig", "MSGSIG");
-        msg.put("msgbody", "MSGBODY");
+        msg.put("src", src);
+        msg.put("dst", dst);
+        msg.put("dstid", dstid);
+        msg.put("msgsig", msgsig);
+        msg.put("msgbody", msgbody);
 
         populateSrc();
     }    
@@ -103,6 +103,11 @@ public class ControlMessage extends Message {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setDstId(String dst)
+	{
+		dstid = dst;
+	}
 
 	public void setDst(String ip, int port)
 	{
@@ -121,15 +126,10 @@ public class ControlMessage extends Message {
 		return (String) msg.get("msgbody");
 	}
 	
-//	public ControlType getControlType()
-//	{
-//		return controlType;
-//	}
-	
 	public void signMessage()
 	{
 		//TODO hash of msgBody + src + timestamp + controlType
-		msg.put("msgsig", "1111");
+		msgsig = "11111";
 	}
 
     /**

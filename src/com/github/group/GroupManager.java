@@ -42,6 +42,10 @@ public class GroupManager
 					GroupList.getInstance().addGroup(targetGroup);
 				}
 				targetGroup.addPeer(peer);
+				if (j.getExternalContact() != null)
+				{
+					targetGroup.setExternalContact(j.getExternalContact());
+				}
 				break;
 
 			case METADATA:

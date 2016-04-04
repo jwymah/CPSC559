@@ -76,7 +76,7 @@ public class Shell extends Thread
 				                g = new Group(splitArray[1], "new group name", P2PChat.id);
 				                GroupList.getInstance().addGroup(g);
 
-				                Join body = new Join(g);
+				                Join body = new Join(g, true);
 				                ControlMessage joinMsg = new ControlMessage();
 				                joinMsg.setMsgBody(body.toJsonString());
 
@@ -99,12 +99,21 @@ public class Shell extends Thread
 				    case "/l":
 				        if (splitArray.length > 1)
 				        {
+				        	//if there are other members, send to group
+				        	//if there are no other members, send to everyone (disband group)
 				            Group g = GroupList.getInstance().getGroup(splitArray[1]);
 				            Leave leaveBody = new Leave(g);
 				            ControlMessage leaveMsg = new ControlMessage();
 				            leaveMsg.setMsgBody(leaveBody.toJsonString());
-				            g.messageGroup(leaveMsg);
-				            g.clearGroup();
+				            if(g.size() > 0)
+				            {
+				            	g.messageGroup(leaveMsg);
+				            }
+				            else
+				            {
+				            	g.clearGroup();
+				            	PeerList.messageAllPeers(leaveMsg);
+				            }
 				        }
 				        break;
 

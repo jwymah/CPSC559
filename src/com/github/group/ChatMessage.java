@@ -152,7 +152,14 @@ public class ChatMessage extends Message {
         String timestamp = sdf.format(cal.getTime());
 
         // Print out log message
-        System.out.println("[" + timestamp + "] [" + srcid + "] " + getMsgBody());
+        if(groupid.compareTo("-1") != 0)
+        {
+        	System.out.println("[" + timestamp + "] [" + groupid + "] [" + srcid + "] " + getMsgBody());
+        }
+        else
+    	{
+        	System.out.println("[" + timestamp + "] [" + srcid + "] " + getMsgBody());
+    	}
     }
 
     /**

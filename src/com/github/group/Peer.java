@@ -119,10 +119,8 @@ public class Peer {
     
     public synchronized void sendMessage(Message msg)
     {
-        //System.out.println("=======SENDING MESSAGE: \n" + msg.toJsonString());
         log.printLogMessage(Log.INFO, CLASS_ID, "Sending: " + msg.toJsonString());
     	out.println(msg.toJsonString());
-        //System.out.println("sent");
     }
     
     public synchronized void setWriter(PrintWriter writer)

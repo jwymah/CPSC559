@@ -14,6 +14,9 @@ import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import controlMessages.ControlMessage;
+import controlMessages.Join;
+
 public class Group {
 
     private Set<Peer> groupMembers;
@@ -109,7 +112,34 @@ public class Group {
     public void removePeer(Peer peerToRemove)
     {
     	groupMembers.remove(peerToRemove);
+    	if(getExternalContact().compareTo(peerToRemove.id) == 0)
+		{
+			reassignExternalContact();
+		}
     }
+
+	public void reassignExternalContact()
+	{
+		String newExternal = P2PChat.id;
+		for (Peer p : groupMembers)
+		{
+			if (newExternal.compareTo(p.id) < 0)
+			{
+				newExternal = p.id;
+			}
+			externalContact = newExternal;
+		}
+		// This peer is the new external contact, update everyone including non group members.
+		if (newExternal.compareTo(P2PChat.id) == 0)
+		{
+			externalContact = newExternal;
+            Join body = new Join(this, true);
+            ControlMessage joinMsg = new ControlMessage();
+            joinMsg.setMsgBody(body.toJsonString());
+
+            PeerList.messageAllPeers(joinMsg);
+		}
+	}
     
     public String getId()
     {
@@ -170,5 +200,10 @@ public class Group {
 		}
 		ids[index] = P2PChat.id; 
 		return ids;
+	}
+
+	public void setExternalContact(String externalContact)
+	{
+		this.externalContact = externalContact;
 	}
 }
