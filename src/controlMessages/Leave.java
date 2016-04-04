@@ -24,6 +24,7 @@ public class Leave {
 
     /**
      * Constructor
+     * @param group the input group
      */
     public Leave(Group group) {
         log = Log.getInstance();
@@ -36,6 +37,7 @@ public class Leave {
 
     /**
      * Constructor that parses and input message
+     * @param m the input message
      */
     public Leave(String m) {
         // Remove weird added whitespace that rekt parsing

@@ -43,7 +43,7 @@ public class PeerList {
     }
     
     /**
-     *
+     * @param peerToAdd The peer to be added to the peer list
      */
     public synchronized static void addPeer(Peer peerToAdd) {
     	if (peersByName.get(peerToAdd.username) != null)
@@ -62,6 +62,7 @@ public class PeerList {
      * Retrieve the peer with an associated username. Only returns 
      * the first instance of a user with specified name.
      *
+     * @param username The username
      * @return the Peer with the associated username, null if there is no such peer
      */
     public synchronized static Peer getPeerByName(String username) {
@@ -74,7 +75,8 @@ public class PeerList {
     }
     
     /**
-     *
+     * @param id The user id
+     * @return the peer with the associated id
      */
     public synchronized static Peer getPeerById(String id)
     {
@@ -82,7 +84,7 @@ public class PeerList {
     }
     
     /**
-     *
+     * @return a copy of the peerlist
      */
     public synchronized static Collection<Peer> getAllPeers() {
     	Set<Peer> copy = new HashSet<Peer>();
@@ -117,6 +119,7 @@ public class PeerList {
 
     /**
      * Removes a disconnected/error Peer
+     * @param p The peer to be removed
      */
     public synchronized static void removePeer(Peer p) {
         log.printLogMessage(Log.INFO, CLASS_ID, "Removed: " + p.username);

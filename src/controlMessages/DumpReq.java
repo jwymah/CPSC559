@@ -24,6 +24,7 @@ public class DumpReq {
 
     /**
      * Constructor
+     * @param group the group
      */
     public DumpReq(Group group) {
         log = Log.getInstance();
@@ -36,6 +37,7 @@ public class DumpReq {
 
     /**
      * Constructor that parses and input message
+     * @param m the input message
      */
     public DumpReq(String m) {
         // Remove weird added whitespace that rekt parsing

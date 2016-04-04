@@ -28,6 +28,7 @@ public class Join{
 
     /**
      * Constructor
+     * @param group the input group
      */
     public Join(Group group) {
         log = Log.getInstance();
@@ -39,6 +40,12 @@ public class Join{
         actionDetails.put(GROUP_NAME, group.getName());
     }
     
+    /**
+     *
+     * @param group the input group
+     * @param setNewExternalContact true/false flag whether to resassign
+     * external contact
+     */
     public Join(Group group, Boolean setNewExternalContact) {
         log = Log.getInstance();
 
