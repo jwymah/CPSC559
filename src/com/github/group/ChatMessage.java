@@ -50,6 +50,8 @@ public class ChatMessage extends Message {
 
     /**
      * Constructor that parses and input message
+     *
+     * @param m the input message
      */
     public ChatMessage(String m) {
     	super(MessageType.CHAT);
@@ -86,7 +88,8 @@ public class ChatMessage extends Message {
 	 * Set the groupid on messages when messaging a group so that the client side parser
 	 * knows that it was a group message.
 	 * groupid is defaulted to -1 in the case that it a direction 1-1 message.
-	 * @param groupid
+     *
+	 * @param groupid the input group id
 	 */
 	public void setGroupId(String groupid)
 	{

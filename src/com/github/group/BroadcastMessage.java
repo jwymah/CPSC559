@@ -51,6 +51,7 @@ public class BroadcastMessage extends Message {
 
     /**
      * Constructor that parses an input message
+     * @param m the message
      */
     public BroadcastMessage(String m) {
     	super(MessageType.BROADCAST);

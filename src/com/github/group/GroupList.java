@@ -99,7 +99,7 @@ public class GroupList
 	}
 
     /**
-     *
+     * @param groupToRemove the group to be removed
      */
 	public synchronized void removeGroup(Group groupToRemove)
 	{

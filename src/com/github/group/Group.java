@@ -63,7 +63,8 @@ public class Group {
     /**
      * overload function
      * mainly used to send control messages
-     * @param msg
+     *
+     * @param msg the input message
      */
     public void messageGroup(Message msg)
     {
@@ -213,7 +214,7 @@ public class Group {
 	
 	/**
 	 * 
-	 * @return
+	 * @return array of member names
 	 */
 	public String[] getMemberNames()
 	{
@@ -230,6 +231,7 @@ public class Group {
 
     /**
      * Sets the external contact for a group
+     * @param externalContact the external contact for the group 
      */
 	public void setExternalContact(String externalContact)
 	{
