@@ -45,10 +45,8 @@ public class Peer {
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			log.printLogMessage(Log.ERROR, CLASS_ID, 
-                    "unable to get a reader or writer for peer socket with username: " 
-                    + username);
+                    "unable to get a reader or writer for peer socket with username: " + username);
 			e.printStackTrace();
 		}
     }

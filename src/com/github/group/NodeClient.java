@@ -37,7 +37,6 @@ public class NodeClient extends Thread {
 
 		try
 		{
-			//TODO: refactor this into common library for nodeserver+nodeclient. after user input is added
 			while ((inputLine = peer.getNextLine()) != null) {
 				switch (Message.parseMessageType(inputLine)){
 					case BROADCAST:
@@ -58,9 +57,6 @@ public class NodeClient extends Thread {
 						//System.out.println("received BLANK_TYPE message type?");
 						break;
 				}
-			    // Log message to stdout
-//			    String addr = peer.getConn().getInetAddress().getHostAddress() + ":" + peer.getConn().getPort();
-			    //log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
 			}
 		} finally {
 	        // Log that they have disconnected

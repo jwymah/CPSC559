@@ -52,21 +52,17 @@ public class MessageServer extends Thread {
         return instance;
     }
 
-
     /**
      * MessageServer Thread execution 
      */
     public void run() {
-
         // Create a server socket
         try {
-
             serverSocket = new ServerSocket(SERVER_PORT);
             log.printLogMessage(Log.INFO, CLASS_ID, "");
             printServerInfo();
 
             try {
-
                 // Accept connections
                 while (isRunning) {
                     clientSocket = serverSocket.accept();
@@ -140,16 +136,13 @@ public class MessageServer extends Thread {
         public void run() {
             String addr = client.getInetAddress().getHostAddress() + ":" + client.getPort();
 
-            log.printLogMessage(Log.INFO, CLASS_ID, 
-                    "Connected:\t" + addr);
+            log.printLogMessage(Log.INFO, CLASS_ID, "Connected:\t" + addr);
 
             try {
 
                 // Get reader/writer
-                PrintWriter out = new PrintWriter(
-                        clientSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(
-                            clientSocket.getInputStream()));
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 String inputLine;
 
@@ -162,16 +155,12 @@ public class MessageServer extends Thread {
 
                     // Handle `ping` message
                     if (inputLine.equals("/ping")) {
-
                         out.println("/pong");
-
                     }
                     log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
-//                    log.printLogMessage(Log.MESSAGE, CLASS_ID, "local address: " + InetAddress.getLocalHost().getHostAddress());
                 }
 
-                log.printLogMessage(Log.INFO, CLASS_ID, 
-                        "Disconnected:\t" + addr);
+                log.printLogMessage(Log.INFO, CLASS_ID, "Disconnected:\t" + addr);
 
                 // Clean up connections
                 out.close();
