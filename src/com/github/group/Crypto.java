@@ -67,22 +67,19 @@ public class Crypto {
     }
 
     /**
-     * Generates a Public and Private key and returns the public key as the user
-     * ID.
+     * Returns a SHA hash of the input message
      *
-     * @return A public key in Hex encoding
+     * @param msg The input message
+     * @return The SHA hash of the message
      */
-    public String getID() {
-
-        log.printLogMessage(Log.INFO, CLASS_ID, "Generating ID");
-
+    public String hash(String msg) {
         // Get a string buffer
         StringBuffer sb = new StringBuffer();
 
         // Get a hash of the public key
         try {
             MessageDigest md = MessageDigest.getInstance("SHA");
-            md.update(pub.getEncoded());
+            md.update(msg.getBytes());
             byte[] mdbytes = md.digest();
 
             // Convert the bytes to hex format 
@@ -94,6 +91,19 @@ public class Crypto {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Generates a Public and Private key and returns the public key as the user
+     * ID.
+     *
+     * @return A public key in Hex encoding
+     */
+    public String getID() {
+
+        log.printLogMessage(Log.INFO, CLASS_ID, "Generating ID");
+
+        return hash(new String(pub.getEncoded()));
 
     }
 
