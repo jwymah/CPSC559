@@ -120,6 +120,7 @@ public class Peer {
     public synchronized void sendMessage(Message msg)
     {
 		msg.setDst(username);
+		msg.signMessage();
         log.printLogMessage(Log.INFO, CLASS_ID, "Sending: " + msg.toJsonString());
     	out.println(msg.toJsonString());
     }

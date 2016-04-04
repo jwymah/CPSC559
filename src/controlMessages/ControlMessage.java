@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.github.group.Crypto;
 import com.github.group.Log;
 import com.github.group.Message;
 import com.github.group.MessageType;
@@ -107,8 +108,8 @@ public class ControlMessage extends Message {
 	
 	public void signMessage()
 	{
-		//TODO hash of msgBody + src + timestamp + controlType
-		msgsig = "11111";
+		msgsig = Crypto.getInstance().hash(timestamp + msgbody);
+		msg.put("msgsig", msgsig);
 	}
 
     /**

@@ -107,5 +107,11 @@ public class BroadcastMessage extends Message {
 	{
         // Do nothing
 	}
+
+	@Override
+	public void signMessage()
+	{
+		// Do nothing
+	}
 }
 

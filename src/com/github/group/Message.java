@@ -91,4 +91,6 @@ public abstract class Message {
     }
 
 	public abstract void setDst(String username);
+	
+	public abstract void signMessage();
 }
