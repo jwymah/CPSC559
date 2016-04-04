@@ -185,6 +185,23 @@ public class Group {
 		ids[index] = P2PChat.id; 
 		return ids;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String[] getMemberNames()
+	{
+		String[] ids = new String[groupMembers.size() + 1];
+		int index = 0;
+		for(Peer p : groupMembers)
+		{
+			ids[index] = p.username;
+			index++;
+		}
+		ids[index] = P2PChat.username; 
+		return ids;
+	}
 
 	public void setExternalContact(String externalContact)
 	{

@@ -30,7 +30,7 @@ public class DumpResp {
     /**
      * Constructor
      *
-     * @param group Incoming group
+     * @param Group incoming group
      */
     public DumpResp(Group group) {
         log = Log.getInstance();

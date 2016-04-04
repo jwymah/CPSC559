@@ -1,5 +1,5 @@
 /**
- *  ControlMessage.java
+ *  Leave.java
  *
  */
 package controlMessages;

@@ -33,11 +33,12 @@ public class Shell extends Thread
         System.out.println("Usage:");
         System.out.println("\t/p\t\t\tDisplay available Peers");
         System.out.println("\t/e\t\t\tDisplay available Groups");
+        System.out.println("]t/m\t\t\tDisplay groups I am a part of");
+        System.out.println("\t/gm <group>\t\tDisplay known members of a group");
         System.out.println("\t/g <group> <msg>\tWrite group message");
         System.out.println("\t/j <group>\t\tJoin/Create group");
         System.out.println("\t/l <group>\t\tLeave group");
         System.out.println("\t/w <username> <msg>\tWrite message to peer");
-        //System.out.println("\t/c <username>\tWrite control message to peer");
         System.out.println("\t/?\t\t\tDisplay this help message");
         System.out.println();
     }
@@ -121,29 +122,23 @@ public class Shell extends Thread
 
 				    // show online peers
 				    case "/p":
-				        //log.printLogMessage(Log.INFO, CLASS_ID, "Listing Peers");
-				        //System.out.println("Listing all peers :");
-				        // PeerList.displayPeerListUsernames();
 				        PeerList.displayPeerList();
-				        //System.out.println("-------------------");
 				        break;
 
 				    // show all groups on network
 				    case "/e":
-				        //PeerList.displayPeerList();
-				        //System.out.println("Listing all Groups on network :");
 				        GroupList.getInstance().displayGroupList();
-				        //System.out.println("-------------------");
 				        break;
 
 				    // show members of a group that i am a part of
 				    case "/m":
-				        /*
-				        if (splitArray.length > 2)
-				        {
-				            Group g = GroupList.getInstance().getGroup(splitArray[1]);
-
-				        }*/
+				    	System.out.println("You are in [" + GroupList.getInstance().getMyGroups().size() + "] groups:");
+				    	int index = 0;
+				    	for (Group g : GroupList.getInstance().getMyGroups())
+				    	{
+				    		System.out.println("\t" + index + ": " + g.getId());
+				    		index++;
+				    	}
 				        break;
 
 				    // group message
@@ -155,8 +150,22 @@ public class Shell extends Thread
 				        }
 				        break;
 				    
+				    // display known members of a group
+				    // ie. /gm 123
 				    case "/gm":
-				        System.out.println(String.join(",", GroupList.getInstance().getGroup(splitArray[1]).getMembersIds()));
+				    	if (splitArray.length > 1)
+				    	{
+				    		Group g = GroupList.getInstance().getGroup(splitArray[1]);
+				    		if(g != null)
+				    		{
+				    			String[] groupMembersArray = GroupList.getInstance().getGroup(splitArray[1]).getMemberNames();
+					    		System.out.println(String.join(", ", g.getMemberNames()));
+				    		}
+				    		else
+				    		{
+				    			System.out.println("No group found with id: " + splitArray[1]);
+				    		}
+				    	}
 				        break;
 
 				    // whisper one peer
@@ -178,12 +187,10 @@ public class Shell extends Thread
 				            else
 				            {
 				                log.printLogMessage(Log.ERROR, CLASS_ID, "No such peer");
-				                //System.out.println("no such peer exists");
 				            }
 				        } else
 				        {
 				            log.printLogMessage(Log.ERROR, CLASS_ID, "Invalid input");
-				            //System.out.println("Improper input");
 				        }
 				        break;
 				    default:
@@ -192,7 +199,6 @@ public class Shell extends Thread
 			}
 			catch (Exception e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }

@@ -1,5 +1,5 @@
 /**
- *  ControlMessage.java
+ *  Join.java
  *
  */
 package controlMessages;

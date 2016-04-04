@@ -69,8 +69,8 @@ public class ControlMessage extends Message {
             
             
             /**
-             * {"dst":"IP:PORT",
-             * "src":"192.168.0.19:0",
+             * {"dst":"peer-42"
+             * "src":"peer-24",
              * "msgsig":"MSGSIG",
              * "dstid":"DSTID",
              * "type":"control",
@@ -115,7 +115,7 @@ public class ControlMessage extends Message {
      * {
      *      "timestamp":1458718049}
      *      "type":"control",
-     *      "src":"192.168.0.19:0",
+     *      "src":"peer-24",
      *      "dstid":"DSTID",
      *      "dst":"IP:PORT",
      *      "msgsig":"MSGSIG",
