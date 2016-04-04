@@ -22,6 +22,7 @@ public abstract class Message {
 
     /**
      * Constructor
+     * @param type the message type
      */
     public Message(MessageType type) {
 
@@ -36,6 +37,7 @@ public abstract class Message {
     
     /**
      * Constructor that parses and input message
+     * @param m The input message
      */
     public Message(String m) {
         // Remove weird added whitespace that rekt parsing
@@ -58,6 +60,7 @@ public abstract class Message {
     
     /**
      * @param jsonMessageString The incoming message in JSON formatted string
+     * @return message type
      */
     public static MessageType parseMessageType(String jsonMessageString)
     {
@@ -90,6 +93,9 @@ public abstract class Message {
         return msg.toJSONString();
     }
 
+    /**
+     * @param username username
+     */
 	public abstract void setDst(String username);
 	
 	public abstract void signMessage();

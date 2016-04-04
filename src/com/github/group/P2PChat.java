@@ -23,6 +23,7 @@ public class P2PChat {
 
     /**
      * MAIN
+     * @param args the command line arguments
      */
     public static void main (String args[]) {
         // Get instances of Crypto and Log

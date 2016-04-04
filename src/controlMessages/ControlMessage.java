@@ -47,6 +47,7 @@ public class ControlMessage extends Message {
 
     /**
      * Constructor that parses and input message
+     * @param m The input message
      */
     public ControlMessage(String m) {
     	super(MessageType.CONTROL);

@@ -30,7 +30,7 @@ public class DumpResp {
     /**
      * Constructor
      *
-     * @param Group incoming group
+     * @param group incoming group
      */
     public DumpResp(Group group) {
         log = Log.getInstance();
@@ -49,6 +49,7 @@ public class DumpResp {
 
     /**
      * Constructor that parses and input message
+     * @param m the input message
      */
     public DumpResp(String m) {
         // Remove weird added whitespace that rekt parsing

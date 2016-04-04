@@ -31,6 +31,10 @@ public class Peer {
     
     /**
      * Use this constructor when a TCP connection is not yet established
+     * @param u The username
+     * @param d The user id
+     * @param i The user ip
+     * @param p The user port
      */
     public Peer(String u, String d, String i, int p) {
         username = u;
@@ -53,6 +57,11 @@ public class Peer {
 
     /**
      * Use this constructor if a connection is already established
+     * @param u The username
+     * @param d The user id
+     * @param i The user ip
+     * @param p The user port
+     * @param sock The user socket
      */
     public Peer(String u, String d, String i, int p, Socket sock) {
         username = u;

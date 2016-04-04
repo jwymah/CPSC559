@@ -32,6 +32,7 @@ public class MetadatasReq {
 
     /**
      * Constructor that parses and input message
+     * @param m the input message
      */
     public MetadatasReq(String m) {
         // Remove weird added whitespace that rekt parsing

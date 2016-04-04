@@ -34,7 +34,7 @@ public class Log {
 
     /**
      * Prints out a log message in the format of 
-     * "[HH:mm:ss] [<type>] <message>"
+     * HH:mm:ss type message
      *
      * @param   t   Message type 
      * @param   c   Calling method

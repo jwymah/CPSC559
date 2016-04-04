@@ -153,7 +153,7 @@ public class NodeServer extends Thread {
     }
 
     /**
-     *
+     * @return Server IP
      */
     public static String getIP() {
         return SERVER_IP;
@@ -161,6 +161,7 @@ public class NodeServer extends Thread {
 
     /**
      * Get the current port that NodeServer is listening on
+     * @return The Server Port
      */
     public static int getPort() {
         return SERVER_PORT;

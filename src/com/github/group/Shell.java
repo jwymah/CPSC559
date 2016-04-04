@@ -22,6 +22,7 @@ public class Shell extends Thread
 
     /**
      * Constructor
+     * @param ns the Node Server
      */
     protected Shell( NodeServer ns)
     {

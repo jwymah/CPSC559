@@ -122,6 +122,7 @@ public class GroupManager
 
     /**
      * @param messageBody The incoming message in JSON formatted string
+     * @return the action to be completed
      */
     public static ControlAction parseAction(String messageBody)
     {
