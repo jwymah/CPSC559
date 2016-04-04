@@ -92,6 +92,7 @@ public class Shell extends Thread
 				                	PeerList.getPeerById(g.getExternalContact()).sendMessage(dumpMessage);
 				                }
 				            }
+			                GroupList.getInstance().imJoiningGroup(g);
 				        }
 				        break;
 
@@ -114,6 +115,7 @@ public class Shell extends Thread
 				            	g.clearGroup();
 				            	PeerList.messageAllPeers(leaveMsg);
 				            }
+			                GroupList.getInstance().imLeavingGroup(g);
 				        }
 				        break;
 
@@ -161,33 +163,17 @@ public class Shell extends Thread
 				    case "/w":
 				        if (splitArray.length > 2)
 				        {
-
 				            Peer p = PeerList.getPeerByName(splitArray[1]);
 				            ChatMessage m = new ChatMessage();
 
-
 				            if (p != null)
 				            {
-				                //System.out.println( p.toJsonString());
-
 				                m.setDst(p.ip, p.port);
 				                m.setDstId(splitArray[1]);
 				                m.setMsgBody(splitArray[2]);
 				                m.signMessage();
-				                //System.out.println("shell sending chat msg");
+				                
 				                p.sendMessage(m);
-				                //System.out.println("shell sent chat msg");
-
-
-				                /*
-				                Socket conn = lastPeerMessaged.getConn();
-				                try {
-				                    PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
-				                    out.println(m.toJsonString());
-				                    out.flush();
-				                } catch (Exception ex) {
-				                    ex.printStackTrace();
-				                }*/
 				            } 
 				            else
 				            {

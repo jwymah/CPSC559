@@ -20,10 +20,12 @@ public class DumpResp {
     private static final String ACTION = "action";
     private static final String TARGET_GROUP_ID = "targetgroupid";
     private static final String MEMBER_DUMP = "memberdump";
+    private static final String TRY_LATER = "trylater";
     private static Log log;
     private JSONObject actionDetails;
     private String targetGroup;
     private JSONArray memberDump;
+    private String trylater;
 
     /**
      * Constructor
@@ -61,12 +63,23 @@ public class DumpResp {
             actionDetails = (JSONObject) obj;
             targetGroup = (String) actionDetails.get(TARGET_GROUP_ID);
             memberDump = (JSONArray) actionDetails.get(MEMBER_DUMP);
+            trylater = (String) actionDetails.get(TRY_LATER);
         } catch (ParseException e) {
             log.printLogMessage(Log.ERROR, CLASS_ID, "Received invalid Dump action");
             System.out.println(m);
         }
     }
-
+    
+    public void setTryLater()
+    {
+    	actionDetails.put(TRY_LATER, "true");
+    }
+    
+    public boolean isValidDump()
+    {
+    	return (trylater == null);
+    }
+    
     public String getTargetGroup()
     {
         return targetGroup;
