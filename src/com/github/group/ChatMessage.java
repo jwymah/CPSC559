@@ -7,8 +7,6 @@
  */
 package com.github.group;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -23,10 +21,9 @@ public class ChatMessage extends Message {
     private static Log log;
     private JSONObject msg;
 
+    private String groupid;
 	private String src;
-    private String srcid;
     private String dst;
-	private String dstid;
 	private String msgsig;
 	private String msgbody;
 	private int port;
@@ -41,15 +38,14 @@ public class ChatMessage extends Message {
         // Package in JSON object
         msg = new JSONObject();
         msg.put("timestamp", super.timestamp);
-        msg.put("type", super.type.toString());
+        msg.put("type", MessageType.CHAT.toString());
+        msg.put("groupid", "-1");
         msg.put("src", "SRC");
-        msg.put("srcid", "SRCID");
-        msg.put("dst", "IP:PORT");
-        msg.put("dstid", "DSTID");
+        msg.put("dst", "DST");
         msg.put("msgsig", "MSGSIG");
         msg.put("msgbody", "MSGBODY");
 
-        populateSrc();
+        setSrc();
     }    
 
     /**
@@ -70,10 +66,9 @@ public class ChatMessage extends Message {
             msg = (JSONObject) obj;
             timestamp = (long) msg.get("timestamp");
             type = super.type;
+            groupid = (String) msg.get("groupid");
             src = (String) msg.get("src");
-            srcid = (String) msg.get("srcid");
             dst = (String) msg.get("dst");
-            dstid = (String) msg.get("dstid");
             msgsig = (String) msg.get("msgsig");
             msgbody = (String) msg.get("msgbody");
         } catch (ParseException e) {
@@ -82,19 +77,20 @@ public class ChatMessage extends Message {
         }
     }
 
-	private void populateSrc()
+	private void setSrc()
 	{
-		try
-		{
-			msg.put("src", InetAddress.getLocalHost().getHostAddress() 
-                    + ":" + new Integer(MessageServer.getPort()).toString());
-            msg.put("srcid", P2PChat.username);
-		}
-		catch (UnknownHostException e)
-		{
-			//TODO: probably want this fault to propagate
-			e.printStackTrace();
-		}
+		msg.put("src", P2PChat.username);
+	}
+	
+	/**
+	 * Set the groupid on messages when messaging a group so that the client side parser
+	 * knows that it was a group message.
+	 * groupid is defaulted to -1 in the case that it a direction 1-1 message.
+	 * @param groupid
+	 */
+	public void setGroupId(String groupid)
+	{
+		msg.put("groupid", groupid);
 	}
 
 	public void setDst(String ip, int port)
@@ -138,7 +134,14 @@ public class ChatMessage extends Message {
         String timestamp = sdf.format(cal.getTime());
 
         // Print out log message
-        System.out.println("[" + timestamp + "] [" + srcid + "] " + getMsgBody());
+        if(groupid.compareTo("-1") != 0)
+        {
+        	System.out.println("[" + timestamp + "] [" + groupid + "] [" + src + "] " + getMsgBody());
+        }
+        else
+    	{
+        	System.out.println("[" + timestamp + "] [" + src + "] " + getMsgBody());
+    	}
     }
 
     /**
@@ -150,5 +153,12 @@ public class ChatMessage extends Message {
 	public String toJsonString()
 	{
 		return msg.toJSONString();
+	}
+
+	@Override
+	public void setDst(String username)
+	{
+		dst = username;
+		msg.put("dst", dst);
 	}
 }

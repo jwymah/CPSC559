@@ -52,160 +52,150 @@ public class Shell extends Thread
         String input = "";
         while ((input = s.nextLine())!= null)
         {
-            String[] splitArray = input.split(" ",3);
-            //System.out.println("sa length" + splitArray.length);
+            try
+			{
+				String[] splitArray = input.split(" ",3);
 
-            switch (splitArray[0])
-            {
-                // usage
-                case "/?":
-                    usage();
-                    break;
+				switch (splitArray[0])
+				{
+				    // usage
+				    case "/?":
+				        usage();
+				        break;
 
-                // join/create group
-                case "/j":
-                    if (splitArray.length > 1)
-                    {
-                        boolean newGroup = false;
-                        Group g = GroupList.getInstance().getGroup(splitArray[1]);
+				    // join/create group
+				    case "/j":
+				        if (splitArray.length > 1)
+				        {
+				            Group g = GroupList.getInstance().getGroup(splitArray[1]);
 
+				            if (g == null)
+				            {
+				                // create new group if it does not exist
+				                // TODO: Use ID as P2PChat.id
+				                g = new Group(splitArray[1], "new group name", P2PChat.id);
+				                GroupList.getInstance().addGroup(g);
 
+				                Join body = new Join(g, true);
+				                ControlMessage joinMsg = new ControlMessage();
+				                joinMsg.setMsgBody(body.toJsonString());
 
-                        if (g == null)
-                        {
-                            // create new group if it does not exist
-                            // TODO: Use ID as P2PChat.id
-                            g = new Group(splitArray[1], "new group name", P2PChat.username);
-                            GroupList.getInstance().addGroup(g);
+				                PeerList.messageAllPeers(joinMsg);
+				            } else {
+				                // send dumpReq to external contact if 
+				                // group is already there
+				                DumpReq dBody = new DumpReq(g);
+				                ControlMessage dumpMessage = new ControlMessage();
+				                dumpMessage.setMsgBody(dBody.toJsonString());
+				                if (g.getExternalContact().compareTo(P2PChat.id) != 0)
+				                {
+				                	PeerList.getPeerById(g.getExternalContact()).sendMessage(dumpMessage);
+				                }
+				            }
+			                GroupList.getInstance().imJoiningGroup(g);
+				        }
+				        break;
 
-                            Join body = new Join(g);
-                            ControlMessage joinMsg = new ControlMessage();
-                            joinMsg.setMsgBody(body.toJsonString());
+				    // leave group
+				    case "/l":
+				        if (splitArray.length > 1)
+				        {
+				        	//if there are other members, send to group
+				        	//if there are no other members, send to everyone (disband group)
+				            Group g = GroupList.getInstance().getGroup(splitArray[1]);
+				            Leave leaveBody = new Leave(g);
+				            ControlMessage leaveMsg = new ControlMessage();
+				            leaveMsg.setMsgBody(leaveBody.toJsonString());
+				            if(g.size() > 0)
+				            {
+				            	g.messageGroup(leaveMsg);
+				            }
+				            else
+				            {
+				            	g.clearGroup();
+				            	PeerList.messageAllPeers(leaveMsg);
+				            }
+			                GroupList.getInstance().imLeavingGroup(g);
+				        }
+				        break;
 
-                            PeerList.messageAllPeers(joinMsg);
-                        } else {
-                            // send dumpReq to external contact if 
-                            // group is already there
-                            DumpReq dBody = new DumpReq(g);
-                            ControlMessage dumpMessage = new ControlMessage();
-                            dumpMessage.setMsgBody(dBody.toJsonString());
-                            PeerList.getPeerByName(g.getExternalContact()).sendMessage(dumpMessage);
-                        }
-                    }
-                    break;
+				    // show online peers
+				    case "/p":
+				        //log.printLogMessage(Log.INFO, CLASS_ID, "Listing Peers");
+				        //System.out.println("Listing all peers :");
+				        // PeerList.displayPeerListUsernames();
+				        PeerList.displayPeerList();
+				        //System.out.println("-------------------");
+				        break;
 
-                // leave group
-                case "/l":
-                    if (splitArray.length > 1)
-                    {
-                        Group g = GroupList.getInstance().getGroup(splitArray[1]);
-                        Leave leaveBody = new Leave(g);
-                        ControlMessage leaveMsg = new ControlMessage();
-                        leaveMsg.setMsgBody(leaveBody.toJsonString());
-                        g.messageGroup(leaveMsg);
-                        g.clearGroup();
-                    }
-                    break;
+				    // show all groups on network
+				    case "/e":
+				        //PeerList.displayPeerList();
+				        //System.out.println("Listing all Groups on network :");
+				        GroupList.getInstance().displayGroupList();
+				        //System.out.println("-------------------");
+				        break;
 
-                // show online peers
-                case "/p":
-                    //log.printLogMessage(Log.INFO, CLASS_ID, "Listing Peers");
-                    //System.out.println("Listing all peers :");
-                    // PeerList.displayPeerListUsernames();
-                    PeerList.displayPeerList();
-                    //System.out.println("-------------------");
-                    break;
+				    // show members of a group that i am a part of
+				    case "/m":
+				        /*
+				        if (splitArray.length > 2)
+				        {
+				            Group g = GroupList.getInstance().getGroup(splitArray[1]);
 
-                // show all groups on network
-                case "/e":
-                    //PeerList.displayPeerList();
-                    //System.out.println("Listing all Groups on network :");
-                    GroupList.getInstance().displayGroupList();
-                    //System.out.println("-------------------");
-                    break;
+				        }*/
+				        break;
 
-                // show members of a group that i am a part of
-                case "/m":
-                    /*
-                    if (splitArray.length > 2)
-                    {
-                        Group g = GroupList.getInstance().getGroup(splitArray[1]);
+				    // group message
+				    case "/g":
+				        if (splitArray.length > 2)
+				        {
+				            lastGroupMessaged = GroupList.getInstance().getGroup(splitArray[1]);
+				            lastGroupMessaged.messageGroup(splitArray[2]);
+				        }
+				        break;
+				    
+				    case "/gm":
+				        System.out.println(String.join(",", GroupList.getInstance().getGroup(splitArray[1]).getMembersIds()));
+				        break;
 
-                    }*/
-                    break;
+				    // whisper one peer
+				    case "/w":
+				        if (splitArray.length > 2)
+				        {
+				            Peer p = PeerList.getPeerByName(splitArray[1]);
+				            ChatMessage m = new ChatMessage();
 
-                // group message
-                case "/g":
-                    if (splitArray.length > 2)
-                    {
-                        lastGroupMessaged = GroupList.getInstance().getGroup(splitArray[1]);
-                        lastGroupMessaged.messageGroup(splitArray[2]);
-                    }
-                    break;
-
-                // whisper one peer
-                case "/w":
-                    if (splitArray.length > 2)
-                    {
-
-                        Peer p = PeerList.getPeerByName(splitArray[1]);
-                        ChatMessage m = new ChatMessage();
-
-
-                        if (p != null)
-                        {
-                            //System.out.println( p.toJsonString());
-
-                            m.setDst(p.ip, p.port);
-                            m.setDstId(splitArray[1]);
-                            m.setMsgBody(splitArray[2]);
-                            m.signMessage();
-                            //System.out.println("shell sending chat msg");
-                            p.sendMessage(m);
-                            //System.out.println("shell sent chat msg");
-
-
-                            /*
-                            Socket conn = lastPeerMessaged.getConn();
-                            try {
-                                PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
-                                out.println(m.toJsonString());
-                                out.flush();
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }*/
-                        } 
-                        else
-                        {
-                            log.printLogMessage(Log.ERROR, CLASS_ID, "No such peer");
-                            //System.out.println("no such peer exists");
-                        }
-                    } else
-                    {
-                        log.printLogMessage(Log.ERROR, CLASS_ID, "Invalid input");
-                        //System.out.println("Improper input");
-                    }
-                    break;
-
-                // Control message(?)
-                case "/c":
-                    Peer p = PeerList.getPeerByName(splitArray[1]);
-                    if (p != null) {
-                        Message m = new Message(MessageType.CONTROL);
-                        p.sendMessage(m);
-                    }
-                    break;
-
-                default:
-                    log.printLogMessage(Log.ERROR, CLASS_ID, "Unrecognized command");
-                    /*
-                        if(lastGroupMessaged != null)
-                            lastGroupMessaged.messageGroup(input);
-                    */
-            }
+				            if (p != null)
+				            {
+				                m.setDst(p.ip, p.port);
+				                m.setDstId(splitArray[1]);
+				                m.setMsgBody(splitArray[2]);
+				                m.signMessage();
+				                
+				                p.sendMessage(m);
+				            } 
+				            else
+				            {
+				                log.printLogMessage(Log.ERROR, CLASS_ID, "No such peer");
+				                //System.out.println("no such peer exists");
+				            }
+				        } else
+				        {
+				            log.printLogMessage(Log.ERROR, CLASS_ID, "Invalid input");
+				            //System.out.println("Improper input");
+				        }
+				        break;
+				    default:
+				        log.printLogMessage(Log.ERROR, CLASS_ID, "Unrecognized command");
+				}
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
-
+        s.close();
     }
-
-
 }

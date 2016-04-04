@@ -4,17 +4,14 @@
  */
 package controlMessages;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.github.group.Log;
 import com.github.group.Message;
-import com.github.group.MessageServer;
 import com.github.group.MessageType;
+import com.github.group.P2PChat;
 
 		
 public class ControlMessage extends Message {
@@ -25,11 +22,8 @@ public class ControlMessage extends Message {
 
 	private String src;
     private String dst;
-	private String dstid;
 	private String msgsig;
 	private String msgbody;
-//	private ControlType controlType;
-	private int port;
 
     /**
      * Constructor
@@ -41,14 +35,13 @@ public class ControlMessage extends Message {
         // Package in JSON object
         msg = new JSONObject();
         msg.put("timestamp", super.timestamp);
-        msg.put("type", super.type.toString());
-        msg.put("src", "SRC");
-        msg.put("dst", "IP:PORT");
-        msg.put("dstid", "DSTID");
-        msg.put("msgsig", "MSGSIG");
-        msg.put("msgbody", "MSGBODY");
-
-        populateSrc();
+        msg.put("type", MessageType.CONTROL.toString());
+        msg.put("src", src);
+        msg.put("dst", dst);
+        msg.put("msgsig", msgsig);
+        msg.put("msgbody", msgbody);
+        
+        setSrc();
     }    
 
     /**
@@ -71,7 +64,6 @@ public class ControlMessage extends Message {
             type = MessageType.CONTROL;
             src = (String) msg.get("src");
             dst = (String) msg.get("dst");
-            dstid = (String) msg.get("dstid");
             msgsig = (String) msg.get("msgsig");
             msgbody = (String) msg.get("msgbody");
             
@@ -91,24 +83,16 @@ public class ControlMessage extends Message {
         }
     }
 
-	private void populateSrc()
+	public void setSrc()
 	{
-		try
-		{
-			msg.put("src", InetAddress.getLocalHost().getHostAddress() + ":" + new Integer(MessageServer.getPort()).toString());
-		}
-		catch (UnknownHostException e)
-		{
-			//TODO: probably want this fault to propagate
-			e.printStackTrace();
-		}
+		msg.put("src", P2PChat.username);
 	}
 
-	public void setDst(String ip, int port)
+	@Override
+	public void setDst(String username)
 	{
-		dst = ip;
-		this.port = port;
-		msg.put("dst", ip + new Integer(port).toString());
+		dst = username;
+		msg.put("dst", dst);
 	}
 
 	public void setMsgBody(String msgBody)
@@ -121,15 +105,10 @@ public class ControlMessage extends Message {
 		return (String) msg.get("msgbody");
 	}
 	
-//	public ControlType getControlType()
-//	{
-//		return controlType;
-//	}
-	
 	public void signMessage()
 	{
 		//TODO hash of msgBody + src + timestamp + controlType
-		msg.put("msgsig", "1111");
+		msgsig = "11111";
 	}
 
     /**
@@ -148,7 +127,6 @@ public class ControlMessage extends Message {
         System.out.println("\t\"timestamp\": " + timestamp);
         System.out.println("\t\"type\": \"" + type + "\"");
         System.out.println("\t\"src\": \"" + src + "\"");
-        System.out.println("\t\"dstid\": \"" + dstid + "\"");
         System.out.println("\t\"dst\": \"" + dst + "\"");
         System.out.println("\t\"msgsig\": \"" + msgsig + "\"");
         System.out.println("\t\"msgbody\": \"" + msgbody + "\"");

@@ -1,8 +1,10 @@
 package com.github.group;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.json.simple.JSONArray;
 
@@ -10,6 +12,7 @@ public class GroupList
 {
 	private static final String CLASS_ID = "GroupList";
 	private Map<String, Group> groups;
+	private Set<Group> myGroups;
 	private static Log log = Log.getInstance();
 
     private static GroupList instance = null;
@@ -17,6 +20,7 @@ public class GroupList
 	protected GroupList()
 	{
 		groups = new HashMap<String, Group>();
+		myGroups = new HashSet<Group>();
 		//groups.put("test", new Group());
 	}
 
@@ -31,6 +35,25 @@ public class GroupList
             instance = new GroupList();
         }
         return instance;
+    }
+    
+    public synchronized void imJoiningGroup(Group g)
+    {
+    	myGroups.add(g);
+    }
+    public synchronized void imLeavingGroup(Group g)
+    {
+    	myGroups.remove(g);
+    }
+    public synchronized Set<Group> getMyGroups()
+    {
+    	Set<Group> copy = new HashSet<Group>();
+    	copy.addAll(myGroups);
+    	return copy;
+    }
+    public synchronized boolean amIInGroup(Group g)
+    {
+    	return myGroups.contains(g);
     }
 
 	public synchronized void addGroup(Group groupToAdd)
@@ -72,6 +95,14 @@ public class GroupList
 		return array;
 	}
 	
+	public synchronized void removePeerFromAllGroups(Peer peer)
+	{
+		for (Group g : groups.values())
+		{
+			g.removePeer(peer);
+		}
+	}
+	
 	public void mockMessageGroup(String msg)
 	{
 		Group mocky = getGroup("test");
@@ -85,7 +116,8 @@ public class GroupList
 	 */
 	public void addAllPeersToGroup(Group group)
 	{
-		for (Peer e : PeerList.getInstance().getAllPeers())
+		PeerList.getInstance();
+		for (Peer e : PeerList.getAllPeers())
 		{
 			group.addPeer(e);
 		}
@@ -111,7 +143,6 @@ public class GroupList
             System.out.print("ID: " + e.getKey());
 			System.out.println(", name: " + g.getName() + ", size: " + g.size() + ", externalContact: " + g.getExternalContact());
             */
-
         }
     }
 }

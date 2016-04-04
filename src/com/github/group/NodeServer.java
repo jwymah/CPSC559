@@ -13,11 +13,6 @@ import java.util.Enumeration;
 import java.util.Random;
 
 import controlMessages.ControlMessage;
-import controlMessages.DumpReq;
-import controlMessages.DumpResp;
-import controlMessages.Join;
-import controlMessages.Leave;
-import controlMessages.MetadatasReq;
 
 public class NodeServer extends Thread {
     private static NodeServer instance = null;
@@ -209,8 +204,6 @@ public class NodeServer extends Thread {
     			out = null;	//clear these so that they don't get used outside the Peer wrappers
     			in = null;
     			conn = null;
-    			
-                //GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
 
             	//TODO: Refactor this into common library for 
                 //      nodeserver+nodeclient. after user input is added
@@ -223,63 +216,14 @@ public class NodeServer extends Thread {
                 			break;
 
                 		case CHAT:
-                            // print out chat message
                             ChatMessage cmsg = new ChatMessage(inputLine);
-                            //System.out.println("ns["+ cmsg.timestamp+"]" + "["+ cmsg.getSender()+"]"+ " "+ cmsg.getMsgBody());
                             cmsg.printMessage();
                             cmsg.toJsonString();
                 			break;
 
 						case CONTROL:
-							/*Group newGroup = new Group("12", "helluva group", P2PChat.id);
-							Join body = new Join(newGroup);
-							ControlMessage joinMsg = new ControlMessage();
-							joinMsg.setMsgBody(body.toJsonString());
-							
-							//iterate over peerList
-							//iterate over peerList
-                			peer.sendMessage(joinMsg);
-                			
-                			DumpReq dBody = new DumpReq(newGroup);
-                			ControlMessage dumpMessage = new ControlMessage();
-                			dumpMessage.setMsgBody(dBody.toJsonString());
-                			peer.sendMessage(dumpMessage);
-                			
-                			System.out.println("-----------------------------");
-                			DumpResp drBody = new DumpResp(newGroup);
-                			System.out.println("-----------------------------");
-                			System.out.println(drBody.toJsonString());
-                			System.out.println("-----------------------------");
-                			DumpResp drParsed = new DumpResp(drBody.toJsonString());
-                			System.out.println(drParsed.toJsonString());
-                			System.out.println("-----------------------------");
-                			
-                			MetadatasReq mdr = new MetadatasReq();
-                			ControlMessage mdrMessage = new ControlMessage();
-                			mdrMessage.setMsgBody(mdr.toJsonString());
-                			peer.sendMessage(mdrMessage);
-                			
-                			try
-							{
-								Thread.sleep(5000);
-							}
-							catch (InterruptedException e)
-							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-                			
-                			Leave leaveBody = new Leave(newGroup);
-                			ControlMessage leaveMsg = new ControlMessage();
-                			leaveMsg.setMsgBody(leaveBody.toJsonString());
-                			
-                			peer.sendMessage(leaveMsg);
-                			*/
-
                             ControlMessage controlMsg = new ControlMessage(inputLine);
-                            //controlMsg.printMessage();
                             GroupManager.handleControlMessage(peer,controlMsg);
-
 							break;
 						case BLANK:
 						default:
@@ -294,22 +238,19 @@ public class NodeServer extends Thread {
 
                 // Log that they have disconnected
                 log.printLogMessage(Log.INFO, CLASS_ID, "Disconnected: " + addr);
-
-                // Remove from PeerList
-                PeerList.removePeer(peer);
-
-                // Clean up connections
-                peer.clearConnection();
-
+                
             } catch (IOException e) {
-                // Remove from PeerList
-                PeerList.removePeer(peer);
-
-                // Clean up connections
-                peer.clearConnection();
-
                 // Log the error
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Error disconnect: " + peer.username);
+            } finally {
+                // Remove from all groups
+                GroupList.getInstance().removePeerFromAllGroups(peer);
+                
+                // Remove from PeerList
+                PeerList.removePeer(peer);
+
+                // Clean up connections
+                peer.clearConnection();
             }
         }
 

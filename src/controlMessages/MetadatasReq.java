@@ -4,12 +4,10 @@
  */
 package controlMessages;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.github.group.GroupList;
 import com.github.group.Log;
 
 		

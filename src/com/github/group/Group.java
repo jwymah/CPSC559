@@ -7,12 +7,14 @@
  */
 package com.github.group;
 
-import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import controlMessages.ControlMessage;
+import controlMessages.Join;
 
 public class Group {
 
@@ -51,23 +53,10 @@ public class Group {
                 log.printLogMessage(Log.ERROR, CLASS_ID, "This really shouldn't happen");
     			//System.out.println("why the fuck is it null? WHY");
     		msg.setDst(p.ip, p.port);
+    		msg.setGroupId(id);
     		msg.signMessage();
 
             p.sendMessage(msg);
-            /*
-            Socket conn = p.getConn();
-
-
-            //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
-            try {
-//                PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
-//                out.println(msg.toJsonString());
-            	p.sendMessage(msg);
-            }
-            catch(Exception ex)
-            {
-            	ex.printStackTrace();
-            }*/
     	}
     }
 
@@ -82,21 +71,6 @@ public class Group {
         {
             p.sendMessage(msg);
         }
-    }
-    
-    public void updateGroupStatus()
-    {
-//    	ControlMessage msg = new ControlMessage();
-    	Message msg = new Message(MessageType.CONTROL); //TODO: change this to ControlMessage, a child of Message
-		for(Peer p : PeerList.getAllPeers())
-    	{
-//    		msg.setDst(p.ip, p.port);
-//    		msg.setMsgBody(msgBody);
-//    		msg.signMessage();
-
-            //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
-            p.sendMessage(msg);
-    	}
     }
 
     /**
@@ -113,6 +87,8 @@ public class Group {
 	{
 		for(int i=0; i<memberDump.size(); i++)
 		{
+        	if (((String) memberDump.get(i)).compareTo(P2PChat.id) == 0)
+        		return;	//special case if a peer joins same group multiple times. own ID will be in this dump
 			groupMembers.add(PeerList.getPeerById((String) memberDump.get(i)));
 		}
 	}
@@ -120,7 +96,34 @@ public class Group {
     public void removePeer(Peer peerToRemove)
     {
     	groupMembers.remove(peerToRemove);
+    	if(getExternalContact().compareTo(peerToRemove.id) == 0)
+		{
+			reassignExternalContact();
+		}
     }
+
+	public void reassignExternalContact()
+	{
+		String newExternal = P2PChat.id;
+		for (Peer p : groupMembers)
+		{
+			if (newExternal.compareTo(p.id) < 0)
+			{
+				newExternal = p.id;
+			}
+			externalContact = newExternal;
+		}
+		// This peer is the new external contact, update everyone including non group members.
+		if (newExternal.compareTo(P2PChat.id) == 0)
+		{
+			externalContact = newExternal;
+            Join body = new Join(this, true);
+            ControlMessage joinMsg = new ControlMessage();
+            joinMsg.setMsgBody(body.toJsonString());
+
+            PeerList.messageAllPeers(joinMsg);
+		}
+	}
     
     public String getId()
     {
@@ -181,5 +184,10 @@ public class Group {
 		}
 		ids[index] = P2PChat.id; 
 		return ids;
+	}
+
+	public void setExternalContact(String externalContact)
+	{
+		this.externalContact = externalContact;
 	}
 }

@@ -42,6 +42,10 @@ public class GroupManager
 					GroupList.getInstance().addGroup(targetGroup);
 				}
 				targetGroup.addPeer(peer);
+				if (j.getExternalContact() != null)
+				{
+					targetGroup.setExternalContact(j.getExternalContact());
+				}
 				break;
 
 			case METADATA:
@@ -81,7 +85,11 @@ public class GroupManager
 				
 				if (targetGroup != null)
 				{
-					DumpResp dumpRespBody = new DumpResp(targetGroup);
+					DumpResp dumpRespBody = new DumpResp(targetGroup);	//respond with a try later if something racey
+					if (GroupList.getInstance().amIInGroup(targetGroup) == false)
+					{
+						dumpRespBody.setTryLater();
+					}
 					ControlMessage dumpRespMsg = new ControlMessage();
 					dumpRespMsg.setMsgBody(dumpRespBody.toJsonString());
 					
@@ -91,15 +99,22 @@ public class GroupManager
 
 			case DUMPRESP:
 				DumpResp dr = new DumpResp(msgBody);
-				targetGroup = grouplist.getGroup(dr.getTargetGroup());
-				// assumed that the targetgroup does not equate to a null group on this side
-				targetGroup.addMemberDump(dr.getMemberDump());
-
-				Join body = new Join(targetGroup);
-				ControlMessage joinMsg = new ControlMessage();
-				joinMsg.setMsgBody(body.toJsonString());
-
-				targetGroup.messageGroup(joinMsg);
+				if(dr.isValidDump())
+				{
+					targetGroup = grouplist.getGroup(dr.getTargetGroup());
+					// assumed that the targetgroup does not equate to a null group on this side
+					targetGroup.addMemberDump(dr.getMemberDump());
+	
+					Join body = new Join(targetGroup);
+					ControlMessage joinMsg = new ControlMessage();
+					joinMsg.setMsgBody(body.toJsonString());
+	
+					targetGroup.messageGroup(joinMsg);
+				}
+				else
+				{
+					log.printLogMessage(Log.ERROR, CLASS_ID, "Could not join the group. Try again in a few seconds");
+				}
 				break;
 				
 			default:

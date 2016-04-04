@@ -36,9 +36,19 @@ public class Join{
         actionDetails = new JSONObject();
         actionDetails.put(ACTION, JOIN);
         actionDetails.put(TARGET_GROUP_ID, group.getId());
+        actionDetails.put(GROUP_NAME, group.getName());
+    }
+    
+    public Join(Group group, Boolean setNewExternalContact) {
+        log = Log.getInstance();
+
+        // Package in JSON object
+        actionDetails = new JSONObject();
+        actionDetails.put(ACTION, JOIN);
+        actionDetails.put(TARGET_GROUP_ID, group.getId());
         actionDetails.put(EXTERNAL_CONTACT_ID, group.getExternalContact());
         actionDetails.put(GROUP_NAME, group.getName());
-    }    
+    }
 
     /**
      * Constructor that parses and input message

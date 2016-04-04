@@ -15,8 +15,6 @@ import org.json.simple.JSONObject;
 
 public class BroadcastMessage extends Message {
 
-    private static NodeServer ns = null;
-
     private static String CLASS_ID = "BroadcastMessage";
     private static Log log;
 
@@ -26,8 +24,6 @@ public class BroadcastMessage extends Message {
     public int port;
 
     private JSONObject msg;
-    private NetworkInterface net;
-
     /**
      * Constructor
      */
@@ -105,5 +101,12 @@ public class BroadcastMessage extends Message {
         System.out.println("\tPort:\t\t" + port);
         System.out.println();        
     }
+
+	@Override
+	public void setDst(String username)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
 
