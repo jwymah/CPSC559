@@ -209,8 +209,6 @@ public class NodeServer extends Thread {
     			out = null;	//clear these so that they don't get used outside the Peer wrappers
     			in = null;
     			conn = null;
-    			
-                //GroupList.getInstance().mockMessageGroup("sending CHAT message to group members [from new broadcaster] [1]");
 
             	//TODO: Refactor this into common library for 
                 //      nodeserver+nodeclient. after user input is added
@@ -245,22 +243,19 @@ public class NodeServer extends Thread {
 
                 // Log that they have disconnected
                 log.printLogMessage(Log.INFO, CLASS_ID, "Disconnected: " + addr);
-
-                // Remove from PeerList
-                PeerList.removePeer(peer);
-
-                // Clean up connections
-                peer.clearConnection();
-
+                
             } catch (IOException e) {
-                // Remove from PeerList
-                PeerList.removePeer(peer);
-
-                // Clean up connections
-                peer.clearConnection();
-
                 // Log the error
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Error disconnect: " + peer.username);
+            } finally {
+                // Remove from all groups
+                GroupList.getInstance().removePeerFromAllGroups(peer);
+                
+                // Remove from PeerList
+                PeerList.removePeer(peer);
+
+                // Clean up connections
+                peer.clearConnection();
             }
         }
 

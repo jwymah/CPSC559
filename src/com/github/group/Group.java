@@ -55,20 +55,6 @@ public class Group {
     		msg.signMessage();
 
             p.sendMessage(msg);
-            /*
-            Socket conn = p.getConn();
-
-
-            //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
-            try {
-//                PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
-//                out.println(msg.toJsonString());
-            	p.sendMessage(msg);
-            }
-            catch(Exception ex)
-            {
-            	ex.printStackTrace();
-            }*/
     	}
     }
 

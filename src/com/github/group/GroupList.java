@@ -72,6 +72,14 @@ public class GroupList
 		return array;
 	}
 	
+	public synchronized void removePeerFromAllGroups(Peer peer)
+	{
+		for (Group g : groups.values())
+		{
+			g.removePeer(peer);
+		}
+	}
+	
 	public void mockMessageGroup(String msg)
 	{
 		Group mocky = getGroup("test");
