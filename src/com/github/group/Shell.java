@@ -33,7 +33,7 @@ public class Shell extends Thread
         System.out.println("Usage:");
         System.out.println("\t/p\t\t\tDisplay available Peers");
         System.out.println("\t/e\t\t\tDisplay available Groups");
-        System.out.println("]t/m\t\t\tDisplay groups I am a part of");
+        System.out.println("\t/m\t\t\tDisplay groups I am a part of");
         System.out.println("\t/gm <group>\t\tDisplay known members of a group");
         System.out.println("\t/g <group> <msg>\tWrite group message");
         System.out.println("\t/j <group>\t\tJoin/Create group");

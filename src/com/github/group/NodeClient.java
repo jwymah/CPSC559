@@ -18,7 +18,7 @@ public class NodeClient extends Thread {
     /**
      * Construction
      */
-    public NodeClient(String s, int p, Peer peer) {
+    public NodeClient(Peer peer) {
         // Get instance of Log
         log = Log.getInstance();
         this.peer = peer;
