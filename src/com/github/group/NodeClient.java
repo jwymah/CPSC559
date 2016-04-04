@@ -59,7 +59,7 @@ public class NodeClient extends Thread {
 						break;
 				}
 			    // Log message to stdout
-			    String addr = peer.getConn().getInetAddress().getHostAddress() + ":" + peer.getConn().getPort();
+//			    String addr = peer.getConn().getInetAddress().getHostAddress() + ":" + peer.getConn().getPort();
 			    //log.printLogMessage(Log.MESSAGE, CLASS_ID, addr + ": " + inputLine);
 			}
 		} finally {

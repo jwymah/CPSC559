@@ -7,7 +7,6 @@
  */
 package com.github.group;
 
-import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,21 +71,6 @@ public class Group {
         {
             p.sendMessage(msg);
         }
-    }
-    
-    public void updateGroupStatus()
-    {
-//    	ControlMessage msg = new ControlMessage();
-    	Message msg = new Message(MessageType.CONTROL); //TODO: change this to ControlMessage, a child of Message
-		for(Peer p : PeerList.getAllPeers())
-    	{
-//    		msg.setDst(p.ip, p.port);
-//    		msg.setMsgBody(msgBody);
-//    		msg.signMessage();
-
-            //TODO: have spin up a SINGLE THREAD that handles sending over each socket. don't want messages being interleaved
-            p.sendMessage(msg);
-    	}
     }
 
     /**

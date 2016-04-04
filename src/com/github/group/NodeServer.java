@@ -13,11 +13,6 @@ import java.util.Enumeration;
 import java.util.Random;
 
 import controlMessages.ControlMessage;
-import controlMessages.DumpReq;
-import controlMessages.DumpResp;
-import controlMessages.Join;
-import controlMessages.Leave;
-import controlMessages.MetadatasReq;
 
 public class NodeServer extends Thread {
     private static NodeServer instance = null;

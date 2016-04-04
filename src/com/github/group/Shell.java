@@ -200,16 +200,6 @@ public class Shell extends Thread
 				            //System.out.println("Improper input");
 				        }
 				        break;
-
-				    // Control message(?)
-				    case "/c":
-				        Peer p = PeerList.getPeerByName(splitArray[1]);
-				        if (p != null) {
-				            Message m = new Message(MessageType.CONTROL);
-				            p.sendMessage(m);
-				        }
-				        break;
-
 				    default:
 				        log.printLogMessage(Log.ERROR, CLASS_ID, "Unrecognized command");
 				}
@@ -220,8 +210,6 @@ public class Shell extends Thread
 				e.printStackTrace();
 			}
         }
-
+        s.close();
     }
-
-
 }

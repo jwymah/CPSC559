@@ -11,7 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class Message {
+public abstract class Message {
 
     private final static String CLASS_ID = "Message";
     private static Log log;
@@ -89,4 +89,6 @@ public class Message {
         msg.put("type", type.toString());
         return msg.toJSONString();
     }
+
+	public abstract void setDst(String username);
 }

@@ -93,7 +93,8 @@ public class GroupList
 	 */
 	public void addAllPeersToGroup(Group group)
 	{
-		for (Peer e : PeerList.getInstance().getAllPeers())
+		PeerList.getInstance();
+		for (Peer e : PeerList.getAllPeers())
 		{
 			group.addPeer(e);
 		}
