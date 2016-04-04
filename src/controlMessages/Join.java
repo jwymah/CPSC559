@@ -59,6 +59,7 @@ public class Join{
 
     /**
      * Constructor that parses and input message
+     * @param m the input message
      */
     public Join(String m) {
         // Remove weird added whitespace that rekt parsing
