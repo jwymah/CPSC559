@@ -24,6 +24,7 @@ For a list of available methods available while the program is running run
 * Frankie Yuan
 
 **Dependencies:**
+* java 8
 * json-simple-1.1.1
 * junit-4.12
 * hamcrest-all-1.1
