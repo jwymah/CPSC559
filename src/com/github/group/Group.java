@@ -27,13 +27,11 @@ public class Group {
 
     /**
      * Constructor
+     *
+     * @param groupId The group id
+     * @param groupName The group name
+     * @param externalContact The external contact of the group
      */
-    public Group() {
-    	id = "1"; // TODO: be dynamic
-        groupMembers = new HashSet<Peer>();
-        log = Log.getInstance();
-    }
-    
     public Group(String groupId, String groupName, String externalContact)
 	{
     	groupMembers = new HashSet<Peer>();
@@ -42,6 +40,9 @@ public class Group {
     	this.externalContact = externalContact;
 	}
 
+    /**
+     * @param msgBody The message body
+     */
 	public void messageGroup(String msgBody)
     {
     	ChatMessage msg = new ChatMessage();
@@ -51,7 +52,6 @@ public class Group {
     	{
     		if (p == null)
                 log.printLogMessage(Log.ERROR, CLASS_ID, "This really shouldn't happen");
-    			//System.out.println("why the fuck is it null? WHY");
     		msg.setDst(p.ip, p.port);
     		msg.setGroupId(id);
     		msg.signMessage();
@@ -83,16 +83,26 @@ public class Group {
     	groupMembers.add(peerToAdd);
     }
 
+    /**
+     * @param memberDump the json information
+     */
 	public void addMemberDump(JSONArray memberDump)
 	{
 		for(int i=0; i<memberDump.size(); i++)
 		{
         	if (((String) memberDump.get(i)).compareTo(P2PChat.id) == 0)
-        		return;	//special case if a peer joins same group multiple times. own ID will be in this dump
+        		return;	
+                // special case if a peer joins same group multiple times. 
+                // own ID will be in this dump
 			groupMembers.add(PeerList.getPeerById((String) memberDump.get(i)));
 		}
 	}
     
+    /**
+     * Removes a peer from the group
+     *
+     * @param peerToRemove the peer to be removed
+     */
     public void removePeer(Peer peerToRemove)
     {
     	groupMembers.remove(peerToRemove);
@@ -102,6 +112,9 @@ public class Group {
 		}
     }
 
+    /**
+     * Reassigns the external contact for a group.
+     */
 	public void reassignExternalContact()
 	{
 		String newExternal = P2PChat.id;
@@ -125,21 +138,33 @@ public class Group {
 		}
 	}
     
+    /**
+     * @return the group id
+     */
     public String getId()
     {
     	return id;
     }
     
+    /**
+     * @return the group name
+     */
     public String getName()
     {
     	return groupName;
     }
     
+    /**
+     * @return the external contact
+     */
     public String getExternalContact()
     {
     	return externalContact;
     }
     
+    /**
+     * @return the size of a group
+     */
     public int size()
     {
     	return groupMembers.size();
@@ -203,6 +228,9 @@ public class Group {
 		return ids;
 	}
 
+    /**
+     * Sets the external contact for a group
+     */
 	public void setExternalContact(String externalContact)
 	{
 		this.externalContact = externalContact;

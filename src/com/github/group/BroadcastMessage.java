@@ -105,8 +105,7 @@ public class BroadcastMessage extends Message {
 	@Override
 	public void setDst(String username)
 	{
-		// TODO Auto-generated method stub
-		
+        // Do nothing
 	}
 }
 

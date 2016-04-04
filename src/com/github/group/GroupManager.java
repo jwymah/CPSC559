@@ -23,8 +23,6 @@ public class GroupManager
 	{
         log.printLogMessage(Log.MESSAGE, CLASS_ID, "Handling Control Message");
         controlMsg.printMessage();
-		//System.out.println(controlMsg.toJsonString());
-        // System.out.println(parseAction(controlMsg.getMsgBody()));
 		
 		String msgBody = controlMsg.getMsgBody();
 		Group targetGroup = null;
@@ -64,7 +62,6 @@ public class GroupManager
 					GroupList.getInstance().addGroup(new Group((String) ob.get("id"), 
                                 (String) ob.get("groupname"), 
                                 (String) ob.get("externalcontact")));
-                    // GroupList.getInstance().displayAllGroups();
 				}
 				break;
 				
@@ -85,7 +82,8 @@ public class GroupManager
 				
 				if (targetGroup != null)
 				{
-					DumpResp dumpRespBody = new DumpResp(targetGroup);	//respond with a try later if something racey
+					DumpResp dumpRespBody = new DumpResp(targetGroup);	
+                    //respond with a try later if something racey
 					if (GroupList.getInstance().amIInGroup(targetGroup) == false)
 					{
 						dumpRespBody.setTryLater();
@@ -119,7 +117,6 @@ public class GroupManager
 				
 			default:
                 log.printLogMessage(Log.ERROR, CLASS_ID, "Invalid GroupManager action");
-				//System.out.println("hi  ----  Got a weird action in group manager");
 		}
 	}
 
